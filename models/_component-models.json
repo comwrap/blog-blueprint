@@ -34,7 +34,7 @@
             "component": "aem-tag",
             "valueType": "string",
             "name": "cq:tags",
-            "label": "Tags"
+            "label": "AEM Tag Picker"
           },
           {
             "component": "text",
@@ -88,7 +88,7 @@
           {
             "component": "text",
             "valueType": "string",
-            "name": "e-mail",
+            "name": "email",
             "label": "Author Email"
           },
           {
