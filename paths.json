@@ -2,7 +2,12 @@
   "mappings": [
     "/content/blog-blueprint/:/",
     "/content/blog-blueprint/configuration:/.helix/config.json",
-    "/content/blog-blueprint/metadata:/metadata.json"
+    "/content/blog-blueprint.resource/query-index.json:/query-index.json",
+    "/content/blog-blueprint.resource/us-en/query-index.json:/us-en/query-index.json",
+    "/content/blog-blueprint.resource/de-de/query-index.json:/de-de/query-index.json",
+    "/content/blog-blueprint/metadata:/metadata.json",
+    "/content/blog-blueprint/api/authors.json",
+    "/content/blog-blueprint/api/dictionary.json"
   ],
   "includes": [
     "/content/blog-blueprint/"
