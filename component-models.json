@@ -241,7 +241,7 @@
     ]
   },
   {
-    "id": "article",
+    "id": "articlefeed",
     "fields": [
       {
         "component": "aem-tag",

@@ -12,7 +12,7 @@ export default async function decorate(block) {
   const blogArticles = articles.data.filter((article) => {
     const { path, title } = article;
     return path.includes(`/${currentCountry}-${currentLanguage}/`)
-      && !title.includes('index')
+      && !title.includes('Index')
       && !path.includes('/nav')
       && !path.includes('/footer');
   });
