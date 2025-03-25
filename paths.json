@@ -1,10 +1,10 @@
 {
   "mappings": [
-    "/content/aem-boilerplate/:/",
-    "/content/aem-boilerplate/configuration:/.helix/config.json",
-    "/content/aem-boilerplate/metadata:/metadata.json"
+    "/content/blog-blueprint/:/",
+    "/content/blog-blueprint/configuration:/.helix/config.json",
+    "/content/blog-blueprint/metadata:/metadata.json"
   ],
   "includes": [
-    "/content/aem-boilerplate/"
+    "/content/blog-blueprint/"
   ]
 }
