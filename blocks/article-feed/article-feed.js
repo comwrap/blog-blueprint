@@ -9,7 +9,13 @@ export default async function decorate(block) {
 
   const container = document.createElement('div');
   container.classList.add('article-container');
-  const blogArticles = articles.data.filter((article) => article.path.includes(`/${currentCountry}-${currentLanguage}/`));
+  const blogArticles = articles.data.filter((article) => {
+    const { path } = article;
+    return path.includes(`/${currentCountry}-${currentLanguage}/`)
+      && !path.includes('/index')
+      && !path.includes('/nav')
+      && !path.includes('/footer');
+  });
   blogArticles.forEach((article) => {
     const articleLink = document.createElement('a');
     articleLink.href = article.path;
