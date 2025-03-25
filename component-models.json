@@ -241,12 +241,11 @@
     ]
   },
   {
-    "id": "articlefeed",
+    "id": "article",
     "fields": [
       {
         "component": "aem-tag",
         "name": "tags",
-        "value": "transactions",
         "label": "Tag",
         "valueType": "string",
         "rootPath": "/content/cq:tags"
