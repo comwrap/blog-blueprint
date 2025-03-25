@@ -53,6 +53,7 @@ export default async function decorate(block) {
     articleBody.appendChild(readMoreButton);
 
     container.appendChild(articleLink);
-    block.replaceChildren(container);
+    block.textContent = '';
+    block.append(container);
   });
 }
