@@ -241,6 +241,17 @@
     ]
   },
   {
+    "id": "articlefeed",
+    "fields": [
+      {
+        "component": "aem-tag",
+        "valueType": "string",
+        "name": "article tags",
+        "label": "Tags"
+      }
+    ]
+  },
+  {
     "id": "card",
     "fields": [
       {
