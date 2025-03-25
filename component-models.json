@@ -1,5 +1,140 @@
 [
   {
+    "id": "page-metadata",
+    "fields": [
+      {
+        "component": "container",
+        "label": "Fieldset",
+        "fields": [
+          {
+            "component": "text",
+            "valueType": "string",
+            "name": "jcr:title",
+            "label": "Title"
+          },
+          {
+            "component": "text",
+            "valueType": "string",
+            "name": "jcr:description",
+            "label": "Description"
+          },
+          {
+            "component": "text",
+            "valueType": "string",
+            "name": "jcr:description",
+            "label": "Description"
+          },
+          {
+            "component": "text",
+            "valueType": "string",
+            "name": "cq:canonicalUrl",
+            "label": "Canonical"
+          },
+          {
+            "component": "select",
+            "valueType": "string",
+            "name": "cq:robotsTags",
+            "label": "Robots"
+          },
+          {
+            "component": "aem-tag",
+            "valueType": "string",
+            "name": "cq:tags",
+            "label": "Tags"
+          },
+          {
+            "component": "text",
+            "valueType": "string",
+            "name": "keywords",
+            "multi": true,
+            "label": "Keywords"
+          },
+          {
+            "component": "text",
+            "valueType": "string",
+            "name": "topics",
+            "multi": true,
+            "label": "Topics"
+          },
+          {
+            "component": "select",
+            "name": "template",
+            "label": "Template name",
+            "options": [
+              {
+                "name": "Author",
+                "value": "author"
+              },
+              {
+                "name": "Blog Post",
+                "value": "blogpost"
+              },
+              {
+                "name": "Category",
+                "value": "category"
+              },
+              {
+                "name": "Search",
+                "value": "search"
+              }
+            ]
+          },
+          {
+            "component": "text",
+            "valueType": "string",
+            "name": "author",
+            "label": "Author"
+          },
+          {
+            "component": "text",
+            "valueType": "string",
+            "name": "position",
+            "label": "Author Position"
+          },
+          {
+            "component": "text",
+            "valueType": "string",
+            "name": "e-mail",
+            "label": "Author Email"
+          },
+          {
+            "component": "text",
+            "valueType": "string",
+            "name": "brand",
+            "label": "Brand"
+          },
+          {
+            "component": "text",
+            "valueType": "number",
+            "name": "readingTime",
+            "label": "Reading Time"
+          },
+          {
+            "component": "date-time",
+            "valueType": "date-time",
+            "name": "publishDate",
+            "label": "Publish Date",
+            "placeholder": "YYYY-MM-DD",
+            "displayFormat": null,
+            "valueFormat": null
+          },
+          {
+            "component": "text",
+            "valueType": "string",
+            "name": "language",
+            "label": "Language"
+          },
+          {
+            "component": "text",
+            "valueType": "string",
+            "name": "primary-language-url",
+            "label": "Primary Language URL"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "image",
     "fields": [
       {
