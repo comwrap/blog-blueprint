@@ -21,12 +21,6 @@
           {
             "component": "text",
             "valueType": "string",
-            "name": "jcr:description",
-            "label": "Description"
-          },
-          {
-            "component": "text",
-            "valueType": "string",
             "name": "cq:canonicalUrl",
             "label": "Canonical"
           },
