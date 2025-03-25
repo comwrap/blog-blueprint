@@ -10,9 +10,9 @@ export default async function decorate(block) {
   const container = document.createElement('div');
   container.classList.add('article-container');
   const blogArticles = articles.data.filter((article) => {
-    const { path } = article;
+    const { path, title } = article;
     return path.includes(`/${currentCountry}-${currentLanguage}/`)
-      && !path.includes('/index')
+      && !title.includes('index')
       && !path.includes('/nav')
       && !path.includes('/footer');
   });
