@@ -244,6 +244,13 @@
     "id": "articlefeed",
     "fields": [
       {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text",
+        "valueType": "string"
+      },
+      {
         "component": "aem-tag",
         "name": "tags",
         "label": "Tag",
