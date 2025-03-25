@@ -19,6 +19,9 @@
     ]
   },
   {
+    "id": "articlefeed"
+  },
+  {
     "id": "cards",
     "components": [
       "card"
