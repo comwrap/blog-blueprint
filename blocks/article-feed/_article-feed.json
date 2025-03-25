@@ -24,7 +24,8 @@
         {
           "component": "aem-content",
           "name": "link",
-          "label": "Parent page"
+          "label": "Parent page",
+          "rootPath": "/content/blog-blueprint"
         }
       ]
     }
