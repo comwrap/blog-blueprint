@@ -1,16 +1,94 @@
 version: 1
 
 indices:
-  pages:
-    include:
-      - '/**'
-    exclude:
-      - '/**.json'
+  default: &default
     target: /query-index.json
+    exclude:
+      - '**/drafts/**'
     properties:
-      lastModified:
+      path:
         select: none
-        value: parseTimestamp(headers["last-modified"], "ddd, DD MMM YYYY hh:mm:ss GMT")
+        value: |
+          path
+      title:
+        select: head > meta[property="og:title"]
+        value: |
+          attribute(el, 'content')
+      description:
+        select: head > meta[property="og:description"]
+        value: |
+          attribute(el, 'content')
       robots:
         select: head > meta[name="robots"]
+        value: |
+          attribute(el, 'content')
+      tags:
+        select: head > meta[property="article:tag"]
+        values: |
+          attribute(el, 'content')
+      image:
+        select: head > meta[property="og:image"]
+        value: |
+          match(attribute(el, 'content'), 'https:\/\/[^/]+(\/.*)')
+      template:
+        select: head > meta[name="template"]
+        value: |
+          attribute(el, 'content')
+      date:
+        select: head > meta[name="date"]
+        value: |
+          attribute(el, 'content')
+      lastModified:
+        select: none
+        value: |
+          parseTimestamp(headers['last-modified'], 'ddd, DD MMM YYYY hh:mm:ss GMT')
+      author:
+        select: head > meta[name="author"]
+        value: |
+          attribute(el, 'content')
+      language:
+        select: head > meta[name="lang"]
+        value: |
+          attribute(el, 'content')
+      content:
+        select: main
+        value: |
+          textContent(el)
+      primary-language-url:
+        select: head > meta[name="primary-language-url"]
         value: attribute(el, "content")
+  de-de:
+    <<: *default
+    include:
+      - '/de-de/**'
+    target: /de-de/query-index.json
+  en-us:
+    <<: *default
+    include:
+      - '/us-en/**'
+    target: /us-en/query-index.json
+  author:
+    include:
+      - '/authors/**'
+    target: /api/authors.json
+    properties:
+      path:
+        select: none
+        value: |
+          path
+      name:
+        select: head > meta[name="author"]
+        value: |
+          attribute(el, 'content')
+      image:
+        select: head > meta[property="og:image"]
+        value: |
+          match(attribute(el, 'content'), 'https:\/\/[^/]+(\/.*)')
+      position:
+        select: head > meta[name="position"]
+        value: |
+          attribute(el, 'content')
+      email:
+        select: head > meta[name="e-mail"]
+        value: |
+          attribute(el, 'content')
