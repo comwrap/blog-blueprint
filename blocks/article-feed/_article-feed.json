@@ -37,9 +37,11 @@
       "fields": [
         {
           "component": "aem-tag",
+          "name": "tags",
+          "value": "transactions",
+          "label": "Tag",
           "valueType": "string",
-          "name": "article tags",
-          "label": "Tags"
+          "rootPath": "/content/cq:tags"
         }
       ]
     }
