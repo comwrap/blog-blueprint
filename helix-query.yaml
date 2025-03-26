@@ -35,7 +35,7 @@ indices:
         value: |
           attribute(el, 'content')
       date:
-        select: head > meta[name="date"]
+        select: head > meta[name="publishdate"]
         value: |
           attribute(el, 'content')
       lastModified:
