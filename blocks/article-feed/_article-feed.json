@@ -25,7 +25,11 @@
           "component": "aem-content",
           "name": "link",
           "label": "Parent page",
-          "rootPath": "/content/blog-blueprint"
+          "value": "",
+          "valueType": "string",
+          "validation": {
+            "rootPath": "/content/blog-blueprint"
+          }
         }
       ]
     }

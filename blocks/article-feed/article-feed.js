@@ -3,6 +3,9 @@ import {
 } from '../helpers.js';
 
 export default async function decorate(block) {
+  const referenceLink = block.querySelector('a');
+  const referencePath = referenceLink ? referenceLink.getAttribute('href') : '';
+
   const [currentCountry, currentLanguage] = getCurrentCountryLanguage();
   const response = await fetch(`/${currentCountry}-${currentLanguage}/query-index.json`);
   const articles = await response.json();
@@ -11,10 +14,11 @@ export default async function decorate(block) {
   container.classList.add('article-container');
   const blogArticles = articles.data.filter((article) => {
     const { path, title } = article;
-    return path.includes(`/${currentCountry}-${currentLanguage}/`)
+    return path.includes(`${referencePath}/`)
       && !title.includes('Index')
       && !path.includes('/nav')
-      && !path.includes('/footer');
+      && !path.includes('/footer')
+      && (!referencePath || path.startsWith(referencePath));
   });
   blogArticles.forEach((article) => {
     const articleLink = document.createElement('a');
