@@ -58,6 +58,6 @@ export default async function decorate(block) {
 
     container.appendChild(articleLink);
     block.textContent = '';
-    block.append(container);
+    block.replaceChildren(container);
   });
 }
