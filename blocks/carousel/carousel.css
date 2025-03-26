@@ -151,3 +151,7 @@
 .carousel-navigation-buttons button.slide-next::before {
   transform: translate(-75%, -50%) rotate(45deg);
 }
+
+.adobe-ue-edit .carousel-slide-image img {
+  height: 37.5rem;
+}
