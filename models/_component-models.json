@@ -138,6 +138,9 @@
     "...": "./_section.json#/models"
   },
   {
+    "...": "./_marginal.json#/models"
+  },
+  {
     "...": "../blocks/*/_*.json#/models"
   }
 ]
