@@ -17,7 +17,14 @@
       "columns",
       "fragment",
       "articlefeed",
-      "carousel"
+      "carousel",
+      "accordion"
+    ]
+  },
+  {
+    "id": "accordion",
+    "components": [
+      "accordionitem"
     ]
   },
   {
