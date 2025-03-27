@@ -28,6 +28,15 @@
       ]
     },
     {
+      "title": "Marginal",
+      "id": "marginal",
+      "components": [
+        {
+          "...": "./_marginal.json#/definitions"
+        }
+      ]
+    },
+    {
       "title": "Blocks",
       "id": "blocks",
       "components": [

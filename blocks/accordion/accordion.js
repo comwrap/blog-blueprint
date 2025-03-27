@@ -135,6 +135,5 @@ export default function decorate(block) {
     block.classList.add(...'grid max-w-7xl w-full mx-auto grid-cols-1 lg:grid-cols-2 gap-16 pt-4'.split(' '));
     block.append(images);
   }
-  decorateIcons(block);
   block.append(div({ id: `accordion-${customUUID}`, class: 'divide-y divide-gray-900/10' }, ...accordionItems));
 }

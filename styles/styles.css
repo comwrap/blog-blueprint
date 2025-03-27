@@ -107,6 +107,10 @@
   --body-size-m: 1.125rem; /* 18px */
   --body-size-s: 1rem; /* 16px */
   --body-size-xs: 0.875rem; /* 14px */
+
+  /* translates */
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
   
   /* heading sizes */
   --heading-1: 2.5rem; /* 40px */

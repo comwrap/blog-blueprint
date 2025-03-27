@@ -1,0 +1,66 @@
+{
+    "definitions": [
+      {
+        "title": "Marginal",
+        "id": "marginal",
+        "plugins": {
+          "xwalk": {
+            "page": {
+              "resourceType": "core/franklin/components/section/v1/section",
+              "template": {
+                "name": "Marginal",
+                "model": "marginal",
+                "filter": "section"
+                }
+            }
+          }
+        }
+      }
+    ],
+    "models": [
+      {
+        "id": "marginal",
+        "fields": [
+          {
+            "component": "text",
+            "name": "id",
+            "label": "Id"
+          },
+          {
+            "component": "multiselect",
+            "name": "style",
+            "label": "Style",
+            "options": [
+              {
+                "name": "Highlight",
+                "value": "highlight"
+              },
+              {
+                "name": "Dark",
+                "value": "dark"
+              },
+              {
+                "name": "Light",
+                "value": "light"
+              },          
+              {
+                "name": "Two columns",
+                "value": "grid-layout-two-columns"
+              },
+              {
+                "name": "Three columns",
+                "value": "grid-layout-three-columns"
+              },
+              {
+                "name": "Four columns",
+                "value": "grid-layout-four-columns"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "filters": [
+    ]
+  }
+  
