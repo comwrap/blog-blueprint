@@ -71,6 +71,10 @@ function buildAutoBlocks() {
   }
 }
 
+export function generateUUID() {
+  return Math.floor(1e3 + Math.random() * 9e3);
+}
+
 /**
  * Decorates the main element.
  * @param {Element} main The main element
