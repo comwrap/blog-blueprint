@@ -364,7 +364,7 @@ main .section.highlight {
     padding: 40px 0;
 }
 
-.category {
+.library {
     main {
         display: flex;
         justify-content: center;
