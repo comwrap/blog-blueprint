@@ -50,6 +50,10 @@
             "label": "Template name",
             "options": [
               {
+                "name": "Library",
+                "value": "library"
+              },
+              {
                 "name": "Author",
                 "value": "author"
               },
