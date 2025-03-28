@@ -23,9 +23,12 @@
     ]
   },
   {
-    "id": "accordion",
+    "id": "accordionitem",
     "components": [
-      "accordion-item"
+      "text",
+      "image",
+      "button",
+      "title"
     ]
   },
   {
