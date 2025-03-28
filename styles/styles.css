@@ -394,6 +394,17 @@ main .section.highlight {
           position: fixed;
           width: 30%;
           left: 0;
+
+          ul li {
+            list-style: none;
+            a {
+              text-decoration: none;
+              color: var(--btn-primary-bg);
+            }
+            a:hover {
+              color: var(--btn-primary-hover-bg);
+            }
+          }
       }
   
       .section:nth-child(2) {

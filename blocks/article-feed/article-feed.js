@@ -7,7 +7,12 @@ export default async function decorate(block) {
   const referencePath = referenceLink ? referenceLink.getAttribute('href') : '';
 
   const [currentCountry, currentLanguage] = getCurrentCountryLanguage();
-  const response = await fetch(`/${currentCountry}-${currentLanguage}/query-index.json`);
+  let response = await fetch('/query-index.json');
+
+  if (currentCountry && currentLanguage) {
+    response = await fetch(`/${currentCountry}-${currentLanguage}/query-index.json`);
+  }
+  
   const articles = await response.json();
 
   const container = document.createElement('div');
