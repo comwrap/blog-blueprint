@@ -301,18 +301,6 @@
     ]
   },
   {
-    "id": "accordionitem",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "title",
-        "value": "",
-        "label": "Title"
-      }
-    ]
-  },
-  {
     "id": "articlefeed",
     "fields": [
       {
