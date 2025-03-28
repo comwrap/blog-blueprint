@@ -23,6 +23,12 @@
     ]
   },
   {
+    "id": "accordion",
+    "components": [
+      "accordionitem"
+    ]
+  },
+  {
     "id": "accordionitem",
     "components": [
       "text",

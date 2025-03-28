@@ -282,87 +282,33 @@
     ]
   },
   {
+    "id": "accordion",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "number",
+        "name": "columns",
+        "value": "",
+        "label": "Columns"
+      },
+      {
+        "component": "text",
+        "valueType": "number",
+        "name": "rows",
+        "value": "",
+        "label": "Rows"
+      }
+    ]
+  },
+  {
     "id": "accordionitem",
     "fields": [
       {
         "component": "text",
-        "name": "accordiontitle",
-        "label": "Accordion Item Title",
         "valueType": "string",
-        "value": ""
-      },
-      {
-        "component": "select",
-        "name": "accordionitem-component",
-        "label": "Add Component",
-        "options": [
-          {
-            "name": "Quote",
-            "value": "accordionitem-component-quote"
-          },
-          {
-            "name": "Text",
-            "value": "accordionitem-component-text"
-          }
-        ]
-      },
-      {
-        "component": "text-input",
-        "label": "This text is shown when clicked quote",
-        "name": "hidden-quote",
-        "valueType": "string",
-        "condition": {
-          "===": [
-            {
-              "var": "accordionitem-component"
-            },
-            "accordionitem-component-quote"
-          ]
-        }
-      },
-      {
-        "component": "text-input",
-        "label": "This text is shown when clicked text",
-        "name": "hidden-text",
-        "valueType": "string",
-        "condition": {
-          "===": [
-            {
-              "var": "accordionitem-component"
-            },
-            "accordionitem-component-text"
-          ]
-        }
-      },
-      {
-        "component": "richtext",
-        "name": "accordionItem_quote",
-        "label": "Answer",
-        "valueType": "string",
+        "name": "title",
         "value": "",
-        "condition": {
-          "===": [
-            {
-              "var": "accordionitem-component"
-            },
-            "accordionitem-component-quote"
-          ]
-        }
-      },
-      {
-        "component": "richtext",
-        "name": "accordionItem_text",
-        "label": "Answer",
-        "valueType": "string",
-        "value": "",
-        "condition": {
-          "===": [
-            {
-              "var": "accordionitem-component"
-            },
-            "accordionitem-component-text"
-          ]
-        }
+        "label": "Title"
       }
     ]
   },
