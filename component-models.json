@@ -287,16 +287,9 @@
       {
         "component": "text",
         "valueType": "number",
-        "name": "columns",
+        "name": "automaticOpened",
         "value": "",
-        "label": "Columns"
-      },
-      {
-        "component": "text",
-        "valueType": "number",
-        "name": "rows",
-        "value": "",
-        "label": "Rows"
+        "label": "automaticOpened"
       }
     ]
   },
