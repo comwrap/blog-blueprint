@@ -365,6 +365,9 @@ main .section.highlight {
 }
 
 .library {
+    header {
+        height: unset;
+    }
     main {
         display: flex;
         justify-content: center;
@@ -373,44 +376,43 @@ main .section.highlight {
         gap: 16px;
         width: 100%;
         margin: 0 auto;
-        
-        .section {
-          width: 100%;
-      }
 
+        .section {
+            width: 100%;
+        }
     }
 
     @media (width >= 900px) {
-      main {
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        flex-direction: row;
-        gap: 16px;
-        width: 100%;
-        margin: 0 auto;
-        
-        .section:nth-child(1) {
-          position: fixed;
-          width: 30%;
-          left: 0;
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: row;
+            gap: 16px;
+            width: 100%;
+            margin: 0 auto;
 
-          ul li {
-            list-style: none;
-            a {
-              text-decoration: none;
-              color: var(--btn-primary-bg);
+            .section:nth-child(1) {
+                position: fixed;
+                width: 30%;
+                left: 0;
+
+                ul li {
+                    list-style: none;
+                    a {
+                        text-decoration: none;
+                        color: var(--btn-primary-bg);
+                    }
+                    a:hover {
+                        color: var(--btn-primary-hover-bg);
+                    }
+                }
             }
-            a:hover {
-              color: var(--btn-primary-hover-bg);
+
+            .section:nth-child(2) {
+                width: 70%;
+                margin-left: 24px;
             }
-          }
-      }
-  
-      .section:nth-child(2) {
-          width: 70%;
-          margin-left: 24px;
-      }
-    }
+        }
     }
 }
