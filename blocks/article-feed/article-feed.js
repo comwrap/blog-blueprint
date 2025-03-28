@@ -12,7 +12,7 @@ export default async function decorate(block) {
   if (currentCountry && currentLanguage) {
     response = await fetch(`/${currentCountry}-${currentLanguage}/query-index.json`);
   }
-  
+
   const articles = await response.json();
 
   const container = document.createElement('div');
@@ -63,6 +63,6 @@ export default async function decorate(block) {
 
     container.appendChild(articleLink);
     block.textContent = '';
-    block.replaceChildren(container);
+    block.append(container);
   });
 }
