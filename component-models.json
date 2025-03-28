@@ -282,14 +282,28 @@
     ]
   },
   {
-    "id": "accordion",
+    "id": "accordionitem",
     "fields": [
       {
         "component": "text",
-        "valueType": "number",
-        "name": "automaticOpened",
-        "value": "",
-        "label": "automaticOpened"
+        "name": "question",
+        "label": "Question",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "answer",
+        "label": "Answer",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Image",
+        "valueType": "string",
+        "multi": false
       }
     ]
   },
