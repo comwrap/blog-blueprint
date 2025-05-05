@@ -411,6 +411,7 @@ function decorateButtons(element) {
     if (a.href !== a.textContent) {
       const up = a.parentElement;
       const twoup = a.parentElement.parentElement;
+      const threeup = a.parentElement.parentElement.parentElement;
       if (!a.querySelector('img')) {
         if (up.childNodes.length === 1 && (up.tagName === 'P' || up.tagName === 'DIV')) {
           a.className = 'button'; // default
@@ -432,6 +433,16 @@ function decorateButtons(element) {
           && twoup.tagName === 'P'
         ) {
           a.className = 'button secondary';
+          twoup.classList.add('button-container');
+        }
+        if (
+          up.childNodes.length === 1
+          && up.tagName === 'EM'
+          && twoup.childNodes.length === 1
+          && twoup.tagName === 'strong'
+          && threeup.tagName === 'P'
+        ) {
+          a.className = 'button tertiary';
           twoup.classList.add('button-container');
         }
       }

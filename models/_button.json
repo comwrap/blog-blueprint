@@ -8,8 +8,7 @@
           "page": {
             "resourceType": "core/franklin/components/button/v1/button",
             "template": {
-              "model": "button",
-              "classes": "primary"
+              "model": "button"
             }
           }
         }
@@ -37,9 +36,13 @@
         },
         {
           "component": "select",
-          "name": "classes",
+          "name": "linkClasses",
           "label": "Styles",
           "options": [
+            {
+              "name": "default",
+              "value": ""
+            },
             {
               "name": "primary",
               "value": "primary"
@@ -53,6 +56,11 @@
               "value": "tertiary"
             }
           ]
+        },
+        {
+          "component": "boolean",
+          "name": "linkTarget",
+          "label": "Target"
         }
       ]
     }

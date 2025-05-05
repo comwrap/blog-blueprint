@@ -50,8 +50,7 @@
               "page": {
                 "resourceType": "core/franklin/components/button/v1/button",
                 "template": {
-                  "model": "button",
-                  "classes": "primary"
+                  "model": "button"
                 }
               }
             }
