@@ -199,13 +199,9 @@
       },
       {
         "component": "select",
-        "name": "linkType",
-        "label": "Type",
+        "name": "classes",
+        "label": "Styles",
         "options": [
-          {
-            "name": "default",
-            "value": ""
-          },
           {
             "name": "primary",
             "value": "primary"
@@ -213,6 +209,10 @@
           {
             "name": "secondary",
             "value": "secondary"
+          },
+          {
+            "name": "tertiary",
+            "value": "tertiary"
           }
         ]
       }

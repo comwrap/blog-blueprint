@@ -350,6 +350,11 @@ button:disabled:hover {
 
 a.button.secondary,
 button.secondary {
+    background-color: var(--btn-secondary-bg);
+}
+
+a.button.tertiary,
+button.tertiary {
     background-color: unset;
     border: 2px solid currentcolor;
     color: var(--text-color);
