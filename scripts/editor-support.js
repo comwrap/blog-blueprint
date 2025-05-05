@@ -14,12 +14,6 @@ import { decorateMain } from './scripts.js';
  * Module for handling component locking and user-specific filtering
  */
 
-let filterPath = '/content/aem-xwalk.resource/component-limited-filters.json';
-const filterScript = document.querySelector(
-  'script[type="application/vnd.adobe.aue.filter+json"]',
-);
-await filterScript.setAttribute('src', filterPath);
-
 /**
  * Fetches current user and their group memberships
  * @returns {Promise<Object>} User data including group memberships
@@ -62,27 +56,27 @@ function lockComponent(element) {
  * @param {Object} userData - Current user data including group memberships
  */
 async function updateComponentFilters(userData) {
-  console.log('Updating component filters for user:', userData);
   if (!userData?.memberOf) return;
 
   const userGroups = userData.memberOf;
+  const filterScript = document.querySelector('script[type="application/vnd.adobe.aue.filter+json"]');
+  if (!filterScript) return;
 
   // Determine appropriate filter based on user groups
-  console.log('User groups:', userGroups);
+  const filterPath = userGroups.some((group) => group.authorizableId === 'contributor')
+    ? '/content/aem-xwalk.resource/component-limited-filters.json'
+    : '/content/aem-xwalk.resource/component-filters.json';
 
-  // Check if any group in the array has the name 'contributor'
-  if (userGroups.some((group) => group.authorizableId === 'contributor')) {
-    filterPath = '/content/aem-xwalk.resource/component-limited-filters.json';
-  } else {
-    filterPath = '/content/aem-xwalk.resource/component-filters.json';
+  // Only update if the path is different
+  if (filterScript.getAttribute('src') !== filterPath) {
+    filterScript.setAttribute('src', filterPath);
   }
-
-  filterScript.setAttribute('src', filterPath);
 }
 
 // Initialize component locking and user-specific filtering
 async function initializeEditorSupport() {
   const userData = await getCurrentUser();
+  await updateComponentFilters(userData);
 
   // Check if this is an article page that needs component locking
   const isArticlePage = document.body.classList.contains('two-columns');
@@ -95,13 +89,9 @@ async function initializeEditorSupport() {
       }
     });
   }
-
-  // Set up user-specific component filtering
-  if (userData) {
-    await updateComponentFilters(userData);
-  }
 }
 
+// Initialize editor support immediately at module level
 await initializeEditorSupport();
 
 async function applyChanges(event) {
