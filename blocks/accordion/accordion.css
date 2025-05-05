@@ -4,7 +4,7 @@
   margin: 0;
 }
 
-.accordion li {
+.accordion > li {
   cursor: pointer;
   border-bottom: 1px solid rgb(var(--color-pure-black));
 }
