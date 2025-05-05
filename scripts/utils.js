@@ -58,7 +58,6 @@ export const moveClassToFirstChild = (block) => {
   if (classes.length > 0) {
     classes.forEach((className) => {
       firstChild.classList.add(className);
-      block.classList.remove(className);
     });
   }
 };

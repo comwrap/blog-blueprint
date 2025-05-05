@@ -15,19 +15,9 @@ export default function decorate(block) {
 
   let href = link;
   block.classList.forEach((className) => {
-    switch (className) {
-      case 'telephone':
-        href = `tel:${link}`;
-        break;
-      case 'email':
-        href = `mailto:${link}`;
-        break;
-      case 'download':
-        button.download = '';
-        break;
-      default:
-        href = link;
-    }
+    if (className === 'telephone') href = `tel:${link}`;
+    if (className === 'email') href = `mailto:${link}`;
+    if (className === 'download') button.download = '';
   });
 
   button.href = href;
