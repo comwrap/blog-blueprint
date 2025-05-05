@@ -18,19 +18,36 @@ async function initializeUserAndFilters() {
   if (!filterScript) return;
 
   try {
-    const [userResponse] = await Promise.all([
-      fetch('/libs/granite/security/currentuser.json?props=memberOf'),
-    ]);
-
+    const userResponse = await fetch('/libs/granite/security/currentuser.json?props=memberOf');
     if (!userResponse.ok) throw new Error('Failed to fetch user data');
     const userData = await userResponse.json();
     const userGroups = userData?.memberOf || [];
+    
     console.log('User groups:', userGroups);
+    
     const filterPath = userGroups.some((group) => group.authorizableId === 'contributor')
       ? '/content/aem-xwalk.resource/component-limited-filters.json'
       : '/content/aem-xwalk.resource/component-filters.json';
 
+    // Set the filter and wait for it to be applied
     filterScript.setAttribute('src', filterPath);
+    
+    // Wait for the filter to be loaded and applied
+    await new Promise((resolve) => {
+      const checkFilter = () => {
+        if (window.granite?.author?.editor?.page?.component?.filter) {
+          resolve();
+        } else {
+          setTimeout(checkFilter, 100);
+        }
+      };
+      checkFilter();
+    });
+
+    // Verify the filter is applied
+    if (window.granite?.author?.editor?.page?.component?.filter) {
+      console.log('Filter successfully applied');
+    }
   } catch (error) {
     console.error('Error initializing filters:', error);
     // Set default filter on error
