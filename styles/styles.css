@@ -432,10 +432,12 @@ main .section.highlight {
         .section:nth-child(1) {
             ul li {
                 list-style: none;
+                
                 a {
                     text-decoration: none;
                     color: var(--btn-primary-bg);
                 }
+                
                 a:hover {
                     color: var(--btn-primary-hover-bg);
                 }

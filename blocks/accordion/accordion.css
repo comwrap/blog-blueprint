@@ -67,7 +67,7 @@
   height: 1.5rem;
 }
 
-.accordion-trigger[aria-expanded=true] .accordion-icon::after {
+.accordion-trigger[aria-expanded="true"] .accordion-icon::after {
   transform: translate(-50%, -50%) rotate(90deg);
   opacity: 0;
 }
