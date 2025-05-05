@@ -1,66 +1,87 @@
-.custom-button-container {
-  margin: 1rem 0;
+.custom-button {
+  display: inline-block;
+  margin: var(--spacing-m) 0;
 }
 
-.custom-button {
+.custom-button button {
   display: inline-flex;
   align-items: center;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  gap: 0.5rem;
-}
-
-/* Button styles */
-.custom-button.primary {
-  background-color: #007bff;
-  color: white;
-  border: 2px solid #007bff;
-}
-
-.custom-button.primary:hover {
-  background-color: #0056b3;
-  border-color: #0056b3;
-}
-
-.custom-button.secondary {
-  background-color: transparent;
-  color: #007bff;
-  border: 2px solid #007bff;
-}
-
-.custom-button.secondary:hover {
-  background-color: #007bff;
-  color: white;
-}
-
-.custom-button.tertiary {
-  background-color: transparent;
-  color: #007bff;
+  gap: var(--spacing-s);
+  padding: var(--btn-padding);
   border: none;
-  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-family: var(--body-font-family);
+  font-size: var(--button-text);
+  font-weight: var(--font-bold);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  position: relative;
 }
 
-.custom-button.tertiary:hover {
-  text-decoration: underline;
+/* Primary Button */
+.custom-button button.primary {
+  background-color: rgb(var(--button-primary));
+  color: rgb(var(--on-button-primary));
 }
 
-/* Label and text */
-.button-label {
-  font-size: 0.875rem;
-  opacity: 0.8;
+.custom-button button.primary:hover {
+  background-color: rgb(var(--button-primary-hover));
 }
 
-.button-text {
-  font-size: 1rem;
+/* Secondary Button */
+.custom-button button.secondary {
+  background-color: rgb(var(--button-secondary));
+  color: rgb(var(--on-button-secondary));
 }
 
-/* Target indicator for external links */
-.custom-button[target="_blank"]::after {
-  content: "↗";
-  margin-left: 0.25rem;
-  font-size: 0.875rem;
+.custom-button button.secondary:hover {
+  background-color: rgb(var(--button-secondary-hover));
+}
+
+/* Tertiary Button */
+.custom-button button.tertiary {
+  background-color: rgb(var(--button-secondary-option));
+  color: rgb(var(--on-button-secondary-option));
+}
+
+.custom-button button.tertiary:hover {
+  background-color: rgb(var(--button-secondary-option-hover));
+}
+
+/* Text Button */
+.custom-button button.text {
+  background: none;
+  color: rgb(var(--button-primary));
+  padding: var(--spacing-s) var(--spacing-m);
+}
+
+.custom-button button.text:hover {
+  color: rgb(var(--button-primary-hover));
+}
+
+/* Button Label */
+.custom-button button .button-label {
+  display: block;
+  font-size: var(--body-size-xs);
+  font-weight: var(--font-regular);
+  margin-bottom: var(--spacing-xs);
+}
+
+/* Button Text */
+.custom-button button .button-text {
+  display: inline-block;
+}
+
+/* External Link Indicator */
+.custom-button button[target="_blank"]::after {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-left: var(--spacing-xs);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'%3E%3C/path%3E%3Cpolyline points='15 3 21 3 21 9'%3E%3C/polyline%3E%3Cline x1='10' y1='14' x2='21' y2='3'%3E%3C/line%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  vertical-align: middle;
 }

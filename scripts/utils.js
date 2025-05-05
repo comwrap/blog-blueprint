@@ -19,11 +19,7 @@ export const getNodeValue = (block, index) => {
  * @param {Array} blockItemMap Map of settings for each type of block item
  * @param {Array} blockItemsOptions Array of options for each block item (accumulative)
  */
-export const setBlockItemOptions = (
-  blockItem,
-  blockItemMap,
-  blockItemsOptions,
-) => {
+export const setBlockItemOptions = (blockItem, blockItemMap, blockItemsOptions) => {
   const itemOptions = {};
 
   blockItemMap.forEach((blockItemOption, index) => {
@@ -44,4 +40,16 @@ export const getBlockChildren = (block, options) => {
   if (!block) return [];
 
   return [...block.children].filter((_, index) => index !== exceptIndex);
+};
+
+/**
+ * Get block children
+ * @param {HTMLElement} block html
+ * @param {Object | undefined} options options
+ */
+export const moveClassToChild = (block) => {
+  const firstChild = block.children[0];
+  console.log('firstChild', firstChild);
+  const classBeforeBlock = block.classList.item(1);
+  firstChild.classList.add(classBeforeBlock);
 };

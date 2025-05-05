@@ -1,60 +1,43 @@
-import { readBlockConfig } from '../../scripts/aem.js';
+import { setBlockItemOptions, moveClassToChild } from '../../scripts/utils.js';
 
 export default function decorate(block) {
-  const config = readBlockConfig(block);
+  const blockItemsOptions = [];
+  const blockItemMap = [
+    { name: 'link' },
+    { name: 'title' },
+    { name: 'label' },
+    { name: 'target' },
+    { name: 'type' },
+  ];
+
+  setBlockItemOptions(block, blockItemMap, blockItemsOptions);
   const {
-    aemContent,
-    title,
-    label,
-    style = 'primary',
-    text,
-    target = '_self',
-    type = 'link', // link, telephone, email, download
-  } = config;
+    link, title, label, target, type,
+  } = blockItemsOptions[0];
 
-  // Create button container
-  const buttonContainer = document.createElement('div');
-  buttonContainer.className = 'custom-button-container';
-
-  // Create the button
   const button = document.createElement('a');
-  button.className = `custom-button ${style}`;
-  button.title = title || text;
-  button.target = target;
+  button.className = 'button';
+  button.title = title || label;
+  if (target !== '') button.target = target;
+  button.innerText = label;
 
-  // Set href based on type
-  let href = aemContent;
+  let href = link;
   switch (type) {
     case 'telephone':
-      href = `tel:${aemContent}`;
+      href = `tel:${link}`;
       break;
     case 'email':
-      href = `mailto:${aemContent}`;
+      href = `mailto:${link}`;
       break;
     case 'download':
       button.download = '';
       break;
     default:
-      href = aemContent;
+      href = link;
   }
   button.href = href;
 
-  // Add label if provided
-  if (label) {
-    const labelSpan = document.createElement('span');
-    labelSpan.className = 'button-label';
-    labelSpan.textContent = label;
-    button.appendChild(labelSpan);
-  }
-
-  // Add text
-  const textSpan = document.createElement('span');
-  textSpan.className = 'button-text';
-  textSpan.textContent = text;
-  button.appendChild(textSpan);
-
-  // Add to container
-  buttonContainer.appendChild(button);
   block.textContent = '';
-  block.appendChild(buttonContainer);
+  block.appendChild(button);
+  moveClassToChild(block);
 }

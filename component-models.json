@@ -500,7 +500,7 @@
         "options": [
           {
             "name": "Same Window",
-            "value": "_self"
+            "value": ""
           },
           {
             "name": "New Tab",
