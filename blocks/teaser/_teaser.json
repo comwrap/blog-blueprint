@@ -8,7 +8,9 @@
           "block": {
             "resourceType": "core/franklin/components/teaser/v1/teaser",
             "template": {
-              "model": "teaser"
+              "name": "Teaser",
+              "model": "teaser",
+              "filter": "teaser"
             }
           }
         }
