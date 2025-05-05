@@ -289,6 +289,20 @@
               }
             }
           }
+        },
+        {
+          "title": "Teaser",
+          "id": "teaser",
+          "plugins": {
+            "xwalk": {
+              "block": {
+                "resourceType": "core/franklin/components/teaser/v1/teaser",
+                "template": {
+                  "model": "teaser"
+                }
+              }
+            }
+          }
         }
       ]
     }

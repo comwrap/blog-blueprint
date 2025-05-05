@@ -55,7 +55,8 @@
         "articlefeed",
         "carousel",
         "accordion",
-        "download"
+        "download",
+        "teaser"
       ]
     }
   ]

@@ -1,0 +1,59 @@
+{
+  "definitions": [
+    {
+      "title": "Teaser",
+      "id": "teaser",
+      "plugins": {
+        "xwalk": {
+          "block": {
+            "resourceType": "core/franklin/components/teaser/v1/teaser",
+            "template": {
+              "model": "teaser"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "teaser",
+      "fields": [
+        {
+          "name": "title",
+          "type": "text",
+          "title": "Title",
+          "default": "Teaser Title"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "title": "Description",
+          "default": "This is a teaser description."
+        },
+        {
+          "name": "image",
+          "type": "image",
+          "title": "Image",
+          "default": "https://via.placeholder.com/400x200"
+        },
+        {
+          "name": "imageAlt",
+          "type": "text",
+          "title": "Image Alt Text",
+          "default": "Teaser Image"
+        },
+        {
+          "name": "aemContent",
+          "type": "text",
+          "title": "Button Link",
+          "default": "#"
+        },
+        {
+          "...": "../../models/partials/_button.json#/fields"
+        }
+      ]
+    }
+  ],
+  "filters": []
+} 
