@@ -49,7 +49,6 @@ export const getBlockChildren = (block, options) => {
  */
 export const moveClassToChild = (block) => {
   const firstChild = block.children[0];
-  console.log('firstChild', firstChild);
   const classBeforeBlock = block.classList.item(1);
   firstChild.classList.add(classBeforeBlock);
 };

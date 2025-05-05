@@ -458,40 +458,12 @@
       {
         "component": "aem-content",
         "name": "custom-button-link",
-        "label": "Link/Content"
-      },
-      {
-        "component": "text",
-        "name": "custom-button-title",
-        "label": "Button Title"
+        "label": "Button Link"
       },
       {
         "component": "text",
         "name": "custom-button-label",
         "label": "Button Label"
-      },
-      {
-        "component": "select",
-        "name": "classes",
-        "label": "Button Style",
-        "options": [
-          {
-            "name": "Primary",
-            "value": "primary"
-          },
-          {
-            "name": "Secondary",
-            "value": "secondary"
-          },
-          {
-            "name": "Tertiary",
-            "value": "tertiary"
-          },
-          {
-            "name": "Text",
-            "value": "text"
-          }
-        ]
       },
       {
         "component": "select",
@@ -509,25 +481,53 @@
         ]
       },
       {
-        "component": "select",
-        "name": "custom-button-type",
-        "label": "Link Type",
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Style",
+        "valueType": "string",
+        "maxSize": 2,
         "options": [
           {
-            "name": "Link",
-            "value": "link"
+            "name": "Style",
+            "children": [
+              {
+                "name": "Primary",
+                "value": "primary"
+              },
+              {
+                "name": "Secondary",
+                "value": "secondary"
+              },
+              {
+                "name": "Tertiary",
+                "value": "tertiary"
+              },
+              {
+                "name": "Text",
+                "value": "text"
+              }
+            ]
           },
           {
-            "name": "Telephone",
-            "value": "telephone"
-          },
-          {
-            "name": "Email",
-            "value": "email"
-          },
-          {
-            "name": "Download",
-            "value": "download"
+            "name": "Type",
+            "children": [
+              {
+                "name": "Link",
+                "value": "link"
+              },
+              {
+                "name": "Download",
+                "value": "download"
+              },
+              {
+                "name": "Email",
+                "value": "email"
+              },
+              {
+                "name": "Telephone",
+                "value": "telephone"
+              }
+            ]
           }
         ]
       }
