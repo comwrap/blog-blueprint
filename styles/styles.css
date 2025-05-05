@@ -448,13 +448,13 @@ main .section.highlight {
             margin: 0 auto;
 
             .section:nth-child(1) {
-                position: fixed;
+                position: absolute;
                 width: 30%;
                 left: 0;
             }
 
             .section:nth-child(2) {
-                position: relative;
+                position: absolute;
                 width: 70%;
                 right: 0;
             }
