@@ -453,6 +453,87 @@
     ]
   },
   {
+    "id": "custom-button",
+    "fields": [
+      {
+        "component": "aem-content",
+        "name": "custom-button-link",
+        "label": "Link/Content"
+      },
+      {
+        "component": "text",
+        "name": "custom-button-title",
+        "label": "Button Title"
+      },
+      {
+        "component": "text",
+        "name": "custom-button-label",
+        "label": "Button Label"
+      },
+      {
+        "component": "select",
+        "name": "classes",
+        "label": "Button Style",
+        "options": [
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          },
+          {
+            "name": "Tertiary",
+            "value": "tertiary"
+          },
+          {
+            "name": "Text",
+            "value": "text"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "custom-button-target",
+        "label": "Link Target",
+        "options": [
+          {
+            "name": "Same Window",
+            "value": "_self"
+          },
+          {
+            "name": "New Tab",
+            "value": "_blank"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "custom-button-type",
+        "label": "Link Type",
+        "options": [
+          {
+            "name": "Link",
+            "value": "link"
+          },
+          {
+            "name": "Telephone",
+            "value": "telephone"
+          },
+          {
+            "name": "Email",
+            "value": "email"
+          },
+          {
+            "name": "Download",
+            "value": "download"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "download",
     "fields": [
       {
