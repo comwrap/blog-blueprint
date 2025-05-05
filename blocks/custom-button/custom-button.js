@@ -1,4 +1,4 @@
-import { setBlockItemOptions, moveClassToChild } from '../../scripts/utils.js';
+import { setBlockItemOptions, moveClassToFirstChild } from '../../scripts/utils.js';
 
 export default function decorate(block) {
   const blockItemsOptions = [];
@@ -34,5 +34,5 @@ export default function decorate(block) {
 
   block.textContent = '';
   block.appendChild(button);
-  moveClassToChild(block);
+  moveClassToFirstChild(block);
 }

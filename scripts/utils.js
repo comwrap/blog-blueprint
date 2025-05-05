@@ -43,12 +43,22 @@ export const getBlockChildren = (block, options) => {
 };
 
 /**
- * Get block children
- * @param {HTMLElement} block html
- * @param {Object | undefined} options options
+ * Move classes from block to its first child
+ * @param {HTMLElement} block The block element
  */
-export const moveClassToChild = (block) => {
+export const moveClassToFirstChild = (block) => {
+  const blockName = block.getAttribute('data-block-name');
   const firstChild = block.children[0];
-  const classBeforeBlock = block.classList.item(1);
-  firstChild.classList.add(classBeforeBlock);
+  if (!firstChild) return;
+
+  const classes = Array.from(block.classList).filter(
+    (className) => className !== 'block' && className !== blockName,
+  );
+
+  if (classes.length > 0) {
+    classes.forEach((className) => {
+      firstChild.classList.add(className);
+      block.classList.remove(className);
+    });
+  }
 };
