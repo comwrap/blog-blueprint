@@ -1,0 +1,18 @@
+[
+    {
+      "id": "main",
+      "components": [
+        "section"
+      ]
+    },
+    {
+      "id": "section",
+      "components": [
+        "text",
+        "image",
+        "button",
+        "title",
+        "hero"
+      ]
+    }
+  ]
