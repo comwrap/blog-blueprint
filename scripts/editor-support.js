@@ -6,37 +6,41 @@ import {
   decorateSections,
   loadBlock,
   loadSections,
-} from './aem.js';
-import { decorateRichtext } from './editor-support-rte.js';
-import { decorateMain } from './scripts.js';
+} from "./aem.js";
+import { decorateRichtext } from "./editor-support-rte.js";
+import { decorateMain } from "./scripts.js";
 
 async function applyChanges(event) {
   // redecorate default content and blocks on patches (in the properties rail)
   const { detail } = event;
 
-  const resource = detail?.request?.target?.resource // update, patch components
-    || detail?.request?.target?.container?.resource // update, patch, add to sections
-    || detail?.request?.to?.container?.resource; // move in sections
+  const resource =
+    detail?.request?.target?.resource || // update, patch components
+    detail?.request?.target?.container?.resource || // update, patch, add to sections
+    detail?.request?.to?.container?.resource; // move in sections
   if (!resource) return false;
   const updates = detail?.response?.updates;
   if (!updates.length) return false;
   const { content } = updates[0];
   if (!content) return false;
 
-  const parsedUpdate = new DOMParser().parseFromString(content, 'text/html');
+  const parsedUpdate = new DOMParser().parseFromString(content, "text/html");
   const element = document.querySelector(`[data-aue-resource="${resource}"]`);
-
+  console.log("we are talking about: ", content);
   // Check for data-prop attributes
-  const elementsWithDataProp = parsedUpdate.querySelectorAll('[data-prop]');
+  const elementsWithDataProp = parsedUpdate.querySelectorAll("[data-prop]");
+  console.log("elementsWithDataProp", elementsWithDataProp);
   if (elementsWithDataProp.length > 0) {
-    console.log('Elements with data-prop:', elementsWithDataProp);
+    console.log("Elements with data-prop:", elementsWithDataProp);
   }
 
   if (element) {
-    if (element.matches('main')) {
-      const newMain = parsedUpdate.querySelector(`[data-aue-resource="${resource}"]`);
-      newMain.style.display = 'none';
-      element.insertAdjacentElement('afterend', newMain);
+    if (element.matches("main")) {
+      const newMain = parsedUpdate.querySelector(
+        `[data-aue-resource="${resource}"]`
+      );
+      newMain.style.display = "none";
+      element.insertAdjacentElement("afterend", newMain);
       decorateMain(newMain);
       decorateRichtext(newMain);
       await loadSections(newMain);
@@ -47,13 +51,17 @@ async function applyChanges(event) {
       return true;
     }
 
-    const block = element.parentElement?.closest('.block[data-aue-resource]') || element?.closest('.block[data-aue-resource]');
+    const block =
+      element.parentElement?.closest(".block[data-aue-resource]") ||
+      element?.closest(".block[data-aue-resource]");
     if (block) {
-      const blockResource = block.getAttribute('data-aue-resource');
-      const newBlock = parsedUpdate.querySelector(`[data-aue-resource="${blockResource}"]`);
+      const blockResource = block.getAttribute("data-aue-resource");
+      const newBlock = parsedUpdate.querySelector(
+        `[data-aue-resource="${blockResource}"]`
+      );
       if (newBlock) {
-        newBlock.style.display = 'none';
-        block.insertAdjacentElement('afterend', newBlock);
+        newBlock.style.display = "none";
+        block.insertAdjacentElement("afterend", newBlock);
         decorateButtons(newBlock);
         decorateIcons(newBlock);
         decorateBlock(newBlock);
@@ -65,13 +73,15 @@ async function applyChanges(event) {
       }
     } else {
       // sections and default content, may be multiple in the case of richtext
-      const newElements = parsedUpdate.querySelectorAll(`[data-aue-resource="${resource}"],[data-richtext-resource="${resource}"]`);
+      const newElements = parsedUpdate.querySelectorAll(
+        `[data-aue-resource="${resource}"],[data-richtext-resource="${resource}"]`
+      );
       if (newElements.length) {
         const { parentElement } = element;
-        if (element.matches('.section')) {
+        if (element.matches(".section")) {
           const [newSection] = newElements;
-          newSection.style.display = 'none';
-          element.insertAdjacentElement('afterend', newSection);
+          newSection.style.display = "none";
+          element.insertAdjacentElement("afterend", newSection);
           decorateButtons(newSection);
           decorateIcons(newSection);
           decorateRichtext(newSection);
@@ -96,17 +106,19 @@ async function applyChanges(event) {
 
 function attachEventListners(main) {
   [
-    'aue:content-patch',
-    'aue:content-update',
-    'aue:content-add',
-    'aue:content-move',
-    'aue:content-remove',
-    'aue:content-copy',
-  ].forEach((eventType) => main?.addEventListener(eventType, async (event) => {
-    event.stopPropagation();
-    const applied = await applyChanges(event);
-    if (!applied) window.location.reload();
-  }));
+    "aue:content-patch",
+    "aue:content-update",
+    "aue:content-add",
+    "aue:content-move",
+    "aue:content-remove",
+    "aue:content-copy",
+  ].forEach((eventType) =>
+    main?.addEventListener(eventType, async (event) => {
+      event.stopPropagation();
+      const applied = await applyChanges(event);
+      if (!applied) window.location.reload();
+    })
+  );
 }
 
-attachEventListners(document.querySelector('main'));
+attachEventListners(document.querySelector("main"));
