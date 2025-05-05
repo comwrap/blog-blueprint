@@ -36,8 +36,8 @@
         },
         {
           "component": "select",
-          "name": "linkClasses",
-          "label": "Styles",
+          "name": "linkType",
+          "label": "Type",
           "options": [
             {
               "name": "default",
