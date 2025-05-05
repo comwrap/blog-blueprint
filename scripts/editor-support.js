@@ -11,29 +11,35 @@ import { decorateRichtext } from './editor-support-rte.js';
 import { decorateMain } from './scripts.js';
 
 /**
- * Module for handling component locking and user-specific filtering
+ * Initialize user data and set appropriate component filters
  */
-
-let filterPath = '/content/aem-xwalk.resource/component-limited-filters.json';
-const filterScript = document.querySelector(
-  'script[type="application/vnd.adobe.aue.filter+json"]',
-);
-await filterScript.setAttribute('src', filterPath);
-
-/**
- * Fetches current user and their group memberships
- * @returns {Promise<Object>} User data including group memberships
- */
-async function getCurrentUser() {
+async function initializeUserAndFilters() {
+  let userData = null;
   try {
     const response = await fetch('/libs/granite/security/currentuser.json?props=memberOf');
     if (!response.ok) throw new Error('Failed to fetch user data');
-    return await response.json();
+    userData = await response.json();
   } catch (error) {
     console.error('Error fetching user data:', error);
-    return null;
+    userData = null;
   }
+
+  console.log('Updating component filters for user:', userData);
+
+  const userGroups = !userData?.memberOf ? [] : userData.memberOf;
+  let filterPath = '/content/aem-xwalk.resource/component-filters.json';
+  // Determine appropriate filter based on user groups
+  console.log('User groups:', userGroups);
+  const filterScript = document.querySelector('script[type="application/vnd.adobe.aue.filter+json"]');
+  // Check if any group in the array has the name 'contributor'
+  if (userGroups.some((group) => group.authorizableId === 'contributor')) {
+    filterPath = '/content/aem-xwalk.resource/component-limited-filters.json';
+  }
+  await filterScript.setAttribute('src', filterPath);
 }
+
+// Initialize user data and filters at module level
+await initializeUserAndFilters();
 
 /**
  * Removes authoring instrumentation from specified components
@@ -55,32 +61,9 @@ function lockComponent(element) {
   });
 }
 
-/**
- * Updates component filters based on user group membership
- * @param {Object} userData - Current user data including group memberships
- */
-async function updateComponentFilters(userData) {
-  console.log('Updating component filters for user:', userData);
-  if (!userData?.memberOf) return;
-
-  const userGroups = userData.memberOf;
-
-  // Determine appropriate filter based on user groups
-  console.log('User groups:', userGroups);
-
-  // Check if any group in the array has the name 'contributor'
-  if (userGroups.some((group) => group.authorizableId === 'contributor')) {
-    filterPath = '/content/aem-xwalk.resource/component-limited-filters.json';
-  } else {
-    filterPath = '/content/aem-xwalk.resource/component-filters.json';
-  }
-
-  filterScript.setAttribute('src', filterPath);
-}
-
 // Initialize component locking and user-specific filtering
 async function initializeEditorSupport() {
-  const userData = await getCurrentUser();
+  // const userData = await getCurrentUser();
 
   // Check if this is an article page that needs component locking
   const isArticlePage = document.body.classList.contains('two-columns');
@@ -92,11 +75,6 @@ async function initializeEditorSupport() {
         lockComponent(component);
       }
     });
-  }
-
-  // Set up user-specific component filtering
-  if (userData) {
-    await updateComponentFilters(userData);
   }
 }
 
@@ -134,7 +112,7 @@ async function applyChanges(event) {
     }
 
     const block = element.parentElement?.closest('.block[data-aue-resource]')
-    || element?.closest('.block[data-aue-resource]');
+      || element?.closest('.block[data-aue-resource]');
     if (block) {
       const blockResource = block.getAttribute('data-aue-resource');
       const newBlock = parsedUpdate.querySelector(`[data-aue-resource="${blockResource}"]`);
