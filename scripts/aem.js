@@ -412,6 +412,7 @@ function decorateButtons(element) {
       const up = a.parentElement;
       const twoup = a.parentElement.parentElement;
       const threeup = a.parentElement.parentElement.parentElement;
+      console.log('jel uo', twoup.tagName === 'STRONG');
       if (!a.querySelector('img')) {
         if (up.childNodes.length === 1 && (up.tagName === 'P' || up.tagName === 'DIV')) {
           a.className = 'button'; // default
@@ -439,11 +440,11 @@ function decorateButtons(element) {
           up.childNodes.length === 1
           && up.tagName === 'EM'
           && twoup.childNodes.length === 1
-          && twoup.tagName === 'strong'
+          && twoup.tagName === 'STRONG'
           && threeup.tagName === 'P'
         ) {
           a.className = 'button tertiary';
-          twoup.classList.add('button-container');
+          threeup.classList.add('button-container');
         }
       }
     }
