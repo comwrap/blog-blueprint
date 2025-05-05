@@ -14,28 +14,28 @@ import { decorateMain } from './scripts.js';
  * Initialize user data and set appropriate component filters
  */
 async function initializeUserAndFilters() {
-  let userData = null;
-  try {
-    const response = await fetch('/libs/granite/security/currentuser.json?props=memberOf');
-    if (!response.ok) throw new Error('Failed to fetch user data');
-    userData = await response.json();
-  } catch (error) {
-    console.error('Error fetching user data:', error);
-    userData = null;
-  }
-
-  console.log('Updating component filters for user:', userData);
-
-  const userGroups = !userData?.memberOf ? [] : userData.memberOf;
-  let filterPath = '/content/aem-xwalk.resource/component-filters.json';
-  // Determine appropriate filter based on user groups
-  console.log('User groups:', userGroups);
   const filterScript = document.querySelector('script[type="application/vnd.adobe.aue.filter+json"]');
-  // Check if any group in the array has the name 'contributor'
-  if (userGroups.some((group) => group.authorizableId === 'contributor')) {
-    filterPath = '/content/aem-xwalk.resource/component-limited-filters.json';
+  if (!filterScript) return;
+
+  try {
+    const [userResponse] = await Promise.all([
+      fetch('/libs/granite/security/currentuser.json?props=memberOf'),
+    ]);
+
+    if (!userResponse.ok) throw new Error('Failed to fetch user data');
+    const userData = await userResponse.json();
+    const userGroups = userData?.memberOf || [];
+    console.log('User groups:', userGroups);
+    const filterPath = userGroups.some((group) => group.authorizableId === 'contributor')
+      ? '/content/aem-xwalk.resource/component-limited-filters.json'
+      : '/content/aem-xwalk.resource/component-filters.json';
+
+    filterScript.setAttribute('src', filterPath);
+  } catch (error) {
+    console.error('Error initializing filters:', error);
+    // Set default filter on error
+    filterScript.setAttribute('src', '/content/aem-xwalk.resource/component-filters.json');
   }
-  await filterScript.setAttribute('src', filterPath);
 }
 
 // Initialize user data and filters at module level
