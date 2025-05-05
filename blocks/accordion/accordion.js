@@ -6,6 +6,9 @@ export default function decorate(block) {
   ul.className = 'accordion';
   ul.setAttribute('role', 'list');
 
+  // Get accordion options
+  const singleOpen = block.getAttribute('data-single-open') !== 'false';
+
   [...block.children].forEach((row, index) => {
     const li = document.createElement('li');
     moveInstrumentation(row, li);
@@ -15,7 +18,10 @@ export default function decorate(block) {
     const button = document.createElement('button');
     button.className = 'accordion-trigger';
     button.setAttribute('type', 'button');
-    button.setAttribute('aria-expanded', 'false');
+
+    const accordionItemOpened = row.querySelector(':scope > div:last-child');
+    const isInitiallyOpen = accordionItemOpened && accordionItemOpened.textContent.trim() === 'true';
+    button.setAttribute('aria-expanded', isInitiallyOpen);
     button.setAttribute('aria-controls', `accordion-sect-${index}`);
     button.id = `accordion-trigger-${index}`;
 
@@ -40,7 +46,10 @@ export default function decorate(block) {
     panel.id = `accordion-sect-${index}`;
     panel.setAttribute('role', 'region');
     panel.setAttribute('aria-labelledby', `accordion-trigger-${index}`);
-    panel.setAttribute('hidden', '');
+
+    if (!isInitiallyOpen) {
+      panel.setAttribute('hidden', '');
+    }
 
     const contentDiv = document.createElement('div');
     contentDiv.className = 'accordion-content';
@@ -54,7 +63,9 @@ export default function decorate(block) {
     if (imageDiv) {
       const img = imageDiv.querySelector('img');
       if (img) {
-        const optimizedPic = createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }]);
+        const optimizedPic = createOptimizedPicture(img.src, img.alt, false, [
+          { width: '750' },
+        ]);
         moveInstrumentation(img, optimizedPic.querySelector('img'));
         contentDiv.insertBefore(optimizedPic, contentDiv.firstChild);
       }
@@ -65,14 +76,18 @@ export default function decorate(block) {
 
     button.addEventListener('click', () => {
       const isExpanded = button.getAttribute('aria-expanded') === 'true';
-      // Close all other panels
-      ul.querySelectorAll('.accordion-trigger').forEach((otherButton) => {
-        if (otherButton !== button) {
-          otherButton.setAttribute('aria-expanded', 'false');
-          const otherPanel = document.getElementById(otherButton.getAttribute('aria-controls'));
-          otherPanel.setAttribute('hidden', '');
-        }
-      });
+      // Close other panels if singleOpen is true and we're opening this panel
+      if (singleOpen && !isExpanded) {
+        ul.querySelectorAll('.accordion-trigger').forEach((otherButton) => {
+          if (otherButton !== button) {
+            otherButton.setAttribute('aria-expanded', 'false');
+            const otherPanel = document.getElementById(
+              otherButton.getAttribute('aria-controls'),
+            );
+            otherPanel.setAttribute('hidden', '');
+          }
+        });
+      }
 
       // Toggle current panel
       button.setAttribute('aria-expanded', !isExpanded);
