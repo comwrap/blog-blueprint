@@ -454,7 +454,7 @@ main .section.highlight {
             }
 
             .section:nth-child(2) {
-                position: absolute;
+                position: relative;
                 width: 70%;
                 right: 0;
             }
