@@ -221,9 +221,19 @@
         ]
       },
       {
-        "component": "boolean",
+        "component": "select",
         "name": "linkTarget",
-        "label": "Target"
+        "label": "Link Target",
+        "options": [
+          {
+            "name": "self",
+            "value": ""
+          },
+          {
+            "name": "blank",
+            "value": "_blank"
+          }
+        ]
       }
     ]
   },
