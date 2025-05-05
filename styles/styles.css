@@ -152,7 +152,7 @@
     --background-color: #1a1a1a;
     --light-color: #2d2d2d;
     --dark-color: #e0e0e0;
-    --text-color: #ffffff;
+    --text-color: #fff;
     --link-color: #6b8cff;
     --link-hover-color: #8ba3ff;
     --overlay-background-color: #ffffff57;
@@ -248,18 +248,23 @@ h6 {
 h1 {
     font-size: var(--heading-font-size-xxl);
 }
+
 h2 {
     font-size: var(--heading-font-size-xl);
 }
+
 h3 {
     font-size: var(--heading-font-size-l);
 }
+
 h4 {
     font-size: var(--heading-font-size-m);
 }
+
 h5 {
     font-size: var(--heading-font-size-s);
 }
+
 h6 {
     font-size: var(--heading-font-size-xs);
 }
@@ -410,6 +415,7 @@ main .section.highlight {
     header {
         height: unset;
     }
+
     main {
         display: flex;
         justify-content: center;
