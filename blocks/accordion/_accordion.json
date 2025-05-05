@@ -33,6 +33,16 @@
   ],
   "models": [
     {
+      "id": "accordion",
+      "fields": [
+        {
+          "component": "boolean",
+          "name": "accordion-single-open",
+          "label": "Allow Only One Item Open at a Time"
+        }
+      ]
+    },
+    {
       "id": "accordionitem",
       "fields": [
         {
@@ -55,6 +65,11 @@
           "label": "Image",
           "valueType": "string",
           "multi": false
+        },
+        {
+          "component": "boolean",
+          "name": "accordion-item-open",
+          "label": "Initially Open"
         }
       ]
     }
