@@ -70,6 +70,20 @@ async function updateComponentFilters(userData) {
   // Only update if the path is different
   if (filterScript.getAttribute('src') !== filterPath) {
     filterScript.setAttribute('src', filterPath);
+
+    // Fetch and apply the filter
+    try {
+      const response = await fetch(filterPath);
+      if (!response.ok) throw new Error('Failed to fetch filter');
+      const filterData = await response.json();
+
+      // Apply the filter to the editor
+      if (window.granite?.author?.editor?.page?.component?.filter) {
+        window.granite.author.editor.page.component.filter.setFilter(filterData);
+      }
+    } catch (error) {
+      console.error('Error applying filter:', error);
+    }
   }
 }
 
@@ -77,6 +91,12 @@ async function updateComponentFilters(userData) {
 async function initializeEditorSupport() {
   const userData = await getCurrentUser();
   await updateComponentFilters(userData);
+
+  // Check for data-props on editor initialization
+  const elementsWithDataProp = document.querySelectorAll('[data-prop]');
+  if (elementsWithDataProp.length > 0) {
+    console.log('Elements with data-prop on editor open:', elementsWithDataProp);
+  }
 
   // Check if this is an article page that needs component locking
   const isArticlePage = document.body.classList.contains('two-columns');
