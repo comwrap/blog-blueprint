@@ -1,15 +1,17 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
 
+const generateUniqueId = () => `accordion-${Math.random().toString(36).substr(2, 9)}`;
+
 export default function decorate(block) {
   const ul = document.createElement('ul');
   ul.className = 'accordion';
   ul.setAttribute('role', 'list');
 
-  // Get accordion options
-  const singleOpen = block.getAttribute('data-single-open') !== 'false';
+  const singleOpenDiv = block.querySelector(':scope > div:first-child');
+  const singleOpen = singleOpenDiv && singleOpenDiv.textContent.trim() === 'true';
 
-  [...block.children].forEach((row, index) => {
+  [...block.children].slice(1).forEach((row) => {
     const li = document.createElement('li');
     moveInstrumentation(row, li);
     li.setAttribute('role', 'listitem');
@@ -22,8 +24,9 @@ export default function decorate(block) {
     const accordionItemOpened = row.querySelector(':scope > div:last-child');
     const isInitiallyOpen = accordionItemOpened && accordionItemOpened.textContent.trim() === 'true';
     button.setAttribute('aria-expanded', isInitiallyOpen);
-    button.setAttribute('aria-controls', `accordion-sect-${index}`);
-    button.id = `accordion-trigger-${index}`;
+    const uniqueId = generateUniqueId();
+    button.setAttribute('aria-controls', uniqueId);
+    button.id = `trigger-${uniqueId}`;
 
     const titleSpan = document.createElement('span');
     titleSpan.className = 'accordion-title';
@@ -43,9 +46,9 @@ export default function decorate(block) {
 
     const panel = document.createElement('div');
     panel.className = 'accordion-panel';
-    panel.id = `accordion-sect-${index}`;
+    panel.id = uniqueId;
     panel.setAttribute('role', 'region');
-    panel.setAttribute('aria-labelledby', `accordion-trigger-${index}`);
+    panel.setAttribute('aria-labelledby', `trigger-${uniqueId}`);
 
     if (!isInitiallyOpen) {
       panel.setAttribute('hidden', '');
@@ -76,25 +79,18 @@ export default function decorate(block) {
 
     button.addEventListener('click', () => {
       const isExpanded = button.getAttribute('aria-expanded') === 'true';
-      // Close other panels if singleOpen is true and we're opening this panel
-      if (singleOpen && !isExpanded) {
-        ul.querySelectorAll('.accordion-trigger').forEach((otherButton) => {
-          if (otherButton !== button) {
-            otherButton.setAttribute('aria-expanded', 'false');
-            const otherPanel = document.getElementById(
-              otherButton.getAttribute('aria-controls'),
-            );
-            otherPanel.setAttribute('hidden', '');
-          }
-        });
-      }
 
-      // Toggle current panel
-      button.setAttribute('aria-expanded', !isExpanded);
-      if (isExpanded) {
-        panel.setAttribute('hidden', '');
-      } else {
+      if (singleOpen) {
+        ul.querySelectorAll(`.accordion-trigger:not(#${button.id})`).forEach((otherButton) => {
+          otherButton.setAttribute('aria-expanded', 'false');
+          const otherPanel = otherButton.parentElement.nextElementSibling;
+          otherPanel.setAttribute('hidden', 'true');
+        });
+        button.setAttribute('aria-expanded', true);
         panel.removeAttribute('hidden');
+      } else {
+        button.setAttribute('aria-expanded', !isExpanded);
+        panel.toggleAttribute('hidden', isExpanded);
       }
     });
 
