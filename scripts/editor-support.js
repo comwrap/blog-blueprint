@@ -26,27 +26,6 @@ async function getCurrentUser() {
 }
 
 /**
- * Removes authoring instrumentation from specified components
- * @param {HTMLElement} element - The component element to lock
- */
-function lockComponent(element) {
-  if (!element) return;
-
-  // Remove all data-aue-* attributes
-  const aueAttributes = Array.from(element.attributes)
-    .filter((attr) => attr.name.startsWith('data-aue-'));
-
-  aueAttributes.forEach((attr) => {
-    element.removeAttribute(attr.name);
-  });
-
-  // Also remove from child elements
-  element.querySelectorAll('[data-aue-resource]').forEach((child) => {
-    lockComponent(child);
-  });
-}
-
-/**
  * Updates component filters based on user group membership
  * @param {Object} userData - Current user data including group memberships
  */
@@ -55,7 +34,9 @@ async function updateComponentFilters(userData) {
   if (!userData?.memberOf) return;
 
   const userGroups = userData.memberOf;
-  const filterScript = document.querySelector('script[type="application/vnd.adobe.aue.filter+json"]');
+  const filterScript = document.querySelector(
+    'script[type="application/vnd.adobe.aue.filter+json"]',
+  );
 
   // Determine appropriate filter based on user groups
   let filterPath = ''; // default path
@@ -71,21 +52,37 @@ async function updateComponentFilters(userData) {
   filterScript.setAttribute('src', filterPath);
 }
 
+/**
+ * Removes authoring instrumentation from specified components
+ * @param {HTMLElement} element - The component element to lock
+ */
+function lockComponent(element) {
+  if (!element) return;
+
+  // Remove all data-aue-* attributes
+  const aueAttributes = Array.from(element.attributes).filter((attr) => attr.name.startsWith('data-aue-'));
+
+  aueAttributes.forEach((attr) => {
+    element.removeAttribute(attr.name);
+  });
+
+  // Also remove from child elements
+  element.querySelectorAll('[data-aue-resource]').forEach((child) => {
+    lockComponent(child);
+  });
+}
+
 // Initialize component locking and user-specific filtering
 async function initializeEditorSupport() {
   const userData = await getCurrentUser();
 
-  // Check if this is an article page that needs component locking
-  const isArticlePage = document.body.classList.contains('two-columns');
-  if (isArticlePage) {
-    // Lock all add except those that should remain editable
-    document.querySelectorAll('.block[data-aue-resource]').forEach((component) => {
-      // You can add conditions here to determine which components to lock
-      if (!component.classList.contains('editable')) {
-        lockComponent(component);
-      }
-    });
-  }
+  // Lock all add except those that should remain editable
+  document.querySelectorAll('.block[data-aue-resource]').forEach((component) => {
+    // You can add conditions here to determine which components to lock
+    if (!component.classList.contains('editable')) {
+      lockComponent(component);
+    }
+  });
 
   // Set up user-specific component filtering
   if (userData) {
@@ -97,9 +94,10 @@ async function applyChanges(event) {
   // redecorate default content and blocks on patches (in the properties rail)
   const { detail } = event;
 
-  const resource = detail?.request?.target?.resource // update, patch components
-    || detail?.request?.target?.container?.resource // update, patch, add to sections
-    || detail?.request?.to?.container?.resource; // move in sections
+  const resource =
+    detail?.request?.target?.resource || // update, patch components
+    detail?.request?.target?.container?.resource || // update, patch, add to sections
+    detail?.request?.to?.container?.resource; // move in sections
   if (!resource) return false;
   const updates = detail?.response?.updates;
   if (!updates.length) return false;
@@ -124,7 +122,9 @@ async function applyChanges(event) {
       return true;
     }
 
-    const block = element.parentElement?.closest('.block[data-aue-resource]') || element?.closest('.block[data-aue-resource]');
+    const block =
+      element.parentElement?.closest('.block[data-aue-resource]') ||
+      element?.closest('.block[data-aue-resource]');
     if (block) {
       const blockResource = block.getAttribute('data-aue-resource');
       const newBlock = parsedUpdate.querySelector(`[data-aue-resource="${blockResource}"]`);
@@ -142,7 +142,9 @@ async function applyChanges(event) {
       }
     } else {
       // sections and default content, may be multiple in the case of richtext
-      const newElements = parsedUpdate.querySelectorAll(`[data-aue-resource="${resource}"],[data-richtext-resource="${resource}"]`);
+      const newElements = parsedUpdate.querySelectorAll(
+        `[data-aue-resource="${resource}"],[data-richtext-resource="${resource}"]`
+      );
       if (newElements.length) {
         const { parentElement } = element;
         if (element.matches('.section')) {
@@ -179,11 +181,13 @@ function attachEventListners(main) {
     'aue:content-move',
     'aue:content-remove',
     'aue:content-copy',
-  ].forEach((eventType) => main?.addEventListener(eventType, async (event) => {
-    event.stopPropagation();
-    const applied = await applyChanges(event);
-    if (!applied) window.location.reload();
-  }));
+  ].forEach((eventType) =>
+    main?.addEventListener(eventType, async (event) => {
+      event.stopPropagation();
+      const applied = await applyChanges(event);
+      if (!applied) window.location.reload();
+    })
+  );
 }
 
 attachEventListners(document.querySelector('main'));
