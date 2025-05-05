@@ -12,6 +12,7 @@ import { decorateMain } from './scripts.js';
 
 // Check for data-props on editor initialization
 function checkDataProps() {
+  console.log('Checking data-props on editor initialization');
   const elementsWithDataProp = document.querySelectorAll('[data-prop]');
   if (elementsWithDataProp.length > 0) {
     console.log('Elements with data-prop on editor open:', elementsWithDataProp);
