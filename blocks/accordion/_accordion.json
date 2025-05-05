@@ -37,15 +37,15 @@
       "fields": [
         {
           "component": "text",
-          "name": "question",
-          "label": "Question",
+          "name": "accordionItemTitle",
+          "label": "Accordion Item Title",
           "valueType": "string",
           "value": ""
         },
         {
           "component": "richtext",
-          "name": "answer",
-          "label": "Answer",
+          "name": "accordionItemContent",
+          "label": "Accordion Item Content",
           "valueType": "string",
           "value": ""
         },
