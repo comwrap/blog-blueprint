@@ -14,6 +14,12 @@ import { decorateMain } from './scripts.js';
  * Module for handling component locking and user-specific filtering
  */
 
+let filterPath = '/content/aem-xwalk.resource/component-limited-filters.json';
+const filterScript = document.querySelector(
+  'script[type="application/vnd.adobe.aue.filter+json"]',
+);
+await filterScript.setAttribute('src', filterPath);
+
 /**
  * Fetches current user and their group memberships
  * @returns {Promise<Object>} User data including group memberships
@@ -37,9 +43,7 @@ function lockComponent(element) {
   if (!element) return;
 
   // Remove all data-aue-* attributes
-  const aueAttributes = Array.from(element.attributes).filter((attr) =>
-    attr.name.startsWith('data-aue-')
-  );
+  const aueAttributes = Array.from(element.attributes).filter((attr) => attr.name.startsWith('data-aue-'));
 
   aueAttributes.forEach((attr) => {
     element.removeAttribute(attr.name);
@@ -56,47 +60,27 @@ function lockComponent(element) {
  * @param {Object} userData - Current user data including group memberships
  */
 async function updateComponentFilters(userData) {
+  console.log('Updating component filters for user:', userData);
   if (!userData?.memberOf) return;
 
   const userGroups = userData.memberOf;
-  const filterScript = document.querySelector('script[type="application/vnd.adobe.aue.filter+json"]');
-  if (!filterScript) return;
 
   // Determine appropriate filter based on user groups
-  const filterPath = userGroups.some((group) => group.authorizableId === 'contributor')
-    ? '/content/aem-xwalk.resource/component-limited-filters.json'
-    : '/content/aem-xwalk.resource/component-filters.json';
+  console.log('User groups:', userGroups);
 
-  // Only update if the path is different
-  if (filterScript.getAttribute('src') !== filterPath) {
-    filterScript.setAttribute('src', filterPath);
-
-    // Fetch and apply the filter
-    try {
-      const response = await fetch(filterPath);
-      if (!response.ok) throw new Error('Failed to fetch filter');
-      const filterData = await response.json();
-
-      // Apply the filter to the editor
-      if (window.granite?.author?.editor?.page?.component?.filter) {
-        window.granite.author.editor.page.component.filter.setFilter(filterData);
-      }
-    } catch (error) {
-      console.error('Error applying filter:', error);
-    }
+  // Check if any group in the array has the name 'contributor'
+  if (userGroups.some((group) => group.authorizableId === 'contributor')) {
+    filterPath = '/content/aem-xwalk.resource/component-limited-filters.json';
+  } else {
+    filterPath = '/content/aem-xwalk.resource/component-filters.json';
   }
+
+  filterScript.setAttribute('src', filterPath);
 }
 
 // Initialize component locking and user-specific filtering
 async function initializeEditorSupport() {
   const userData = await getCurrentUser();
-  await updateComponentFilters(userData);
-
-  // Check for data-props on editor initialization
-  const elementsWithDataProp = document.querySelectorAll('[data-prop]');
-  if (elementsWithDataProp.length > 0) {
-    console.log('Elements with data-prop on editor open:', elementsWithDataProp);
-  }
 
   // Check if this is an article page that needs component locking
   const isArticlePage = document.body.classList.contains('two-columns');
@@ -109,19 +93,22 @@ async function initializeEditorSupport() {
       }
     });
   }
+
+  // Set up user-specific component filtering
+  if (userData) {
+    await updateComponentFilters(userData);
+  }
 }
 
-// Initialize editor support immediately at module level
 await initializeEditorSupport();
 
 async function applyChanges(event) {
   // redecorate default content and blocks on patches (in the properties rail)
   const { detail } = event;
 
-  const resource =
-    detail?.request?.target?.resource || // update, patch components
-    detail?.request?.target?.container?.resource || // update, patch, add to sections
-    detail?.request?.to?.container?.resource; // move in sections
+  const resource = detail?.request?.target?.resource
+    || detail?.request?.target?.container?.resource
+    || detail?.request?.to?.container?.resource;
   if (!resource) return false;
   const updates = detail?.response?.updates;
   if (!updates.length) return false;
@@ -146,9 +133,8 @@ async function applyChanges(event) {
       return true;
     }
 
-    const block =
-      element.parentElement?.closest('.block[data-aue-resource]') ||
-      element?.closest('.block[data-aue-resource]');
+    const block = element.parentElement?.closest('.block[data-aue-resource]')
+    || element?.closest('.block[data-aue-resource]');
     if (block) {
       const blockResource = block.getAttribute('data-aue-resource');
       const newBlock = parsedUpdate.querySelector(`[data-aue-resource="${blockResource}"]`);
@@ -167,7 +153,7 @@ async function applyChanges(event) {
     } else {
       // sections and default content, may be multiple in the case of richtext
       const newElements = parsedUpdate.querySelectorAll(
-        `[data-aue-resource="${resource}"],[data-richtext-resource="${resource}"]`
+        `[data-aue-resource="${resource}"],[data-richtext-resource="${resource}"]`,
       );
       if (newElements.length) {
         const { parentElement } = element;
@@ -205,13 +191,11 @@ function attachEventListners(main) {
     'aue:content-move',
     'aue:content-remove',
     'aue:content-copy',
-  ].forEach((eventType) =>
-    main?.addEventListener(eventType, async (event) => {
-      event.stopPropagation();
-      const applied = await applyChanges(event);
-      if (!applied) window.location.reload();
-    })
-  );
+  ].forEach((eventType) => main?.addEventListener(eventType, async (event) => {
+    event.stopPropagation();
+    const applied = await applyChanges(event);
+    if (!applied) window.location.reload();
+  }));
 }
 
 attachEventListners(document.querySelector('main'));
