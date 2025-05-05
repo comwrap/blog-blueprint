@@ -16,5 +16,4 @@ export default function decorate(block) {
     { name: 'buttonType' },
   ];
   setBlockItemOptions(block, blockItemMap, blockItemsOptions);
-
 }

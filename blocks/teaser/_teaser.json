@@ -22,34 +22,28 @@
       "id": "teaser",
       "fields": [
         {
-          "name": "title",
-          "type": "text",
-          "title": "Title",
-          "default": "Teaser Title"
+          "component": "text",
+          "name": "teaser-title",
+          "value": "",
+          "label": "Title"
         },
         {
-          "name": "description",
-          "type": "text",
-          "title": "Description",
-          "default": "This is a teaser description."
+          "component": "richtext",
+          "name": "teaser-description",
+          "value": "",
+          "label": "Description"
         },
         {
-          "name": "image",
-          "type": "image",
-          "title": "Image",
-          "default": "https://via.placeholder.com/400x200"
+          "component": "reference",
+          "name": "teaser-image",
+          "label": "Image",
+          "valueType": "string",
+          "multi": false
         },
         {
-          "name": "imageAlt",
-          "type": "text",
-          "title": "Image Alt Text",
-          "default": "Teaser Image"
-        },
-        {
-          "name": "aemContent",
-          "type": "text",
-          "title": "Button Link",
-          "default": "#"
+          "name": "teaser-imageAlt",
+          "component": "text",
+          "title": "Image Alt Text"
         },
         {
           "...": "../../models/partials/_button.json#/fields"
@@ -58,4 +52,4 @@
     }
   ],
   "filters": []
-} 
+}
