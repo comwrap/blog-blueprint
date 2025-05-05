@@ -97,7 +97,6 @@ async function applyChanges(event) {
 }
 
 function attachEventListners(main) {
-  checkDataProps(); // Check data-props when editor is initialized
   [
     'aue:content-patch',
     'aue:content-update',
@@ -113,3 +112,4 @@ function attachEventListners(main) {
 }
 
 attachEventListners(document.querySelector('main'));
+checkDataProps(); // Check data-props when editor is initialized
