@@ -1,4 +1,5 @@
-import { setBlockItemOptions, moveClassToFirstChild } from '../../scripts/utils.js';
+import { setBlockItemOptions, moveClassToTargetedChild } from '../../scripts/utils.js';
+import renderButton from '../../components/button/button.js';
 
 export default function decorate(block) {
   const blockItemsOptions = [];
@@ -7,22 +8,14 @@ export default function decorate(block) {
   setBlockItemOptions(block, blockItemMap, blockItemsOptions);
   const { link, label, target } = blockItemsOptions[0];
 
-  const button = document.createElement('a');
-  button.className = 'button';
-  button.title = label;
-  if (target !== '') button.target = target;
-  button.innerText = label;
-
-  let href = link;
-  block.classList.forEach((className) => {
-    if (className === 'telephone') href = `tel:${link}`;
-    if (className === 'email') href = `mailto:${link}`;
-    if (className === 'download') button.download = '';
+  const button = renderButton({
+    link,
+    label,
+    target,
+    block,
   });
-
-  button.href = href;
 
   block.textContent = '';
   block.appendChild(button);
-  moveClassToFirstChild(block);
+  moveClassToTargetedChild(block, button);
 }

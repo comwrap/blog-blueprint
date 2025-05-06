@@ -46,10 +46,8 @@ export const getBlockChildren = (block, options) => {
  * Move classes from block to its first child
  * @param {HTMLElement} block The block element
  */
-export const moveClassToFirstChild = (block) => {
+export const moveClassToTargetedChild = (block, target, removeBlockClass = false) => {
   const blockName = block.getAttribute('data-block-name');
-  const firstChild = block.children[0];
-  if (!firstChild) return;
 
   const classes = Array.from(block.classList).filter(
     (className) => className !== 'block' && className !== blockName,
@@ -57,7 +55,10 @@ export const moveClassToFirstChild = (block) => {
 
   if (classes.length > 0) {
     classes.forEach((className) => {
-      firstChild.classList.add(className);
+      target.classList.add(className);
+      if (removeBlockClass) {
+        block.classList.remove(className);
+      }
     });
   }
 };
