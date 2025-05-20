@@ -590,6 +590,37 @@ function buildBlock(blockName, content) {
   return blockEl;
 }
 
+
+/**
+ * Loads child blocks
+ * @param {Element} parentBlock The block element
+ */
+function loadInnerBlocks(parentBlock) {
+  const children = [...parentBlock.children];
+  const markerTextStartsWith = 'inner-block';
+
+  children.forEach((block) => {
+    const innerChildMarkerNode = [...block.querySelectorAll('*')].find((el) => el.textContent.trim().includes(`${markerTextStartsWith}-`));
+    const markerText = innerChildMarkerNode?.textContent?.trim();
+
+    if (markerText) {
+      const blockClassName = markerText.replace(`${markerTextStartsWith}-`, '').replace(/\s+/g, '-');
+
+      block.classList.add(markerTextStartsWith);
+      block.classList.add(blockClassName);
+      block.dataset.blockName = blockClassName;
+
+      innerChildMarkerNode.remove();
+
+      loadBlock(block);
+
+      parentBlock.classList.add(`has-child-block-${blockClassName}`);
+    }
+  });
+
+  return null;
+}
+
 /**
  * Loads JS and CSS for a block.
  * @param {Element} block The block element
@@ -627,36 +658,6 @@ async function loadBlock(block) {
     block.dataset.blockStatus = 'loaded';
   }
   return block;
-}
-
-/**
- * Loads child blocks
- * @param {Element} parentBlock The block element
- */
-function loadInnerBlocks(parentBlock) {
-  const children = [...parentBlock.children];
-  const markerTextStartsWith = 'inner-block';
-
-  children.forEach((block) => {
-    const innerChildMarkerNode = [...block.querySelectorAll('*')].find((el) => el.textContent.trim().includes(`${markerTextStartsWith}-`));
-    const markerText = innerChildMarkerNode?.textContent?.trim();
-
-    if (markerText) {
-      const blockClassName = markerText.replace(`${markerTextStartsWith}-`, '').replace(/\s+/g, '-');
-
-      block.classList.add(markerTextStartsWith);
-      block.classList.add(blockClassName);
-      block.dataset.blockName = blockClassName;
-
-      innerChildMarkerNode.remove();
-
-      loadBlock(block);
-
-      parentBlock.classList.add(`has-child-block-${blockClassName}`);
-    }
-  });
-
-  return null;
 }
 
 /**
