@@ -745,7 +745,6 @@ export {
   decorateTemplateAndTheme,
   fetchPlaceholders,
   getMetadata,
-  loadInnerBlocks,
   loadBlock,
   loadCSS,
   loadFooter,
