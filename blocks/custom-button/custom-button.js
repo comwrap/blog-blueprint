@@ -1,5 +1,5 @@
 import { setBlockItemOptions, moveClassToTargetedChild } from '../../scripts/utils.js';
-import renderButton from '../../components/button/button.js';
+import { renderButton } from '../../components/button/button.js';
 
 export default function decorate(block) {
   const blockItemsOptions = [];
