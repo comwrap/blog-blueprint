@@ -152,6 +152,44 @@
   transform: translate(-75%, -50%) rotate(45deg);
 }
 
+.carousel-slide-indicators {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  z-index: 5;
+}
+
+.carousel-slide-indicator {
+  margin: 0;
+  padding: 0;
+}
+
+.carousel-slide-indicator button {
+  width: 0.75rem;
+  height: 0.75rem;
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(var(--color-pure-white), 0.5);
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.3s ease;
+}
+
+.carousel-slide-indicator button:hover {
+  background-color: rgba(var(--color-pure-white), 0.8);
+}
+
+.carousel-slide-indicator button[disabled] {
+  background-color: rgba(var(--color-pure-white), 1);
+  cursor: default;
+}
+
 .adobe-ue-edit .carousel-slide-image img {
   height: 37.5rem;
 }

@@ -153,6 +153,13 @@ function createSlide(row, slideIndex, carouselId) {
 
         divClone.appendChild(buttonsContainer);
       }
+
+      const hasTextContent = divClone.textContent.trim() !== '';
+      const hasButtons = divClone.querySelector('.carousel-buttons') !== null;
+
+      if (!hasTextContent && !hasButtons) {
+        return;
+      }
     }
     if (divClone.querySelector('a')) {
       const link = divClone.querySelector('a');

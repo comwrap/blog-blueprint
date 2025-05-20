@@ -1,7 +1,6 @@
 import { setBlockItemOptions, moveClassToTargetedChild } from '../../scripts/utils.js';
 import { renderButton } from '../../components/button/button.js';
 import { createOptimizedPicture } from '../../scripts/aem.js';
-import { moveInstrumentation } from '../../scripts/scripts.js';
 
 export default function decorate(block) {
   const blockItemsOptions = [];
