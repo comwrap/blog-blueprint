@@ -96,7 +96,8 @@
       {
         "id": "carousel",
         "components": [
-          "carouselitem"
+          "carouselitem",
+          "teaser"
         ]
       }
     ]
