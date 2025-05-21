@@ -1,7 +1,7 @@
 {
   "definitions": [
     {
-      "title": "Button",
+      "title": "Button (AEM)",
       "id": "button",
       "plugins": {
         "xwalk": {

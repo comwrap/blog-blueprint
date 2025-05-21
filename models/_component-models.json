@@ -1,10 +1,6 @@
 [
   {
     "id": "page-metadata",
-    "fields": [
-      {
-        "component": "container",
-        "label": "Fieldset",
         "fields": [
           {
             "component": "text",
@@ -118,8 +114,6 @@
             "name": "primary-language-url",
             "label": "Primary Language URL"
           }
-        ]
-      }
     ]
   },
   {
