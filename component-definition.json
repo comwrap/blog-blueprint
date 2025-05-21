@@ -43,7 +43,7 @@
           }
         },
         {
-          "title": "Button (AEM)",
+          "title": "Button",
           "id": "button",
           "plugins": {
             "xwalk": {
