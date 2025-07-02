@@ -397,9 +397,24 @@ main > .section:first-of-type {
     margin-top: 0;
 }
 
+/* Target all elements with classes ending in "-wrapper" */
+[class*="-wrapper"] {
+    padding: var(--spacing-m);
+}
+
+/* Alternative: More specific targeting for wrapper classes */
+[class$="-wrapper"] {
+    padding: var(--spacing-m);
+}
+
 @media (width >= 900px) {
     main > .section > div {
         padding: 0 32px;
+    }
+    
+    /* Responsive padding for wrapper elements */
+    [class*="-wrapper"] {
+        padding: var(--spacing-l);
     }
 }
 
