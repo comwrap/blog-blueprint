@@ -1,1 +1,7 @@
 /* stylelint-disable no-empty-source */
+.fragment {
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
