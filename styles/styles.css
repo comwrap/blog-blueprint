@@ -494,12 +494,20 @@ main .section.highlight {
                     max-height: 40px;
                 }
             }
-            
+
             .accordion-wrapper {
                 .accordion-trigger {
                     padding-top: 0;
                 }
             }
         }
+    }
+}
+
+.adobe-ue-edit .library main {
+    .section:nth-child(1) {
+        position: fixed;
+        width: 30%;
+        left: 0;
     }
 }
