@@ -609,80 +609,76 @@
         "value": ""
       },
       {
-        "fields": [
+        "component": "aem-content",
+        "name": "custom-button-link",
+        "label": "Button Link"
+      },
+      {
+        "component": "text",
+        "name": "custom-button-label",
+        "label": "Button Label"
+      },
+      {
+        "component": "select",
+        "name": "custom-button-target",
+        "label": "Link Target",
+        "options": [
           {
-            "component": "aem-content",
-            "name": "custom-button-link",
-            "label": "Button Link"
+            "name": "Same Window",
+            "value": ""
           },
           {
-            "component": "text",
-            "name": "custom-button-label",
-            "label": "Button Label"
-          },
+            "name": "New Tab",
+            "value": "_blank"
+          }
+        ]
+      },
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Style",
+        "valueType": "string",
+        "maxSize": 2,
+        "options": [
           {
-            "component": "select",
-            "name": "custom-button-target",
-            "label": "Link Target",
-            "options": [
+            "name": "Style",
+            "children": [
               {
-                "name": "Same Window",
-                "value": ""
+                "name": "Primary",
+                "value": "primary"
               },
               {
-                "name": "New Tab",
-                "value": "_blank"
+                "name": "Secondary",
+                "value": "secondary"
+              },
+              {
+                "name": "Tertiary",
+                "value": "tertiary"
+              },
+              {
+                "name": "Text",
+                "value": "text"
               }
             ]
           },
           {
-            "component": "multiselect",
-            "name": "classes",
-            "label": "Style",
-            "valueType": "string",
-            "maxSize": 2,
-            "options": [
+            "name": "Type",
+            "children": [
               {
-                "name": "Style",
-                "children": [
-                  {
-                    "name": "Primary",
-                    "value": "primary"
-                  },
-                  {
-                    "name": "Secondary",
-                    "value": "secondary"
-                  },
-                  {
-                    "name": "Tertiary",
-                    "value": "tertiary"
-                  },
-                  {
-                    "name": "Text",
-                    "value": "text"
-                  }
-                ]
+                "name": "Link",
+                "value": "link"
               },
               {
-                "name": "Type",
-                "children": [
-                  {
-                    "name": "Link",
-                    "value": "link"
-                  },
-                  {
-                    "name": "Download",
-                    "value": "download"
-                  },
-                  {
-                    "name": "Email",
-                    "value": "email"
-                  },
-                  {
-                    "name": "Telephone",
-                    "value": "telephone"
-                  }
-                ]
+                "name": "Download",
+                "value": "download"
+              },
+              {
+                "name": "Email",
+                "value": "email"
+              },
+              {
+                "name": "Telephone",
+                "value": "telephone"
               }
             ]
           }

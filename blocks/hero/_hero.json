@@ -49,7 +49,7 @@
           "value": ""
         },
         {
-          "...": "../../models/partials/_button.json"
+          "...": "../../models/partials/_button.json#/fields"
         }
       ]
     }
