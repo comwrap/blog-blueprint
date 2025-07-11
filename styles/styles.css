@@ -506,8 +506,9 @@ main .section.highlight {
 
 .adobe-ue-edit .library main {
     .section:nth-child(1) {
-        position: fixed;
-        width: 30%;
-        left: 0;
+        position: unset;
+    }
+    .section:nth-child(2) {
+        position: unset;
     }
 }
