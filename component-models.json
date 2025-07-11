@@ -581,6 +581,20 @@
     "id": "hero",
     "fields": [
       {
+        "component": "text",
+        "name": "title",
+        "value": "",
+        "label": "Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text",
+        "valueType": "string"
+      },
+      {
         "component": "reference",
         "valueType": "string",
         "name": "image",
@@ -595,11 +609,164 @@
         "value": ""
       },
       {
-        "component": "richtext",
-        "name": "text",
-        "value": "",
-        "label": "Text",
-        "valueType": "string"
+        "fields": [
+          {
+            "component": "aem-content",
+            "name": "custom-button-link",
+            "label": "Button Link"
+          },
+          {
+            "component": "text",
+            "name": "custom-button-label",
+            "label": "Button Label"
+          },
+          {
+            "component": "select",
+            "name": "custom-button-target",
+            "label": "Link Target",
+            "options": [
+              {
+                "name": "Same Window",
+                "value": ""
+              },
+              {
+                "name": "New Tab",
+                "value": "_blank"
+              }
+            ]
+          },
+          {
+            "component": "multiselect",
+            "name": "classes",
+            "label": "Style",
+            "valueType": "string",
+            "maxSize": 2,
+            "options": [
+              {
+                "name": "Style",
+                "children": [
+                  {
+                    "name": "Primary",
+                    "value": "primary"
+                  },
+                  {
+                    "name": "Secondary",
+                    "value": "secondary"
+                  },
+                  {
+                    "name": "Tertiary",
+                    "value": "tertiary"
+                  },
+                  {
+                    "name": "Text",
+                    "value": "text"
+                  }
+                ]
+              },
+              {
+                "name": "Type",
+                "children": [
+                  {
+                    "name": "Link",
+                    "value": "link"
+                  },
+                  {
+                    "name": "Download",
+                    "value": "download"
+                  },
+                  {
+                    "name": "Email",
+                    "value": "email"
+                  },
+                  {
+                    "name": "Telephone",
+                    "value": "telephone"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "fields": [
+          {
+            "component": "aem-content",
+            "name": "custom-button-link",
+            "label": "Button Link"
+          },
+          {
+            "component": "text",
+            "name": "custom-button-label",
+            "label": "Button Label"
+          },
+          {
+            "component": "select",
+            "name": "custom-button-target",
+            "label": "Link Target",
+            "options": [
+              {
+                "name": "Same Window",
+                "value": ""
+              },
+              {
+                "name": "New Tab",
+                "value": "_blank"
+              }
+            ]
+          },
+          {
+            "component": "multiselect",
+            "name": "classes",
+            "label": "Style",
+            "valueType": "string",
+            "maxSize": 2,
+            "options": [
+              {
+                "name": "Style",
+                "children": [
+                  {
+                    "name": "Primary",
+                    "value": "primary"
+                  },
+                  {
+                    "name": "Secondary",
+                    "value": "secondary"
+                  },
+                  {
+                    "name": "Tertiary",
+                    "value": "tertiary"
+                  },
+                  {
+                    "name": "Text",
+                    "value": "text"
+                  }
+                ]
+              },
+              {
+                "name": "Type",
+                "children": [
+                  {
+                    "name": "Link",
+                    "value": "link"
+                  },
+                  {
+                    "name": "Download",
+                    "value": "download"
+                  },
+                  {
+                    "name": "Email",
+                    "value": "email"
+                  },
+                  {
+                    "name": "Telephone",
+                    "value": "telephone"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -705,6 +872,23 @@
             ]
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "video",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "video",
+        "label": "Video",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "video_description",
+        "label": "Video Description",
+        "valueType": "string"
       }
     ]
   }
