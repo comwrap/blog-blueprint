@@ -508,6 +508,7 @@ main .section.highlight {
     .section:nth-child(1) {
         position: unset;
     }
+    
     .section:nth-child(2) {
         position: unset;
     }
