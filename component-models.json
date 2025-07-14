@@ -459,17 +459,22 @@
     "fields": [
       {
         "component": "aem-content",
-        "name": "custom-button-link",
-        "label": "Button Link"
+        "name": "custombutton_link",
+        "label": "Link"
       },
       {
         "component": "text",
-        "name": "custom-button-label",
-        "label": "Button Label"
+        "name": "custombutton_linkText",
+        "label": "Text"
+      },
+      {
+        "component": "text",
+        "name": "custombutton_linkTitle",
+        "label": "Title"
       },
       {
         "component": "select",
-        "name": "custom-button-target",
+        "name": "custombutton_target",
         "label": "Link Target",
         "options": [
           {
@@ -484,7 +489,7 @@
       },
       {
         "component": "select",
-        "name": "buttontypes_classes",
+        "name": "custombutton_type_classes",
         "label": "Button Type",
         "options": [
           {
@@ -507,7 +512,7 @@
       },
       {
         "component": "select",
-        "name": "buttonstyles_classes",
+        "name": "custombutton_style_classes",
         "label": "Button Style",
         "options": [
           {
@@ -605,17 +610,22 @@
       },
       {
         "component": "aem-content",
-        "name": "custom-button-link",
-        "label": "Button Link"
+        "name": "custombutton_link",
+        "label": "Link"
       },
       {
         "component": "text",
-        "name": "custom-button-label",
-        "label": "Button Label"
+        "name": "custombutton_linkText",
+        "label": "Text"
+      },
+      {
+        "component": "text",
+        "name": "custombutton_linkTitle",
+        "label": "Title"
       },
       {
         "component": "select",
-        "name": "custom-button-target",
+        "name": "custombutton_target",
         "label": "Link Target",
         "options": [
           {
@@ -630,7 +640,7 @@
       },
       {
         "component": "select",
-        "name": "buttontypes_classes",
+        "name": "custombutton_type_classes",
         "label": "Button Type",
         "options": [
           {
@@ -653,7 +663,7 @@
       },
       {
         "component": "select",
-        "name": "buttonstyles_classes",
+        "name": "custombutton_style_classes",
         "label": "Button Style",
         "options": [
           {
@@ -705,17 +715,22 @@
       },
       {
         "component": "aem-content",
-        "name": "custom-button-link",
-        "label": "Button Link"
+        "name": "custombutton_link",
+        "label": "Link"
       },
       {
         "component": "text",
-        "name": "custom-button-label",
-        "label": "Button Label"
+        "name": "custombutton_linkText",
+        "label": "Text"
+      },
+      {
+        "component": "text",
+        "name": "custombutton_linkTitle",
+        "label": "Title"
       },
       {
         "component": "select",
-        "name": "custom-button-target",
+        "name": "custombutton_target",
         "label": "Link Target",
         "options": [
           {
@@ -730,7 +745,7 @@
       },
       {
         "component": "select",
-        "name": "buttontypes_classes",
+        "name": "custombutton_type_classes",
         "label": "Button Type",
         "options": [
           {
@@ -753,7 +768,7 @@
       },
       {
         "component": "select",
-        "name": "buttonstyles_classes",
+        "name": "custombutton_style_classes",
         "label": "Button Style",
         "options": [
           {

@@ -1,49 +1,54 @@
 {
-    "fields": [
+  "fields": [
+    {
+      "component": "aem-content",
+      "name": "custombutton_link",
+      "label": "Link"
+    },
+    {
+      "component": "text",
+      "name": "custombutton_linkText",
+      "label": "Text"
+    },
+    {
+      "component": "text",
+      "name": "custombutton_linkTitle",
+      "label": "Title"
+    },
+    {
+      "component": "select",
+      "name": "custombutton_target",
+      "label": "Link Target",
+      "options": [
         {
-          "component": "aem-content",
-          "name": "custom-button-link",
-          "label": "Button Link"
+          "name": "Same Window",
+          "value": ""
         },
         {
-          "component": "text",
-          "name": "custom-button-label",
-          "label": "Button Label"
-        },
+          "name": "New Tab",
+          "value": "_blank"
+        }
+      ]
+    },
+    {
+      "component": "select",
+      "name": "custombutton_type_classes",
+      "label": "Button Type",
+      "options": [
         {
-          "component": "select",
-          "name": "custom-button-target",
-          "label": "Link Target",
-          "options": [
-            {
-              "name": "Same Window",
-              "value": ""
-            },
-            {
-              "name": "New Tab",
-              "value": "_blank"
-            }
-          ]
-        },
+          "...": "../../models/partials/_button-types.json#/options"
+        }
+      ]
+    },
+    {
+      "component": "select",
+      "name": "custombutton_style_classes",
+      "label": "Button Style",
+      "options": [
         {
-          "component": "select",
-          "name": "buttontypes_classes",
-          "label": "Button Type",
-          "options": [
-            {
-              "...": "../../models/partials/_button-types.json#/options"
-            }
-          ]
-        },
-        {
-          "component": "select",
-          "name": "buttonstyles_classes",
-          "label": "Button Style",
-          "options": [
-            {
-              "...": "../../models/partials/_button-styles.json#/options"
-            }
-          ]
+          "...": "../../models/partials/_button-styles.json#/options"
         }
       ]
     }
+  ]
+}
