@@ -486,28 +486,22 @@
         "component": "select",
         "name": "buttontypes_classes",
         "label": "Button Type",
-        "valueType": "string",
         "options": [
           {
-            "name": "Button Type",
-            "children": [
-              {
-                "name": "Link",
-                "value": "link"
-              },
-              {
-                "name": "Download",
-                "value": "download"
-              },
-              {
-                "name": "Email",
-                "value": "email"
-              },
-              {
-                "name": "Telephone",
-                "value": "telephone"
-              }
-            ]
+            "name": "Link",
+            "value": "link"
+          },
+          {
+            "name": "Download",
+            "value": "download"
+          },
+          {
+            "name": "Email",
+            "value": "email"
+          },
+          {
+            "name": "Telephone",
+            "value": "telephone"
           }
         ]
       },
@@ -515,28 +509,22 @@
         "component": "select",
         "name": "buttonstyles_classes",
         "label": "Button Style",
-        "valueType": "string",
         "options": [
           {
-            "name": "Style",
-            "children": [
-              {
-                "name": "Primary",
-                "value": "primary"
-              },
-              {
-                "name": "Secondary",
-                "value": "secondary"
-              },
-              {
-                "name": "Tertiary",
-                "value": "tertiary"
-              },
-              {
-                "name": "Text",
-                "value": "text"
-              }
-            ]
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          },
+          {
+            "name": "Tertiary",
+            "value": "tertiary"
+          },
+          {
+            "name": "Text",
+            "value": "text"
           }
         ]
       }
@@ -644,28 +632,22 @@
         "component": "select",
         "name": "buttontypes_classes",
         "label": "Button Type",
-        "valueType": "string",
         "options": [
           {
-            "name": "Button Type",
-            "children": [
-              {
-                "name": "Link",
-                "value": "link"
-              },
-              {
-                "name": "Download",
-                "value": "download"
-              },
-              {
-                "name": "Email",
-                "value": "email"
-              },
-              {
-                "name": "Telephone",
-                "value": "telephone"
-              }
-            ]
+            "name": "Link",
+            "value": "link"
+          },
+          {
+            "name": "Download",
+            "value": "download"
+          },
+          {
+            "name": "Email",
+            "value": "email"
+          },
+          {
+            "name": "Telephone",
+            "value": "telephone"
           }
         ]
       },
@@ -673,28 +655,22 @@
         "component": "select",
         "name": "buttonstyles_classes",
         "label": "Button Style",
-        "valueType": "string",
         "options": [
           {
-            "name": "Style",
-            "children": [
-              {
-                "name": "Primary",
-                "value": "primary"
-              },
-              {
-                "name": "Secondary",
-                "value": "secondary"
-              },
-              {
-                "name": "Tertiary",
-                "value": "tertiary"
-              },
-              {
-                "name": "Text",
-                "value": "text"
-              }
-            ]
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          },
+          {
+            "name": "Tertiary",
+            "value": "tertiary"
+          },
+          {
+            "name": "Text",
+            "value": "text"
           }
         ]
       }
@@ -756,28 +732,22 @@
         "component": "select",
         "name": "buttontypes_classes",
         "label": "Button Type",
-        "valueType": "string",
         "options": [
           {
-            "name": "Button Type",
-            "children": [
-              {
-                "name": "Link",
-                "value": "link"
-              },
-              {
-                "name": "Download",
-                "value": "download"
-              },
-              {
-                "name": "Email",
-                "value": "email"
-              },
-              {
-                "name": "Telephone",
-                "value": "telephone"
-              }
-            ]
+            "name": "Link",
+            "value": "link"
+          },
+          {
+            "name": "Download",
+            "value": "download"
+          },
+          {
+            "name": "Email",
+            "value": "email"
+          },
+          {
+            "name": "Telephone",
+            "value": "telephone"
           }
         ]
       },
@@ -785,28 +755,22 @@
         "component": "select",
         "name": "buttonstyles_classes",
         "label": "Button Style",
-        "valueType": "string",
         "options": [
           {
-            "name": "Style",
-            "children": [
-              {
-                "name": "Primary",
-                "value": "primary"
-              },
-              {
-                "name": "Secondary",
-                "value": "secondary"
-              },
-              {
-                "name": "Tertiary",
-                "value": "tertiary"
-              },
-              {
-                "name": "Text",
-                "value": "text"
-              }
-            ]
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          },
+          {
+            "name": "Tertiary",
+            "value": "tertiary"
+          },
+          {
+            "name": "Text",
+            "value": "text"
           }
         ]
       }

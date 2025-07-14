@@ -1,25 +1,20 @@
 {
   "options": [
     {
-      "name": "Button Type",
-      "children": [
-        {
-          "name": "Link",
-          "value": "link"
-        },
-        {
-          "name": "Download",
-          "value": "download"
-        },
-        {
-          "name": "Email",
-          "value": "email"
-        },
-        {
-          "name": "Telephone",
-          "value": "telephone"
-        }
-      ]
+      "name": "Link",
+      "value": "link"
+    },
+    {
+      "name": "Download",
+      "value": "download"
+    },
+    {
+      "name": "Email",
+      "value": "email"
+    },
+    {
+      "name": "Telephone",
+      "value": "telephone"
     }
   ]
 }
