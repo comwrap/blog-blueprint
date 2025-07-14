@@ -1,0 +1,25 @@
+{
+  "options": [
+    {
+      "name": "Style",
+      "children": [
+        {
+          "name": "Primary",
+          "value": "primary"
+        },
+        {
+          "name": "Secondary",
+          "value": "secondary"
+        },
+        {
+          "name": "Tertiary",
+          "value": "tertiary"
+        },
+        {
+          "name": "Text",
+          "value": "text"
+        }
+      ]
+    }
+  ]
+}

@@ -26,14 +26,24 @@
           ]
         },
         {
-          "component": "multiselect",
-          "name": "classes",
-          "label": "Style",
+          "component": "select",
+          "name": "buttontypes_classes",
+          "label": "Button Type",
           "valueType": "string",
-          "maxSize": 2,
           "options": [
             {
               "...": "../../models/partials/_button-types.json#/options"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "buttonstyles_classes",
+          "label": "Button Style",
+          "valueType": "string",
+          "options": [
+            {
+              "...": "../../models/partials/_button-styles.json#/options"
             }
           ]
         }

@@ -483,11 +483,39 @@
         ]
       },
       {
-        "component": "multiselect",
-        "name": "classes",
-        "label": "Style",
+        "component": "select",
+        "name": "buttontypes_classes",
+        "label": "Button Type",
         "valueType": "string",
-        "maxSize": 2,
+        "options": [
+          {
+            "name": "Button Type",
+            "children": [
+              {
+                "name": "Link",
+                "value": "link"
+              },
+              {
+                "name": "Download",
+                "value": "download"
+              },
+              {
+                "name": "Email",
+                "value": "email"
+              },
+              {
+                "name": "Telephone",
+                "value": "telephone"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "buttonstyles_classes",
+        "label": "Button Style",
+        "valueType": "string",
         "options": [
           {
             "name": "Style",
@@ -507,27 +535,6 @@
               {
                 "name": "Text",
                 "value": "text"
-              }
-            ]
-          },
-          {
-            "name": "Type",
-            "children": [
-              {
-                "name": "Link",
-                "value": "link"
-              },
-              {
-                "name": "Download",
-                "value": "download"
-              },
-              {
-                "name": "Email",
-                "value": "email"
-              },
-              {
-                "name": "Telephone",
-                "value": "telephone"
               }
             ]
           }
@@ -634,11 +641,39 @@
         ]
       },
       {
-        "component": "multiselect",
-        "name": "classes",
-        "label": "Style",
+        "component": "select",
+        "name": "buttontypes_classes",
+        "label": "Button Type",
         "valueType": "string",
-        "maxSize": 2,
+        "options": [
+          {
+            "name": "Button Type",
+            "children": [
+              {
+                "name": "Link",
+                "value": "link"
+              },
+              {
+                "name": "Download",
+                "value": "download"
+              },
+              {
+                "name": "Email",
+                "value": "email"
+              },
+              {
+                "name": "Telephone",
+                "value": "telephone"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "buttonstyles_classes",
+        "label": "Button Style",
+        "valueType": "string",
         "options": [
           {
             "name": "Style",
@@ -658,27 +693,6 @@
               {
                 "name": "Text",
                 "value": "text"
-              }
-            ]
-          },
-          {
-            "name": "Type",
-            "children": [
-              {
-                "name": "Link",
-                "value": "link"
-              },
-              {
-                "name": "Download",
-                "value": "download"
-              },
-              {
-                "name": "Email",
-                "value": "email"
-              },
-              {
-                "name": "Telephone",
-                "value": "telephone"
               }
             ]
           }
@@ -739,11 +753,39 @@
         ]
       },
       {
-        "component": "multiselect",
-        "name": "classes",
-        "label": "Style",
+        "component": "select",
+        "name": "buttontypes_classes",
+        "label": "Button Type",
         "valueType": "string",
-        "maxSize": 2,
+        "options": [
+          {
+            "name": "Button Type",
+            "children": [
+              {
+                "name": "Link",
+                "value": "link"
+              },
+              {
+                "name": "Download",
+                "value": "download"
+              },
+              {
+                "name": "Email",
+                "value": "email"
+              },
+              {
+                "name": "Telephone",
+                "value": "telephone"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "buttonstyles_classes",
+        "label": "Button Style",
+        "valueType": "string",
         "options": [
           {
             "name": "Style",
@@ -763,27 +805,6 @@
               {
                 "name": "Text",
                 "value": "text"
-              }
-            ]
-          },
-          {
-            "name": "Type",
-            "children": [
-              {
-                "name": "Link",
-                "value": "link"
-              },
-              {
-                "name": "Download",
-                "value": "download"
-              },
-              {
-                "name": "Email",
-                "value": "email"
-              },
-              {
-                "name": "Telephone",
-                "value": "telephone"
               }
             ]
           }
