@@ -17,7 +17,7 @@
     },
     {
       "component": "select",
-      "name": "custombutton_target",
+      "name": "custombutton-target_target",
       "label": "Link Target",
       "options": [
         {
@@ -32,7 +32,7 @@
     },
     {
       "component": "select",
-      "name": "custombutton_type_classes",
+      "name": "custombutton-type_classes",
       "label": "Button Type",
       "options": [
         {
@@ -42,7 +42,7 @@
     },
     {
       "component": "select",
-      "name": "custombutton_style_classes",
+      "name": "custombutton-style_classes",
       "label": "Button Style",
       "options": [
         {
