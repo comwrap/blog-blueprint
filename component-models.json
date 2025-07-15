@@ -578,6 +578,201 @@
     ]
   },
   {
+    "id": "gallery",
+    "fields": [
+      {
+        "component": "select",
+        "name": "gallery_type",
+        "label": "Gallery Type",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Carousel",
+            "value": "carousel"
+          },
+          {
+            "name": "Grid",
+            "value": "grid"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "elements_per_row",
+        "label": "Elements per Row (Grid only)",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "2",
+            "value": "2"
+          },
+          {
+            "name": "3",
+            "value": "3"
+          },
+          {
+            "name": "4",
+            "value": "4"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "jump_link_label",
+        "label": "Jump Link Label",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "jump_link_id",
+        "label": "Jump Link ID",
+        "valueType": "string",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "galleryimage",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "asset",
+        "label": "Image Asset",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "name": "alt",
+        "label": "Alt Tag",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "caption",
+        "label": "Caption",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "checkbox",
+        "name": "aspect_ratio",
+        "label": "Maintain Aspect Ratio",
+        "valueType": "boolean",
+        "value": true
+      }
+    ]
+  },
+  {
+    "id": "galleryvideo",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "video_asset",
+        "label": "Video Asset",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "name": "video_title",
+        "label": "Video Title",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "video_description",
+        "label": "Video Description",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "name": "aspect_ratio",
+        "label": "Aspect Ratio",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "16:9",
+            "value": "16:9"
+          },
+          {
+            "name": "4:3",
+            "value": "4:3"
+          },
+          {
+            "name": "16:10",
+            "value": "16:10"
+          },
+          {
+            "name": "16:5",
+            "value": "16:5"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "galleryembed",
+    "fields": [
+      {
+        "component": "text",
+        "name": "embed_url",
+        "label": "Embed URL (e.g., YouTube)",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "embed_title",
+        "label": "Embed Title",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "embed_description",
+        "label": "Embed Description",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "name": "aspect_ratio",
+        "label": "Aspect Ratio",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "16:9",
+            "value": "16:9"
+          },
+          {
+            "name": "4:3",
+            "value": "4:3"
+          },
+          {
+            "name": "16:10",
+            "value": "16:10"
+          },
+          {
+            "name": "16:5",
+            "value": "16:5"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "hero",
     "fields": [
       {

@@ -23,7 +23,8 @@
       "accordion",
       "download",
       "teaser",
-      "video"
+      "video",
+      "gallery"
     ]
   },
   {
@@ -57,6 +58,14 @@
       "image",
       "button",
       "title"
+    ]
+  },
+  {
+    "id": "gallery",
+    "components": [
+      "galleryimage",
+      "galleryvideo",
+      "galleryembed"
     ]
   }
 ]
