@@ -8,26 +8,26 @@
 }
 
 /* Grid Layout */
-.gallery--grid {
+.gallery-grid {
   display: grid;
   gap: 1.5rem;
   padding: 0 1rem;
 }
 
-.gallery--grid.gallery--cols-2 {
+.gallery-grid.gallery-cols-2 {
   grid-template-columns: repeat(2, 1fr);
 }
 
-.gallery--grid.gallery--cols-3 {
+.gallery-grid.gallery-cols-3 {
   grid-template-columns: repeat(3, 1fr);
 }
 
-.gallery--grid.gallery--cols-4 {
+.gallery-grid.gallery-cols-4 {
   grid-template-columns: repeat(4, 1fr);
 }
 
 /* Carousel Layout */
-.gallery--carousel {
+.gallery-carousel {
   position: relative;
   overflow: hidden;
   padding: 0 1rem;
@@ -51,13 +51,13 @@
   border-radius: 8px;
   overflow: hidden;
   background: #f8f9fa;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .gallery-item:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 25px rgb(0 0 0 / 15%);
 }
 
 /* Image Styles */
@@ -68,7 +68,7 @@
   object-fit: cover;
 }
 
-.gallery-image--aspect-ratio {
+.gallery-image-aspect-ratio {
   aspect-ratio: 16/9;
   object-fit: cover;
 }
@@ -80,19 +80,19 @@
   display: block;
 }
 
-.gallery-video--16-9 {
+.gallery-video-16-9 {
   aspect-ratio: 16/9;
 }
 
-.gallery-video--4-3 {
+.gallery-video-4-3 {
   aspect-ratio: 4/3;
 }
 
-.gallery-video--16-10 {
+.gallery-video-16-10 {
   aspect-ratio: 16/10;
 }
 
-.gallery-video--16-5 {
+.gallery-video-16-5 {
   aspect-ratio: 16/5;
 }
 
@@ -103,31 +103,31 @@
   border: none;
 }
 
-.gallery-embed--16-9 {
+.gallery-embed-16-9 {
   aspect-ratio: 16/9;
 }
 
-.gallery-embed--4-3 {
+.gallery-embed-4-3 {
   aspect-ratio: 4/3;
 }
 
-.gallery-embed--16-10 {
+.gallery-embed-16-10 {
   aspect-ratio: 16/10;
 }
 
-.gallery-embed--16-5 {
+.gallery-embed-16-5 {
   aspect-ratio: 16/5;
 }
 
 /* Caption Styles */
 .gallery-caption {
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgb(255 255 255 / 95%);
   backdrop-filter: blur(10px);
 }
 
 .gallery-caption h3 {
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.5rem;
   font-size: 1.1rem;
   font-weight: 600;
   color: #333;
@@ -141,7 +141,7 @@
 }
 
 /* Carousel Caption Overlay */
-.gallery--carousel .gallery-caption {
+.gallery-carousel .gallery-caption {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -151,7 +151,7 @@
   opacity: 0;
 }
 
-.gallery--carousel .gallery-item:hover .gallery-caption {
+.gallery-carousel .gallery-item:hover .gallery-caption {
   transform: translateY(0);
   opacity: 1;
 }
@@ -184,6 +184,11 @@
   background: #007bff;
   border-color: #007bff;
   color: #fff;
+}
+
+.gallery-carousel-arrow:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
 }
 
 .gallery-carousel-arrow:disabled {
@@ -241,25 +246,25 @@
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
-  .gallery--grid.gallery--cols-3,
-  .gallery--grid.gallery--cols-4 {
+@media (width <= 768px) {
+  .gallery-grid.gallery-cols-3,
+  .gallery-grid.gallery-cols-4 {
     grid-template-columns: repeat(2, 1fr);
   }
-  
-  .gallery--grid.gallery--cols-2 {
+
+  .gallery-grid.gallery-cols-2 {
     grid-template-columns: 1fr;
   }
-  
+
   .gallery-thumbnails {
     gap: 0.25rem;
   }
-  
+
   .gallery-thumbnail {
     width: 50px;
     height: 50px;
   }
-  
+
   .gallery-carousel-arrow {
     width: 35px;
     height: 35px;
@@ -267,30 +272,30 @@
   }
 }
 
-@media (max-width: 480px) {
-  .gallery--grid {
+@media (width <= 480px) {
+  .gallery-grid {
     grid-template-columns: 1fr !important;
   }
-  
+
   .gallery-thumbnail {
     width: 40px;
     height: 40px;
   }
-  
+
   .gallery-carousel-arrow {
     width: 30px;
     height: 30px;
     font-size: 0.9rem;
   }
-  
+
   .gallery-caption {
     padding: 0.75rem;
   }
-  
+
   .gallery-caption h3 {
     font-size: 1rem;
   }
-  
+
   .gallery-caption p {
     font-size: 0.8rem;
   }
@@ -319,13 +324,6 @@
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
-}
-
-/* Accessibility */
-.gallery-carousel-arrow:focus,
-.gallery-thumbnail:focus {
-  outline: 2px solid #007bff;
-  outline-offset: 2px;
 }
 
 /* Screen Reader Only */

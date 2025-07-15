@@ -27,6 +27,161 @@ function createVimeoEmbed(url) {
   return url;
 }
 
+// Process gallery item functions
+function processImageItem(item) {
+  const image = item.querySelector('img');
+  const {
+    asset,
+    alt = '',
+    title = '',
+    caption = '',
+  } = item.dataset;
+  const maintainAspectRatio = item.dataset.aspectRatio === 'true';
+
+  if (image) {
+    image.classList.add('gallery-image');
+    if (maintainAspectRatio) {
+      image.classList.add('gallery-image-aspect-ratio');
+    }
+
+    if (asset) {
+      image.src = asset;
+    }
+
+    if (alt) {
+      image.alt = alt;
+    }
+  }
+
+  // Create caption if provided
+  if (title || caption) {
+    const captionElement = createTag('div', { class: 'gallery-caption' });
+
+    if (title) {
+      const titleElement = createTag('h3');
+      titleElement.textContent = title;
+      captionElement.appendChild(titleElement);
+    }
+
+    if (caption) {
+      const captionText = createTag('p');
+      captionText.innerHTML = caption;
+      captionElement.appendChild(captionText);
+    }
+
+    item.appendChild(captionElement);
+  }
+}
+
+function processVideoItem(item) {
+  const video = item.querySelector('video');
+  const { videoAsset, videoTitle = '', videoDescription = '' } = item.dataset;
+  const aspectRatio = item.dataset.aspectRatio || '16:9';
+
+  if (video) {
+    video.classList.add('gallery-video');
+    video.classList.add(`gallery-video-${getAspectRatioClass(aspectRatio)}`);
+
+    if (videoAsset) {
+      const source = video.querySelector('source');
+      if (source) {
+        source.src = videoAsset;
+      } else {
+        const newSource = createTag('source', { src: videoAsset, type: 'video/mp4' });
+        video.appendChild(newSource);
+      }
+    }
+
+    // Add controls and other video attributes
+    video.setAttribute('controls', '');
+    video.setAttribute('preload', 'metadata');
+  }
+
+  // Create caption if provided
+  if (videoTitle || videoDescription) {
+    const captionElement = createTag('div', { class: 'gallery-caption' });
+
+    if (videoTitle) {
+      const titleElement = createTag('h3');
+      titleElement.textContent = videoTitle;
+      captionElement.appendChild(titleElement);
+    }
+
+    if (videoDescription) {
+      const descElement = createTag('p');
+      descElement.innerHTML = videoDescription;
+      captionElement.appendChild(descElement);
+    }
+
+    item.appendChild(captionElement);
+  }
+}
+
+function processEmbedItem(item) {
+  const { embedUrl, embedTitle = '', embedDescription = '' } = item.dataset;
+  const aspectRatio = item.dataset.aspectRatio || '16:9';
+
+  if (embedUrl) {
+    let processedUrl = embedUrl;
+
+    // Process different embed types
+    if (embedUrl.includes('youtube.com') || embedUrl.includes('youtu.be')) {
+      processedUrl = createYouTubeEmbed(embedUrl);
+    } else if (embedUrl.includes('vimeo.com')) {
+      processedUrl = createVimeoEmbed(embedUrl);
+    }
+
+    const iframe = createTag('iframe', {
+      src: processedUrl,
+      class: `gallery-embed gallery-embed-${getAspectRatioClass(aspectRatio)}`,
+      frameborder: '0',
+      allowfullscreen: '',
+      loading: 'lazy',
+    });
+
+    // Clear existing content and add iframe
+    item.innerHTML = '';
+    item.appendChild(iframe);
+  }
+
+  // Create caption if provided
+  if (embedTitle || embedDescription) {
+    const captionElement = createTag('div', { class: 'gallery-caption' });
+
+    if (embedTitle) {
+      const titleElement = createTag('h3');
+      titleElement.textContent = embedTitle;
+      captionElement.appendChild(titleElement);
+    }
+
+    if (embedDescription) {
+      const descElement = createTag('p');
+      descElement.innerHTML = embedDescription;
+      captionElement.appendChild(descElement);
+    }
+
+    item.appendChild(captionElement);
+  }
+}
+
+function processGalleryItem(item, type) {
+  item.classList.add('gallery-item');
+
+  switch (type) {
+    case 'image':
+      processImageItem(item);
+      break;
+    case 'video':
+      processVideoItem(item);
+      break;
+    case 'embed':
+      processEmbedItem(item);
+      break;
+    default:
+      break;
+  }
+}
+
 // Carousel functionality
 class GalleryCarousel {
   constructor(container, items) {
@@ -152,6 +307,8 @@ class GalleryCarousel {
           e.preventDefault();
           this.goTo(this.items.length - 1);
           break;
+        default:
+          break;
       }
     });
 
@@ -218,14 +375,16 @@ class GalleryCarousel {
 // Main gallery decoration function
 export default function decorate(block) {
   // Get gallery configuration from data attributes
-  const galleryType = block.dataset.galleryType || 'grid';
-  const elementsPerRow = block.dataset.elementsPerRow || '3';
-  const jumpLinkLabel = block.dataset.jumpLinkLabel;
-  const jumpLinkId = block.dataset.jumpLinkId;
+  const {
+    galleryType = 'grid',
+    elementsPerRow = '3',
+    jumpLinkLabel,
+    jumpLinkId,
+  } = block.dataset;
 
   // Add main gallery class
   block.classList.add('gallery');
-  block.classList.add(`gallery--${galleryType}`);
+  block.classList.add(`gallery-${galleryType}`);
 
   // Add jump link if provided
   if (jumpLinkId && jumpLinkLabel) {
@@ -238,11 +397,9 @@ export default function decorate(block) {
   }
 
   // Process gallery items
-  const items = Array.from(block.children).filter((child) =>
-    child.classList.contains('galleryimage') ||
-    child.classList.contains('galleryvideo') ||
-    child.classList.contains('galleryembed'),
-  );
+  const items = Array.from(block.children).filter((child) => child.classList.contains('galleryimage')
+    || child.classList.contains('galleryvideo')
+    || child.classList.contains('galleryembed'));
 
   if (items.length === 0) {
     block.innerHTML = '<div class="gallery-loading">No gallery items found</div>';
@@ -251,8 +408,14 @@ export default function decorate(block) {
 
   // Process each item
   items.forEach((item) => {
-    const itemType = item.classList.contains('galleryimage') ? 'image' :
-      item.classList.contains('galleryvideo') ? 'video' : 'embed';
+    let itemType;
+    if (item.classList.contains('galleryimage')) {
+      itemType = 'image';
+    } else if (item.classList.contains('galleryvideo')) {
+      itemType = 'video';
+    } else {
+      itemType = 'embed';
+    }
 
     processGalleryItem(item, itemType);
   });
@@ -260,11 +423,13 @@ export default function decorate(block) {
   // Apply layout
   if (galleryType === 'carousel') {
     // Add grid class for carousel layout
-    block.classList.add('gallery--cols-1');
-    new GalleryCarousel(block, items);
+    block.classList.add('gallery-cols-1');
+    const carousel = new GalleryCarousel(block, items);
+    // Store reference to prevent garbage collection
+    block.galleryCarousel = carousel;
   } else {
     // Grid layout
-    block.classList.add(`gallery--cols-${elementsPerRow}`);
+    block.classList.add(`gallery-cols-${elementsPerRow}`);
 
     // Remove any existing carousel-specific classes
     items.forEach((item) => {
@@ -272,157 +437,3 @@ export default function decorate(block) {
     });
   }
 }
-
-function processGalleryItem(item, type) {
-  item.classList.add('gallery-item');
-
-  switch (type) {
-    case 'image':
-      processImageItem(item);
-      break;
-    case 'video':
-      processVideoItem(item);
-      break;
-    case 'embed':
-      processEmbedItem(item);
-      break;
-  }
-}
-
-function processImageItem(item) {
-  const image = item.querySelector('img');
-  const asset = item.dataset.asset;
-  const alt = item.dataset.alt || '';
-  const title = item.dataset.title || '';
-  const caption = item.dataset.caption || '';
-  const maintainAspectRatio = item.dataset.aspectRatio === 'true';
-
-  if (image) {
-    image.classList.add('gallery-image');
-    if (maintainAspectRatio) {
-      image.classList.add('gallery-image--aspect-ratio');
-    }
-
-    if (asset) {
-      image.src = asset;
-    }
-
-    if (alt) {
-      image.alt = alt;
-    }
-  }
-
-  // Create caption if provided
-  if (title || caption) {
-    const captionElement = createTag('div', { class: 'gallery-caption' });
-
-    if (title) {
-      const titleElement = createTag('h3');
-      titleElement.textContent = title;
-      captionElement.appendChild(titleElement);
-    }
-
-    if (caption) {
-      const captionText = createTag('p');
-      captionText.innerHTML = caption;
-      captionElement.appendChild(captionText);
-    }
-
-    item.appendChild(captionElement);
-  }
-}
-
-function processVideoItem(item) {
-  const video = item.querySelector('video');
-  const videoAsset = item.dataset.videoAsset;
-  const videoTitle = item.dataset.videoTitle || '';
-  const videoDescription = item.dataset.videoDescription || '';
-  const aspectRatio = item.dataset.aspectRatio || '16:9';
-
-  if (video) {
-    video.classList.add('gallery-video');
-    video.classList.add(`gallery-video--${getAspectRatioClass(aspectRatio)}`);
-
-    if (videoAsset) {
-      const source = video.querySelector('source');
-      if (source) {
-        source.src = videoAsset;
-      } else {
-        const newSource = createTag('source', { src: videoAsset, type: 'video/mp4' });
-        video.appendChild(newSource);
-      }
-    }
-
-    // Add controls and other video attributes
-    video.setAttribute('controls', '');
-    video.setAttribute('preload', 'metadata');
-  }
-
-  // Create caption if provided
-  if (videoTitle || videoDescription) {
-    const captionElement = createTag('div', { class: 'gallery-caption' });
-
-    if (videoTitle) {
-      const titleElement = createTag('h3');
-      titleElement.textContent = videoTitle;
-      captionElement.appendChild(titleElement);
-    }
-
-    if (videoDescription) {
-      const descElement = createTag('p');
-      descElement.innerHTML = videoDescription;
-      captionElement.appendChild(descElement);
-    }
-
-    item.appendChild(captionElement);
-  }
-}
-
-function processEmbedItem(item) {
-  const embedUrl = item.dataset.embedUrl;
-  const embedTitle = item.dataset.embedTitle || '';
-  const embedDescription = item.dataset.embedDescription || '';
-  const aspectRatio = item.dataset.aspectRatio || '16:9';
-
-  if (embedUrl) {
-    let processedUrl = embedUrl;
-
-    // Process different embed types
-    if (embedUrl.includes('youtube.com') || embedUrl.includes('youtu.be')) {
-      processedUrl = createYouTubeEmbed(embedUrl);
-    } else if (embedUrl.includes('vimeo.com')) {
-      processedUrl = createVimeoEmbed(embedUrl);
-    }
-
-    const iframe = createTag('iframe', {
-      src: processedUrl,
-      class: `gallery-embed gallery-embed--${getAspectRatioClass(aspectRatio)}`,
-      frameborder: '0',
-      allowfullscreen: '',
-      loading: 'lazy',
-    });
-
-    // Clear existing content and add iframe
-    item.innerHTML = '';
-    item.appendChild(iframe);
-  }
-
-  // Create caption if provided
-  if (embedTitle || embedDescription) {
-    const captionElement = createTag('div', { class: 'gallery-caption' });
-
-    if (embedTitle) {
-      const titleElement = createTag('h3');
-      titleElement.textContent = embedTitle;
-      captionElement.appendChild(titleElement);
-    }
-
-    if (embedDescription) {
-      const descElement = createTag('p');
-      descElement.innerHTML = embedDescription;
-      captionElement.appendChild(descElement);
-    }
-
-    item.appendChild(captionElement);
-  }
-} 
