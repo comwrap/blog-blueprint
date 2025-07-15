@@ -12,7 +12,9 @@ function getAspectRatioClass(ratio) {
 }
 
 function createYouTubeEmbed(url) {
-  const videoId = url.match(/(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/i);
+  const videoId = url.match(
+    /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/i
+  );
   if (videoId) {
     return `https://www.youtube.com/embed/${videoId[1]}?rel=0&showinfo=0`;
   }
@@ -30,12 +32,7 @@ function createVimeoEmbed(url) {
 // Process gallery item functions
 function processImageItem(item) {
   const image = item.querySelector('img');
-  const {
-    asset,
-    alt = '',
-    title = '',
-    caption = '',
-  } = item.dataset;
+  const { asset, alt = '', title = '', caption = '' } = item.dataset;
   const maintainAspectRatio = item.dataset.aspectRatio === 'true';
 
   if (image) {
@@ -279,14 +276,22 @@ class GalleryCarousel {
 
   bindEvents() {
     // Touch events for swipe
-    this.container.addEventListener('touchstart', (e) => {
-      this.touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
+    this.container.addEventListener(
+      'touchstart',
+      (e) => {
+        this.touchStartX = e.changedTouches[0].screenX;
+      },
+      { passive: true }
+    );
 
-    this.container.addEventListener('touchend', (e) => {
-      this.touchEndX = e.changedTouches[0].screenX;
-      this.handleSwipe();
-    }, { passive: true });
+    this.container.addEventListener(
+      'touchend',
+      (e) => {
+        this.touchEndX = e.changedTouches[0].screenX;
+        this.handleSwipe();
+      },
+      { passive: true }
+    );
 
     // Keyboard navigation
     this.container.addEventListener('keydown', (e) => {
@@ -375,12 +380,7 @@ class GalleryCarousel {
 // Main gallery decoration function
 export default function decorate(block) {
   // Get gallery configuration from data attributes
-  const {
-    galleryType = 'grid',
-    elementsPerRow = '3',
-    jumpLinkLabel,
-    jumpLinkId,
-  } = block.dataset;
+  const { galleryType = 'grid', elementsPerRow = '3', jumpLinkLabel, jumpLinkId } = block.dataset;
 
   // Add main gallery class
   block.classList.add('gallery');
@@ -394,46 +394,5 @@ export default function decorate(block) {
       'aria-label': jumpLinkLabel,
     });
     block.appendChild(jumpLink);
-  }
-
-  // Process gallery items
-  const items = Array.from(block.children).filter((child) => child.classList.contains('galleryimage')
-    || child.classList.contains('galleryvideo')
-    || child.classList.contains('galleryembed'));
-
-  if (items.length === 0) {
-    block.innerHTML = '<div class="gallery-loading">No gallery items found</div>';
-    return;
-  }
-
-  // Process each item
-  items.forEach((item) => {
-    let itemType;
-    if (item.classList.contains('galleryimage')) {
-      itemType = 'image';
-    } else if (item.classList.contains('galleryvideo')) {
-      itemType = 'video';
-    } else {
-      itemType = 'embed';
-    }
-
-    processGalleryItem(item, itemType);
-  });
-
-  // Apply layout
-  if (galleryType === 'carousel') {
-    // Add grid class for carousel layout
-    block.classList.add('gallery-cols-1');
-    const carousel = new GalleryCarousel(block, items);
-    // Store reference to prevent garbage collection
-    block.galleryCarousel = carousel;
-  } else {
-    // Grid layout
-    block.classList.add(`gallery-cols-${elementsPerRow}`);
-
-    // Remove any existing carousel-specific classes
-    items.forEach((item) => {
-      item.classList.remove('gallery-carousel-item');
-    });
   }
 }

@@ -25,7 +25,8 @@
             "resourceType": "core/franklin/components/block/v1/block/item",
             "template": {
               "name": "Gallery Image",
-              "model": "galleryimage"
+              "model": "galleryimage",
+              "filter": "galleryimage"
             }
           }
         }
@@ -40,7 +41,8 @@
             "resourceType": "core/franklin/components/block/v1/block/item",
             "template": {
               "name": "Gallery Video",
-              "model": "galleryvideo"
+              "model": "galleryvideo",
+              "filter": "galleryvideo"
             }
           }
         }
@@ -55,7 +57,8 @@
             "resourceType": "core/franklin/components/block/v1/block/item",
             "template": {
               "name": "Gallery Embed",
-              "model": "galleryembed"
+              "model": "galleryembed",
+              "filter": "galleryembed"
             }
           }
         }
