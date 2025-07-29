@@ -1,22 +1,18 @@
 export function renderButton({
-  link, label, target, block,
+  linkButton, linkTarget, linkType, linkStyle,
 }) {
-  const button = document.createElement('a');
-  button.className = 'button';
-  button.title = label;
-  if (target !== '') button.target = target;
-  button.innerText = label;
+  if (linkTarget !== '') linkButton.target = linkTarget;
 
-  let href = link;
-  block.classList.forEach((className) => {
-    if (className === 'telephone') href = `tel:${link}`;
-    if (className === 'email') href = `mailto:${link}`;
-    if (className === 'download') button.download = '';
-  });
+  let { href } = linkButton;
+  if (linkType === 'telephone') href = `tel:${href}`;
+  if (linkType === 'email') href = `mailto:${href}`;
+  if (linkType === 'download') linkButton.download = '';
 
-  button.href = href;
+  if (linkStyle !== '') linkButton.classList.add(linkStyle);
 
-  return button;
+  linkButton.href = href;
+
+  return linkButton;
 }
 
 export default renderButton;

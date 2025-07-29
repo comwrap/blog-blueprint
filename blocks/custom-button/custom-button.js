@@ -1,21 +1,20 @@
-import { setBlockItemOptions, moveClassToTargetedChild } from '../../scripts/utils.js';
 import { renderButton } from '../../components/button/button.js';
 
 export default function decorate(block) {
-  const blockItemsOptions = [];
-  const blockItemMap = [{ name: 'link' }, { name: 'label' }, { name: 'target' }];
+  const [link, target, type, style] = block.children;
 
-  setBlockItemOptions(block, blockItemMap, blockItemsOptions);
-  const { link, label, target } = blockItemsOptions[0];
+  const linkButton = link?.querySelector('a');
+  const linkTarget = target?.textContent.trim();
+  const linkType = type?.textContent.trim();
+  const linkStyle = style?.textContent.trim();
 
-  const button = renderButton({
-    link,
-    label,
-    target,
-    block,
+  renderButton({
+    linkButton,
+    linkTarget,
+    linkType,
+    linkStyle,
   });
 
   block.textContent = '';
-  block.appendChild(button);
-  moveClassToTargetedChild(block, button);
+  block.appendChild(linkButton);
 }
