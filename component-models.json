@@ -489,7 +489,7 @@
       },
       {
         "component": "select",
-        "name": "classes_custombutton-type",
+        "name": "custombutton-type",
         "label": "Button Type",
         "options": [
           {
@@ -512,7 +512,7 @@
       },
       {
         "component": "select",
-        "name": "classes_custombutton-style",
+        "name": "custombutton-style",
         "label": "Button Style",
         "options": [
           {
@@ -835,7 +835,7 @@
       },
       {
         "component": "select",
-        "name": "classes_custombutton-type",
+        "name": "custombutton-type",
         "label": "Button Type",
         "options": [
           {
@@ -858,7 +858,7 @@
       },
       {
         "component": "select",
-        "name": "classes_custombutton-style",
+        "name": "custombutton-style",
         "label": "Button Style",
         "options": [
           {
@@ -940,7 +940,7 @@
       },
       {
         "component": "select",
-        "name": "classes_custombutton-type",
+        "name": "custombutton-type",
         "label": "Button Type",
         "options": [
           {
@@ -963,7 +963,7 @@
       },
       {
         "component": "select",
-        "name": "classes_custombutton-style",
+        "name": "custombutton-style",
         "label": "Button Style",
         "options": [
           {
