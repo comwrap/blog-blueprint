@@ -1,7 +1,9 @@
 export function renderButton({
-  linkButton, linkTarget, linkType, linkStyle,
+  linkButton, linkText, linkTitle, linkTarget, linkType, linkStyle,
 }) {
   if (linkTarget !== '') linkButton.target = linkTarget;
+  if (linkText !== '') linkButton.textContent = linkText;
+  if (linkTitle !== '') linkButton.title = linkTitle;
 
   let { href } = linkButton;
   if (linkType === 'telephone') href = `tel:${href}`;
