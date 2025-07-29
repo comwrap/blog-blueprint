@@ -2,22 +2,22 @@
   "fields": [
     {
       "component": "aem-content",
-      "name": "custombutton_link",
+      "name": "custombutton-link",
       "label": "Link"
     },
     {
       "component": "text",
-      "name": "custombutton_linkText",
+      "name": "custombutton-link-text",
       "label": "Text"
     },
     {
       "component": "text",
-      "name": "custombutton_linkTitle",
+      "name": "custombutton-link-title",
       "label": "Title"
     },
     {
       "component": "select",
-      "name": "custombutton-target_target",
+      "name": "custombutton-link-target",
       "label": "Link Target",
       "options": [
         {
