@@ -13,7 +13,7 @@ function getAspectRatioClass(ratio) {
 
 function createYouTubeEmbed(url) {
   const videoId = url.match(
-    /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/i
+    /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/i,
   );
   if (videoId) {
     return `https://www.youtube.com/embed/${videoId[1]}?rel=0&showinfo=0`;
@@ -31,9 +31,19 @@ function createVimeoEmbed(url) {
 
 // Process gallery item functions
 function processImageItem(item) {
+  const div = document.createElement('div');
+  div.classList.add('gallery-image-container');
+  item.appendChild(div);
   const image = item.querySelector('img');
-  const { asset, alt = '', title = '', caption = '' } = item.dataset;
+
+  const {
+    asset,
+    alt = item?.children[1]?.textContent.trim(),
+    title = item?.children[2]?.textContent.trim(),
+    caption = item?.children[3]?.textContent.trim(),
+  } = image.dataset;
   const maintainAspectRatio = item.dataset.aspectRatio === 'true';
+  div.appendChild(image);
 
   if (image) {
     image.classList.add('gallery-image');
@@ -66,32 +76,50 @@ function processImageItem(item) {
       captionElement.appendChild(captionText);
     }
 
+    item.querySelectorAll('div').forEach((divContainer) => {
+      if (!divContainer.classList.contains('gallery-image-container')
+        && !divContainer.classList.contains('gallery-caption')
+      ) {
+        divContainer.remove();
+      }
+    });
+
     item.appendChild(captionElement);
   }
 }
 
 function processVideoItem(item) {
-  const video = item.querySelector('video');
-  const { videoAsset, videoTitle = '', videoDescription = '' } = item.dataset;
-  const aspectRatio = item.dataset.aspectRatio || '16:9';
+  // Find the nested structure elements
+  const link = item.querySelector('a');
+  const titleElement = item.querySelector('p:nth-child(2)'); // Second p element
+  const descriptionElement = item.querySelector('p:nth-child(3)'); // Third p element
+  const aspectRatioElement = item.querySelector('div > div:last-child p'); // Last p in nested div
 
-  if (video) {
-    video.classList.add('gallery-video');
-    video.classList.add(`gallery-video-${getAspectRatioClass(aspectRatio)}`);
+  // Extract values
+  const videoUrl = link?.href || '';
+  const videoTitle = titleElement?.textContent?.trim() || '';
+  const videoDescription = descriptionElement?.textContent?.trim() || '';
+  const aspectRatio = aspectRatioElement?.textContent?.trim() || '16:9';
 
-    if (videoAsset) {
-      const source = video.querySelector('source');
-      if (source) {
-        source.src = videoAsset;
-      } else {
-        const newSource = createTag('source', { src: videoAsset, type: 'video/mp4' });
-        video.appendChild(newSource);
-      }
-    }
+  if (videoUrl) {
+    // Remove existing content
+    item.innerHTML = '';
 
-    // Add controls and other video attributes
-    video.setAttribute('controls', '');
-    video.setAttribute('preload', 'metadata');
+    // Create video element
+    const video = createTag('video', {
+      class: `gallery-video gallery-video-${getAspectRatioClass(aspectRatio)}`,
+      controls: '',
+      preload: 'metadata',
+    });
+
+    // Create source element
+    const source = createTag('source', {
+      src: videoUrl,
+      type: 'video/mp4',
+    });
+
+    video.appendChild(source);
+    item.appendChild(video);
   }
 
   // Create caption if provided
@@ -99,9 +127,9 @@ function processVideoItem(item) {
     const captionElement = createTag('div', { class: 'gallery-caption' });
 
     if (videoTitle) {
-      const titleElement = createTag('h3');
-      titleElement.textContent = videoTitle;
-      captionElement.appendChild(titleElement);
+      const titleHeading = createTag('h3');
+      titleHeading.textContent = videoTitle;
+      captionElement.appendChild(titleHeading);
     }
 
     if (videoDescription) {
@@ -180,71 +208,115 @@ function processGalleryItem(item, type) {
 }
 
 // Carousel functionality
-class GalleryCarousel {
-  constructor(container, items) {
-    this.container = container;
-    this.items = items;
-    this.currentIndex = 0;
-    this.isTransitioning = false;
-    this.touchStartX = 0;
-    this.touchEndX = 0;
+function createGalleryCarousel(container, items) {
+  let currentIndex = 0;
+  let isTransitioning = false;
+  let touchStartX = 0;
+  let touchEndX = 0;
+  let carouselContainer;
+  let prevBtn;
+  let nextBtn;
+  let thumbnails;
 
-    this.init();
+  // Function declarations (hoisted)
+  function updateActiveStates() {
+    // Update button states
+    prevBtn.disabled = currentIndex === 0;
+    nextBtn.disabled = currentIndex === items.length - 1;
+
+    // Update thumbnails
+    if (thumbnails) {
+      thumbnails.forEach((thumb, index) => {
+        thumb.classList.toggle('active', index === currentIndex);
+      });
+    }
+
+    // Update ARIA attributes
+    container.setAttribute('aria-current', currentIndex + 1);
   }
 
-  init() {
-    this.createCarouselStructure();
-    this.createNavigation();
-    this.createThumbnails();
-    this.bindEvents();
-    this.updateActiveStates();
+  function goTo(index) {
+    if (isTransitioning || index === currentIndex) return;
+
+    isTransitioning = true;
+    currentIndex = index;
+
+    const translateX = -index * 100;
+    carouselContainer.style.transform = `translateX(${translateX}%)`;
+
+    updateActiveStates();
+
+    setTimeout(() => {
+      isTransitioning = false;
+    }, 300);
   }
 
-  createCarouselStructure() {
-    const carouselContainer = createTag('div', { class: 'gallery-carousel-container' });
+  function prev() {
+    const newIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
+    goTo(newIndex);
+  }
 
-    this.items.forEach((item, index) => {
+  function next() {
+    const newIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
+    goTo(newIndex);
+  }
+
+  function handleSwipe() {
+    const swipeThreshold = 50;
+    const diff = touchStartX - touchEndX;
+
+    if (Math.abs(diff) > swipeThreshold) {
+      if (diff > 0) {
+        next();
+      } else {
+        prev();
+      }
+    }
+  }
+
+  function createCarouselStructure() {
+    carouselContainer = createTag('div', { class: 'gallery-carousel-container' });
+
+    items.forEach((item, index) => {
       const carouselItem = createTag('div', { class: 'gallery-carousel-item' });
       carouselItem.appendChild(item.cloneNode(true));
       carouselItem.dataset.index = index;
       carouselContainer.appendChild(carouselItem);
     });
 
-    this.container.appendChild(carouselContainer);
-    this.carouselContainer = carouselContainer;
+    container.textContent = '';
+
+    container.appendChild(carouselContainer);
   }
 
-  createNavigation() {
+  function createNavigation() {
     const nav = createTag('div', { class: 'gallery-carousel-nav' });
 
-    const prevBtn = createTag('button', {
+    prevBtn = createTag('button', {
       class: 'gallery-carousel-arrow',
       'aria-label': 'Previous item',
     });
     prevBtn.innerHTML = '‹';
-    prevBtn.addEventListener('click', () => this.prev());
+    prevBtn.addEventListener('click', () => prev());
 
-    const nextBtn = createTag('button', {
+    nextBtn = createTag('button', {
       class: 'gallery-carousel-arrow',
       'aria-label': 'Next item',
     });
     nextBtn.innerHTML = '›';
-    nextBtn.addEventListener('click', () => this.next());
+    nextBtn.addEventListener('click', () => next());
 
     nav.appendChild(prevBtn);
     nav.appendChild(nextBtn);
-    this.container.appendChild(nav);
-
-    this.prevBtn = prevBtn;
-    this.nextBtn = nextBtn;
+    container.appendChild(nav);
   }
 
-  createThumbnails() {
-    if (this.items.length <= 1) return;
+  function createThumbnails() {
+    if (items.length <= 1) return;
 
     const thumbnailsContainer = createTag('div', { class: 'gallery-thumbnails' });
 
-    this.items.forEach((item, index) => {
+    items.forEach((item, index) => {
       const thumbnail = createTag('div', {
         class: 'gallery-thumbnail',
         'aria-label': `Go to item ${index + 1}`,
@@ -259,58 +331,58 @@ class GalleryCarousel {
         thumbnail.appendChild(thumbnailImg);
       }
 
-      thumbnail.addEventListener('click', () => this.goTo(index));
+      thumbnail.addEventListener('click', () => goTo(index));
       thumbnail.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          this.goTo(index);
+          goTo(index);
         }
       });
 
       thumbnailsContainer.appendChild(thumbnail);
     });
 
-    this.container.appendChild(thumbnailsContainer);
-    this.thumbnails = thumbnailsContainer.querySelectorAll('.gallery-thumbnail');
+    container.appendChild(thumbnailsContainer);
+    thumbnails = thumbnailsContainer.querySelectorAll('.gallery-thumbnail');
   }
 
-  bindEvents() {
+  function bindEvents() {
     // Touch events for swipe
-    this.container.addEventListener(
+    container.addEventListener(
       'touchstart',
       (e) => {
-        this.touchStartX = e.changedTouches[0].screenX;
+        touchStartX = e.changedTouches[0].screenX;
       },
-      { passive: true }
+      { passive: true },
     );
 
-    this.container.addEventListener(
+    container.addEventListener(
       'touchend',
       (e) => {
-        this.touchEndX = e.changedTouches[0].screenX;
-        this.handleSwipe();
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
       },
-      { passive: true }
+      { passive: true },
     );
 
     // Keyboard navigation
-    this.container.addEventListener('keydown', (e) => {
+    container.addEventListener('keydown', (e) => {
       switch (e.key) {
         case 'ArrowLeft':
           e.preventDefault();
-          this.prev();
+          prev();
           break;
         case 'ArrowRight':
           e.preventDefault();
-          this.next();
+          next();
           break;
         case 'Home':
           e.preventDefault();
-          this.goTo(0);
+          goTo(0);
           break;
         case 'End':
           e.preventDefault();
-          this.goTo(this.items.length - 1);
+          goTo(items.length - 1);
           break;
         default:
           break;
@@ -318,69 +390,35 @@ class GalleryCarousel {
     });
 
     // Auto-focus for accessibility
-    this.container.setAttribute('tabindex', '0');
+    container.setAttribute('tabindex', '0');
   }
 
-  handleSwipe() {
-    const swipeThreshold = 50;
-    const diff = this.touchStartX - this.touchEndX;
+  // Initialize carousel
+  createCarouselStructure();
+  createNavigation();
+  createThumbnails();
+  bindEvents();
+  updateActiveStates();
 
-    if (Math.abs(diff) > swipeThreshold) {
-      if (diff > 0) {
-        this.next();
-      } else {
-        this.prev();
-      }
-    }
-  }
-
-  goTo(index) {
-    if (this.isTransitioning || index === this.currentIndex) return;
-
-    this.isTransitioning = true;
-    this.currentIndex = index;
-
-    const translateX = -index * 100;
-    this.carouselContainer.style.transform = `translateX(${translateX}%)`;
-
-    this.updateActiveStates();
-
-    setTimeout(() => {
-      this.isTransitioning = false;
-    }, 300);
-  }
-
-  prev() {
-    const newIndex = this.currentIndex > 0 ? this.currentIndex - 1 : this.items.length - 1;
-    this.goTo(newIndex);
-  }
-
-  next() {
-    const newIndex = this.currentIndex < this.items.length - 1 ? this.currentIndex + 1 : 0;
-    this.goTo(newIndex);
-  }
-
-  updateActiveStates() {
-    // Update button states
-    this.prevBtn.disabled = this.currentIndex === 0;
-    this.nextBtn.disabled = this.currentIndex === this.items.length - 1;
-
-    // Update thumbnails
-    if (this.thumbnails) {
-      this.thumbnails.forEach((thumb, index) => {
-        thumb.classList.toggle('active', index === this.currentIndex);
-      });
-    }
-
-    // Update ARIA attributes
-    this.container.setAttribute('aria-current', this.currentIndex + 1);
-  }
+  // Return public methods if needed
+  return {
+    goTo,
+    prev,
+    next,
+  };
 }
 
 // Main gallery decoration function
 export default function decorate(block) {
-  // Get gallery configuration from data attributes
-  const { galleryType = 'grid', elementsPerRow = '3', jumpLinkLabel, jumpLinkId } = block.dataset;
+  // Get gallery configuration from first three children
+  const configChildren = Array.from(block.children).slice(0, 3);
+  const galleryItems = Array.from(block.children).slice(3);
+
+  // Extract configuration from first three children
+  const galleryType = configChildren[0]?.textContent?.trim() || 'grid';
+  const elementsPerRow = configChildren[1]?.textContent?.trim() || '3';
+  const jumpLinkLabel = configChildren[2]?.textContent?.trim() || '';
+  const jumpLinkId = configChildren[2]?.dataset?.id || '';
 
   // Add main gallery class
   block.classList.add('gallery');
@@ -394,5 +432,47 @@ export default function decorate(block) {
       'aria-label': jumpLinkLabel,
     });
     block.appendChild(jumpLink);
+  }
+
+  // Remove the config children from DOM
+  configChildren.forEach((child) => child.remove());
+
+  if (galleryItems.length === 0) {
+    block.innerHTML = '<div class="gallery-loading">No gallery items found</div>';
+    return;
+  }
+
+  // Process each item
+  galleryItems.forEach((item) => {
+    let itemType;
+    if (item.querySelector('img')) {
+      itemType = 'image';
+    } else if (item.querySelector('a[href$=".mp4"]')) {
+      itemType = 'video';
+    } else if (item.querySelector('iframe')) {
+      itemType = 'embed';
+    } else {
+      // Skip items that don't contain expected elements
+      return;
+    }
+
+    processGalleryItem(item, itemType);
+  });
+
+  // Apply layout
+  if (galleryType === 'carousel') {
+    // Add grid class for carousel layout
+    block.classList.add('gallery-cols-1');
+    const carousel = createGalleryCarousel(block, galleryItems);
+    // Store reference to prevent garbage collection
+    block.galleryCarousel = carousel;
+  } else {
+    // Grid layout
+    block.classList.add(`gallery-cols-${elementsPerRow}`);
+
+    // Remove any existing carousel-specific classes
+    galleryItems.forEach((item) => {
+      item.classList.remove('gallery-carousel-item');
+    });
   }
 }
