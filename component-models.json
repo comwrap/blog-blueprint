@@ -422,15 +422,28 @@
         "value": ""
       },
       {
-        "component": "richtext",
-        "name": "slide_title",
-        "label": "Slide Title",
+        "component": "text",
+        "name": "title",
+        "label": "Title",
         "valueType": "string"
       },
       {
-        "component": "button",
-        "name": "slide_button",
-        "label": "Slide Button",
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "buttonText",
+        "label": "Button Text",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "buttonLink",
+        "label": "Button Link",
         "valueType": "string"
       }
     ]
@@ -564,6 +577,70 @@
         "validation": {
           "rootPath": "/content/dam/aem-xwalk"
         }
+      }
+    ]
+  },
+  {
+    "id": "event-teaser",
+    "fields": [
+      {
+        "component": "text",
+        "name": "category",
+        "value": "",
+        "label": "Event Category",
+        "description": "Category of the event (e.g., Event, Automotive)"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "value": "",
+        "label": "Event Title",
+        "description": "Main title of the event"
+      },
+      {
+        "component": "text",
+        "name": "date",
+        "value": "",
+        "label": "Event Date",
+        "description": "Date of the event"
+      },
+      {
+        "component": "text",
+        "name": "location",
+        "value": "",
+        "label": "Event Location",
+        "description": "Location where the event takes place"
+      },
+      {
+        "component": "text",
+        "name": "link",
+        "value": "",
+        "label": "Event Link",
+        "description": "URL to link to when button is clicked"
+      },
+      {
+        "component": "text",
+        "name": "label",
+        "value": "LEARN MORE",
+        "label": "Button Label",
+        "description": "Text displayed on the button"
+      },
+      {
+        "component": "select",
+        "name": "target",
+        "value": "",
+        "label": "Link Target",
+        "description": "How the link should open",
+        "options": [
+          {
+            "name": "Same Window",
+            "value": ""
+          },
+          {
+            "name": "New Window",
+            "value": "_blank"
+          }
+        ]
       }
     ]
   },

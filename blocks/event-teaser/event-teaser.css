@@ -1,0 +1,190 @@
+/* Event Teaser Component - Matching Figma Design Exactly */
+
+.event-teaser {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 40px;
+  width: 404px;
+  height: auto;
+  box-sizing: border-box;
+  
+  /* Background - semi-transparent white */
+  background: rgba(255, 255, 255, 0.4);
+  
+  /* Gradient border */
+  border: 1px solid;
+  border-image: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0.05) 100%
+  ) 1;
+  
+  /* Box shadow and backdrop filter */
+  box-shadow: 10px 10px 45px 25px rgba(12, 58, 80, 0.05);
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
+  
+  /* Rounded corners */
+  border-radius: 8px;
+}
+
+.event-teaser-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: 100%;
+  height: 100%;
+}
+
+.event-content-frame {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  gap: 32px;
+  width: 100%;
+}
+
+.event-info-section {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  gap: 24px;
+  width: 100%;
+}
+
+.event-title-container {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  width: 100%;
+}
+
+.event-category {
+  font-family: Onest, system-ui, -apple-system, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.4;
+  text-align: left;
+  color: #181C1E;
+  margin: 0;
+  width: 100%;
+}
+
+.event-title {
+  font-family: Onest, system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 1.2;
+  text-align: left;
+  color: #181C1E;
+  margin: 0;
+  width: 100%;
+}
+
+.event-divider {
+  width: 100%;
+  height: 1px;
+  background-color: #181C1E;
+  align-self: stretch;
+}
+
+.event-details-section {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  gap: 4px;
+  width: 100%;
+}
+
+.event-date-container,
+.event-location-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-self: stretch;
+  gap: 8px;
+  width: 100%;
+}
+
+.event-date,
+.event-location {
+  font-family: Onest, system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: left;
+  color: #181C1E;
+}
+
+.event-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.event-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  height: 40px;
+  box-sizing: border-box;
+  
+  /* Button styling - outline style */
+  background: transparent;
+  border: 1px solid #181C1E;
+  border-radius: 4px;
+  
+  /* Typography */
+  font-family: Onest, system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.15;
+  text-transform: uppercase;
+  text-align: center;
+  color: #181C1E;
+  text-decoration: none;
+  
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.event-button:hover {
+  background: #181C1E;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(24, 28, 30, 0.3);
+}
+
+.event-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(24, 28, 30, 0.2);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .event-teaser {
+    width: 100%;
+    max-width: 404px;
+    margin: 0 auto;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .event-button,
+  .event-teaser {
+    transition: none;
+  }
+}
+
+/* Focus states for accessibility */
+.event-button:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+} 

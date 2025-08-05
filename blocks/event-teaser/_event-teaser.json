@@ -1,0 +1,87 @@
+{
+  "definitions": [
+    {
+      "title": "Event Teaser",
+      "id": "event-teaser",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Event Teaser",
+              "model": "event-teaser",
+              "filter": "event-teaser"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "event-teaser",
+      "fields": [
+        {
+          "component": "text",
+          "name": "category",
+          "value": "",
+          "label": "Event Category",
+          "description": "Category of the event (e.g., Event, Automotive)"
+        },
+        {
+          "component": "text",
+          "name": "title",
+          "value": "",
+          "label": "Event Title",
+          "description": "Main title of the event"
+        },
+        {
+          "component": "text",
+          "name": "date",
+          "value": "",
+          "label": "Event Date",
+          "description": "Date of the event"
+        },
+        {
+          "component": "text",
+          "name": "location",
+          "value": "",
+          "label": "Event Location",
+          "description": "Location where the event takes place"
+        },
+        {
+          "component": "text",
+          "name": "link",
+          "value": "",
+          "label": "Event Link",
+          "description": "URL to link to when button is clicked"
+        },
+        {
+          "component": "text",
+          "name": "label",
+          "value": "LEARN MORE",
+          "label": "Button Label",
+          "description": "Text displayed on the button"
+        },
+        {
+          "component": "select",
+          "name": "target",
+          "value": "",
+          "label": "Link Target",
+          "description": "How the link should open",
+          "options": [
+            {
+              "name": "Same Window",
+              "value": ""
+            },
+            {
+              "name": "New Window",
+              "value": "_blank"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "filters": []
+} 
