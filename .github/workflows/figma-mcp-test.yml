@@ -1,0 +1,64 @@
+name: Figma MCP Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-figma-codex-test:
+    runs-on: ubuntu-latest
+    container: node:latest
+
+    env:
+      # Ensure these secrets are set in your repository's Settings > Secrets and variables > Actions
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }}
+      
+      # The full prompt for the AI
+      CODEX_PROMPT: |
+        Take the figma file and download the needed images from figma and the designs
+
+        https://www.figma.com/design/WfDJmjg0PeljfcTeLzqu5U/QNX---Design-System?node-id=2577-10468&t=YFC0I8QRWo0um3zF-4
+        Use your MCP Server to download it (~/.codex/config.toml)
+         for now i just need to know if you can connect to figma.
+
+    steps:
+      - name: 1. Checkout Repository
+        uses: actions/checkout@v4
+        # Checks out the code so codex has a place to write files
+
+      - name: 2. Install Codex CLI
+        run: |
+          echo "Installing OpenAI Codex CLI..."
+          npm install -g @openai/codex
+          echo "Codex CLI installed."
+
+      - name: 3. Create Codex Config for Figma MCP
+        # This step only runs if the FIGMA_ACCESS_TOKEN secret is present
+        if: env.FIGMA_ACCESS_TOKEN != ''
+        run: |
+          echo "Setting up Figma MCP server for Codex CLI..."
+          mkdir -p ~/.codex
+          # This creates the configuration file needed for the Figma MCP
+          cat <<EOF > ~/.codex/config.toml
+          [mcp_servers.figma]
+          command = "npx"
+          args = ["-y", "figma-developer-mcp", "--figma-api-key=${FIGMA_ACCESS_TOKEN}", "--stdio"]
+          EOF
+          echo "Codex config for Figma MCP created successfully."
+          echo "--- Verifying config file ---"
+          cat ~/.codex/config.toml
+          echo "-----------------------------"
+      
+      - name: 4. Execute Codex with Figma Prompt
+        run: |
+          echo "Executing Codex CLI with Figma prompt..."
+          # The --verbose flag is crucial for seeing if the MCP server is being launched
+          codex exec --full-auto -m o3 "$CODEX_PROMPT"
+
+      - name: 5. Show Generated Files
+        run: |
+          echo "-------------------------------------"
+          echo "Codex execution finished. Listing all generated files..."
+          ls -R
+          echo "-------------------------------------"
+          echo "Test complete. Check the logs above to see the output from Codex and the list of files."

@@ -1,0 +1,218 @@
+name: Codex Full Auto (Final and Generic)
+
+on:
+  workflow_dispatch:
+    inputs:
+      CODEX_PROMPT:
+        description: 'The main instruction/prompt for the AI.'
+        required: true
+        default: 'Create a simple placeholder file.'
+      TICKET_ID:
+        description: 'The Jira/Ticket ID for branch naming and commits.'
+        required: true
+        default: 'default-ticket-id'
+      CODEX_MODEL:
+        description: 'The AI model to use (e.g., o3, gpt-4-turbo).'
+        required: true
+        default: 'o3'
+      JIRA_IMAGE_URLS:
+        description: 'Comma-separated list of image URLs from Jira.'
+        required: false
+      JIRA_IMAGE_FILENAMES:
+        description: 'Comma-separated list of original image filenames from Jira.'
+        required: false
+  repository_dispatch:
+    types: [codex-run]
+
+jobs:
+  codex-full-auto:
+    runs-on: ubuntu-latest
+    container: node:latest
+
+    env:
+      # Secrets for operation
+      FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      N8N_MR_WEBHOOK_URL: ${{ secrets.N8N_PR_WEBHOOK_URL }}
+      JIRA_API_USER: ${{ secrets.JIRA_API_USER }}
+      JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+      CODEX_PUSH_TOKEN: ${{ secrets.CODEX_PUSH_TOKEN }}
+      AEM_URL: ${{ secrets.AEM_URL }}
+      AEM_USERNAME: ${{ secrets.AEM_USERNAME }}
+      AEM_PASSWORD: ${{ secrets.AEM_PASSWORD }}
+      AEM_SRC_PATH: ${{ secrets.AEM_SRC_PATH }}
+      AEM_DEST_PARENT_PATH: ${{ secrets.AEM_DEST_PARENT_PATH }}
+      
+      # Inputs from dispatch events
+      CODEX_PROMPT: |
+        ${{ github.event.inputs.CODEX_PROMPT || github.event.client_payload.CODEX_PROMPT }}
+      TICKET_ID: ${{ github.event.inputs.TICKET_ID || github.event.client_payload.TICKET_ID }}
+      CODEX_MODEL: ${{ github.event.inputs.CODEX_MODEL || github.event.client_payload.CODEX_MODEL }}
+      JIRA_IMAGE_URLS: ${{ github.event.inputs.JIRA_IMAGE_URLS || github.event.client_payload.JIRA_IMAGE_URLS }}
+      JIRA_IMAGE_FILENAMES: ${{ github.event.inputs.JIRA_IMAGE_FILENAMES || github.event.client_payload.JIRA_IMAGE_FILENAMES }}
+      
+      # Repository context
+      GH_REPO: ${{ github.repository }}
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+
+    steps:
+      - name: 1. Install System Dependencies
+        run: |
+          apt-get update -y && apt-get install -y --no-install-recommends curl jq sed file
+      - name: 2. Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ env.CODEX_PUSH_TOKEN }}
+          fetch-depth: 0
+      - name: 3. Configure Git and Install Codex CLI
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions-bot@github.com"
+          npm install -g @openai/codex
+          
+      - name: 4. Create Codex Config for Figma MCP
+        # This crucial step configures the Figma connection on every run
+        if: env.FIGMA_ACCESS_TOKEN != ''
+        run: |
+          echo "Setting up Figma MCP server for Codex CLI..."
+          mkdir -p ~/.codex
+          cat <<EOF > ~/.codex/config.toml
+          [mcp_servers.figma]
+          command = "npx"
+          args = ["-y", "figma-developer-mcp", "--figma-api-key=${FIGMA_ACCESS_TOKEN}", "--stdio"]
+          EOF
+          echo "Codex config for Figma MCP created successfully. Verifying content:"
+          cat ~/.codex/config.toml
+
+      - name: 5. Install Project Dependencies
+        run: npm install
+        
+      - name: 6. Set Workspace Permissions for Non-Root User
+        run: |
+          chown -R node:node "$GITHUB_WORKSPACE"
+
+      - name: 7. Execute Main AI, Build, and Git Logic
+        id: main_script
+        shell: bash
+        env:
+          DEMO_DATA_PROMPT: |
+            ---
+            **Additional Task: Create Demo Data**
+            After creating the component files as requested above, you MUST ALSO perform the following action:
+            1.  Create a new file named exactly `demo_data.json` inside the new component's directory (e.g., `blocks/your-new-component/demo_data.json`).
+            2.  The content of this file MUST be a single, raw JSON object. Do not include any explanations or markdown formatting.
+            3.  The keys of the JSON object must correspond to the `name` properties of the fields defined in the component's model file you created.
+            4.  Populate the JSON with realistic, high-quality demo content suitable for the component.
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          FEATURE_BRANCH_NAME="feature/$TICKET_ID"
+          git checkout -b "$FEATURE_BRANCH_NAME" "origin/$DEFAULT_BRANCH"
+          
+          FINAL_PROMPT="${CODEX_PROMPT}${DEMO_DATA_PROMPT}"
+          CODEX_CMD_ARGS=("--full-auto" "-m" "$CODEX_MODEL")
+          
+          if [ -n "$JIRA_IMAGE_URLS" ] && [ "$JIRA_IMAGE_URLS" != "none" ]; then
+            IFS=',' read -ra IMAGE_URL_ARRAY <<< "$JIRA_IMAGE_URLS"
+            IFS=',' read -ra IMAGE_FILENAME_ARRAY <<< "$JIRA_IMAGE_FILENAMES"
+            for (( i=0; i<${#IMAGE_URL_ARRAY[@]}; i++ )); do
+              IMG_URL=$(echo "${IMAGE_URL_ARRAY[$i]}" | xargs)
+              SAFE_FILENAME=$(echo "${IMAGE_FILENAME_ARRAY[$i]}" | xargs | sed 's/[^a-zA-Z0-9._-]/_/g')
+              if [ -z "$IMG_URL" ] || [ -z "$SAFE_FILENAME" ]; then continue; fi
+              DOWNLOAD_PATH="jira_dl_image_${i}_${SAFE_FILENAME}"
+              HTTP_STATUS=$(curl -sSL -w "%{http_code}" -o "$DOWNLOAD_PATH" -u "${JIRA_API_USER}:${JIRA_API_TOKEN}" "$IMG_URL")
+              if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ] && [ -s "$DOWNLOAD_PATH" ]; then
+                CODEX_CMD_ARGS+=("-i" "$DOWNLOAD_PATH")
+              fi
+            done
+          fi
+          
+          # This command now automatically uses the Figma MCP server whenever a figma.com URL is in the prompt
+          codex exec "${CODEX_CMD_ARGS[@]}" "$FINAL_PROMPT"
+          
+          rm -f jira_dl_image_*
+          echo "Compiling EDS Models..."
+          npm run build:json
+          echo "EDS Models build completed."
+          
+          if [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            git commit -m "feat($TICKET_ID): Apply AI-generated changes [skip ci]"
+            git push -u origin "$FEATURE_BRANCH_NAME"
+            echo "changes_pushed=true" >> $GITHUB_OUTPUT
+          else
+            echo "No file changes detected."
+            echo "changes_pushed=false" >> $GITHUB_OUTPUT
+          fi
+
+      # --- All subsequent steps (8-14) remain the same ---
+      - name: 8. Sanitize Ticket ID for AEM
+        id: sanitize
+        if: steps.main_script.outputs.changes_pushed == 'true'
+        run: |
+          SANITIZED_NAME=$(echo "${TICKET_ID}" | sed 's/\//-/g')
+          echo "aem_page_name=$SANITIZED_NAME" >> $GITHUB_OUTPUT
+      - name: 9. Wait for EDS Deployment
+        if: steps.main_script.outputs.changes_pushed == 'true'
+        run: "sleep 10"
+      - name: 10. Create AEM Demo Page
+        if: steps.main_script.outputs.changes_pushed == 'true'
+        run: |
+          curl --fail-with-body "${AEM_URL}/bin/wcmcommand" -u "${AEM_USERNAME}:${AEM_PASSWORD}" -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' --data-raw "_charset_=UTF-8&cmd=copyPage&srcPath=${AEM_SRC_PATH}&destParentPath=${AEM_DEST_PARENT_PATH}&before=&destName=${{ steps.sanitize.outputs.aem_page_name }}&shallow=false"
+      - name: 11. Update AEM Page Title
+        if: steps.main_script.outputs.changes_pushed == 'true'
+        run: |
+          curl --fail-with-body "${AEM_URL}${AEM_DEST_PARENT_PATH}/${{ steps.sanitize.outputs.aem_page_name }}/jcr:content" -u "${AEM_USERNAME}:${AEM_PASSWORD}" -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' --data-raw "jcr:title=${{ steps.sanitize.outputs.aem_page_name }}"
+      - name: 12. Add New Component to AEM Page from Demo Data
+        if: steps.main_script.outputs.changes_pushed == 'true'
+        shell: bash
+        run: |
+          # This is the original, correct logic that dynamically excludes fields from partials,
+          # but is now corrected to ONLY exclude link/target and not the label.
+          DEMO_FILE_PATH=$(git diff --name-only HEAD~1 HEAD | grep 'demo_data.json' | head -n 1)
+          SOURCE_MODEL_FILE_PATH=$(git diff --name-only HEAD~1 HEAD | grep 'blocks/.*_.*.json' | head -n 1)
+          if [ -z "$DEMO_FILE_PATH" ] || [ -z "$SOURCE_MODEL_FILE_PATH" ]; then exit 0; fi
+          
+          COMPONENT_NAME=$(basename "$(dirname "$DEMO_FILE_PATH")")
+          COMPILED_MODELS_FILE="component-models.json"
+          
+          PARTIAL_PATHS=$(jq -r '.models[].fields[] | select(has("...")) | .["..."] | sub("#/fields$"; "")' "$SOURCE_MODEL_FILE_PATH")
+          EXCLUDE_FIELDS_JSON="[]"
+          for path in $PARTIAL_PATHS; do
+            ABSOLUTE_PARTIAL_PATH=$(realpath -m "$(dirname "$SOURCE_MODEL_FILE_PATH")/$path")
+            if [ -f "$ABSOLUTE_PARTIAL_PATH" ]; then
+              # CORRECTED: Only exclude fields ending in -link or -target, not all fields from the partial.
+              PARTIAL_FIELDS=$(jq -r '[.fields[] | .name | select(endswith("-link") or endswith("-target"))]' "$ABSOLUTE_PARTIAL_PATH")
+              EXCLUDE_FIELDS_JSON=$(jq -n --argjson current_exclude "$EXCLUDE_FIELDS_JSON" --argjson new_fields "$PARTIAL_FIELDS" '$current_exclude + $new_fields | unique')
+            fi
+          done
+          
+          ALL_FIELDS_JSON=$(jq -r --arg compName "$COMPONENT_NAME" '[.[] | select(.id == $compName) | .fields[].name] | unique' "$COMPILED_MODELS_FILE")
+          MODEL_FIELDS_JSON_ARRAY=$(jq -n --argjson all "$ALL_FIELDS_JSON" --argjson exclude "$EXCLUDE_FIELDS_JSON" '$all - $exclude')
+          
+          NAME_VAL=$(jq -r '.definitions[0].title' "$SOURCE_MODEL_FILE_PATH")
+          
+          METADATA_JSON=$(jq -n --arg filter "$COMPONENT_NAME" --arg model "$COMPONENT_NAME" --arg name "$NAME_VAL" --argjson modelFields "$MODEL_FIELDS_JSON_ARRAY" '{filter: $filter, model: $model, name: $name, modelFields: $modelFields}')
+          AI_CONTENT_JSON=$(cat "$DEMO_FILE_PATH")
+          IMAGE_FIELD_NAME=$(jq -r --arg compName "$COMPONENT_NAME" '.[] | select(.id == $compName) | .fields[] | select(.component == "reference") | .name' "$COMPILED_MODELS_FILE" | head -n 1)
+          FINAL_JSON=$(jq -n --argjson ai_content "$AI_CONTENT_JSON" --argjson meta "$METADATA_JSON" '$ai_content + $meta' | jq --arg fieldName "$IMAGE_FIELD_NAME" 'if $fieldName and $fieldName != "" then .[$fieldName] = "/content/dam/aco/content-at-scale.png" else . end')
+
+          FORM_DATA=$(echo "$FINAL_JSON" | jq -r 'to_entries | .[] | if .value | type == "array" then .key as $k | .value[] | ($k|@uri) + "=" + (. | @uri) else (.key|@uri) + "=" + (.value|tostring|@uri) end' | paste -sd'&')
+          SLING_RESOURCETYPE="core/franklin/components/block/v1/block"
+          FINAL_FORM_DATA="${FORM_DATA}&sling:resourceType=${SLING_RESOURCETYPE}"
+          
+          AEM_PAGE_NAME="${{ steps.sanitize.outputs.aem_page_name }}"
+          TARGET_URL="${AEM_URL}${AEM_DEST_PARENT_PATH}/${AEM_PAGE_NAME}/jcr:content/root/section_0/block"
+          
+          curl -v --fail-with-body "$TARGET_URL" -u "${AEM_USERNAME}:${AEM_PASSWORD}" -H "Content-Type: application/x-www-form-urlencoded; charset=UTF-8" --data-raw "$FINAL_FORM_DATA"
+
+      - name: 13. Notify N8N to Create Pull Request
+        if: steps.main_script.outputs.changes_pushed == 'true'
+        shell: bash
+        run: |
+          FEATURE_BRANCH_NAME="feature/$TICKET_ID"; LATEST_COMMIT_SHA=$(git rev-parse HEAD); REPO_OWNER=$(echo "$GH_REPO" | cut -d'/' -f1); REPO_NAME=$(echo "$GH_REPO" | cut -d'/' -f2); SANITIZED_BRANCH_NAME=$(echo "$FEATURE_BRANCH_NAME" | sed 's/\//-/g'); PREVIEW_URL="https://$SANITIZED_BRANCH_NAME--$REPO_NAME--$REPO_OWNER.hlx.page"; PR_TITLE="feat($TICKET_ID): Implement feature $TICKET_ID (AI Assisted)"; PR_BODY=$(cat <<EOF
+          This Pull Request was automatically generated by the Codex AI Developer to implement ticket **$TICKET_ID**.
+          ### URL for testing:
+          - $PREVIEW_URL
+          Commit SHA: \`$LATEST_COMMIT_SHA\`
+          EOF
+          ); JSON_PAYLOAD=$(jq -n --arg fb "$FEATURE_BRANCH_NAME" --arg tb "$DEFAULT_BRANCH" --arg tid "$TICKET_ID" --arg commitSha "$LATEST_COMMIT_SHA" --arg repo "$GH_REPO" --arg prTitle "$PR_TITLE" --arg prBody "$PR_BODY" '{source_branch: $fb, target_branch: $tb, ticket_id: $tid, commit_sha: $commitSha, repo: $repo, pull_request_title: $prTitle, pull_request_body: $prBody}'); if [ -z "$N8N_MR_WEBHOOK_URL" ]; then echo "Warning: N8N_PR_WEBHOOK_URL secret is not set."; else curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -d "$JSON_PAYLOAD" "$N8N_MR_WEBHOOK_URL"; fi
