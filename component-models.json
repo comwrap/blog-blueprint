@@ -422,28 +422,15 @@
         "value": ""
       },
       {
-        "component": "text",
-        "name": "title",
-        "label": "Title",
-        "valueType": "string"
-      },
-      {
         "component": "richtext",
-        "name": "description",
-        "label": "Description",
-        "valueType": "string",
-        "value": ""
-      },
-      {
-        "component": "text",
-        "name": "buttonText",
-        "label": "Button Text",
+        "name": "slide_title",
+        "label": "Slide Title",
         "valueType": "string"
       },
       {
-        "component": "text",
-        "name": "buttonLink",
-        "label": "Button Link",
+        "component": "button",
+        "name": "slide_button",
+        "label": "Slide Button",
         "valueType": "string"
       }
     ]
