@@ -7,11 +7,13 @@ export default function decorate(block) {
   // Block-level background config from the first row
   let backgroundImageUrl = '';
   let backgroundImageAlt = '';
+  let layout = '';
   if (rows[0]) {
     const img = rows[0].querySelector('img');
     const a = rows[0].querySelector('a');
     backgroundImageUrl = img?.src || a?.href || '';
     backgroundImageAlt = img?.alt || rows[0].children?.[1]?.textContent?.trim() || '';
+    layout = rows[0].children?.[2]?.textContent?.trim() || '';
   }
 
   // Remaining rows are items
@@ -62,6 +64,8 @@ export default function decorate(block) {
   // Build DOM
   const wrapper = document.createElement('div');
   wrapper.className = 'framed-grid';
+  if (layout === 'half') wrapper.classList.add('layout-half');
+  if (layout === 'quarter') wrapper.classList.add('layout-quarter');
 
   const list = document.createElement('ul');
   list.setAttribute('role', 'list');
