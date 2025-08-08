@@ -1,0 +1,123 @@
+.header-teaser {
+  position: relative;
+  width: 100%;
+  height: var(--header-height, 100vh);
+  overflow: hidden;
+}
+
+.header-teaser-media,
+.carousel-slide-image {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.header-teaser-media picture,
+.header-teaser-media img,
+.header-teaser-media video,
+.carousel-slide-image picture,
+.carousel-slide-image img,
+.carousel-slide-image video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Mobile/desktop media toggles */
+.header-teaser-media .mobile-media { display: none; }
+@media (width < 900px) {
+  .header-teaser-media .desktop-media { display: none; }
+  .header-teaser-media .mobile-media { display: block; }
+}
+
+/* Content overlay container (works standalone and inside carousel) */
+.header-teaser-content,
+.carousel-slide-content {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.header-teaser-content-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center; /* vertical center by default */
+  justify-content: center; /* horizontal center by default */
+}
+
+/* Inner textbox with glassmorphism */
+.header-teaser-textbox {
+  pointer-events: auto;
+  max-width: min(90%, 860px);
+  color: rgba(var(--color-pure-white), 1);
+  background: rgba(var(--color-pure-black), 0.6);
+  backdrop-filter: blur(16px);
+  padding: var(--spacing-xl);
+  border-radius: 8px;
+  box-shadow: 0 2px 24px rgba(0 0 0 / 35%);
+  text-align: center;
+}
+
+/* Position tokens: pos-left/center/right (horizontal) */
+.header-teaser-content-inner.pos-left { justify-content: flex-start; }
+.header-teaser-content-inner.pos-center { justify-content: center; }
+.header-teaser-content-inner.pos-right { justify-content: flex-end; }
+
+/* Text alignment tokens */
+.header-teaser-textbox.text-left { text-align: left; }
+.header-teaser-textbox.text-center { text-align: center; }
+.header-teaser-textbox.text-right { text-align: right; }
+
+/* Background style tokens */
+.header-teaser-textbox.no-bg {
+  background: transparent;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+.header-teaser-textbox.glass-25 { background: rgba(var(--color-pure-black), 0.25); }
+.header-teaser-textbox.glass-50 { background: rgba(var(--color-pure-black), 0.5); }
+.header-teaser-textbox.glass-75 { background: rgba(var(--color-pure-black), 0.75); }
+.header-teaser-textbox.overlay-light { color: rgba(var(--color-pure-black), 1); background: rgba(var(--color-pure-white), 0.6); }
+
+/* Height variants */
+.header-teaser-media.height-short,
+.carousel-slide-image.height-short { height: 20vh; }
+.header-teaser-media.height-medium,
+.carousel-slide-image.height-medium { height: 50vh; }
+.header-teaser-media.height-full,
+.carousel-slide-image.height-full { height: 100vh; }
+
+.header-teaser-pretitle {
+  margin: 0 0 var(--spacing-s) 0;
+  font-size: var(--body-font-size-s);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.95;
+}
+
+.header-teaser-title {
+  margin: 0 0 var(--spacing-m) 0;
+  font-weight: var(--font-bold);
+}
+
+.header-teaser-text {
+  margin: 0 0 var(--spacing-l) 0;
+}
+
+.header-teaser-ctas {
+  display: inline-flex;
+  gap: var(--spacing-m);
+}
+
+/* Make it look decent inside the Universal Editor */
+.adobe-ue-edit .header-teaser-media,
+.adobe-ue-edit .carousel-slide-image {
+  height: 37.5rem;
+}
+
+@media (width >= 900px) {
+  .header-teaser-textbox { max-width: min(80%, 960px); }
+}
