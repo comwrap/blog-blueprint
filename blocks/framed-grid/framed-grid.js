@@ -3,76 +3,91 @@ import { renderButton } from '../../components/button/button.js';
 import { createOptimizedPicture } from '../../scripts/aem.js';
 
 export default function decorate(block) {
-  const items = [];
+  const rows = [...block.children];
+
+  // Block-level background config from the first row
   let backgroundImageUrl = '';
   let backgroundImageAlt = '';
+  if (rows[0]) {
+    const img = rows[0].querySelector('img');
+    const a = rows[0].querySelector('a');
+    backgroundImageUrl = img?.src || a?.href || '';
+    backgroundImageAlt = img?.alt || rows[0].children?.[1]?.textContent?.trim() || '';
+  }
 
-  [...block.children].forEach((row) => {
-    const label = row.children?.[0]?.textContent?.trim()?.toLowerCase() || '';
+  // Remaining rows are items
+  const itemRows = rows.slice(1);
 
-    const hasInlineImage = !!row.querySelector('img');
-    const hasAnchor = !!row.querySelector('a');
-    const isLikelyBackgroundRow = hasInlineImage && !hasAnchor && row.children.length <= 2;
+  const items = itemRows.map((row) => {
+    const cells = [...row.children];
+    const title = cells[0]?.textContent?.trim() || '';
+    const description = cells[1]?.textContent?.trim() || '';
 
-    if (label === 'background image' || label === 'background' || (!backgroundImageUrl && isLikelyBackgroundRow)) {
-      const img = row.querySelector('img');
-      if (img) {
-        backgroundImageUrl = img.src;
-        backgroundImageAlt = img.alt || '';
-      } else {
-        const link = row.querySelector('a');
-        if (link) backgroundImageUrl = link.href;
-      }
-      return;
+    let link = '';
+    let linkText = '';
+    let linkTitle = '';
+    let linkTarget = '';
+    let linkType = '';
+    let linkStyle = '';
+
+    // Try to read a standard anchor if present in any cell
+    const anchor = row.querySelector('a');
+    if (anchor) {
+      link = anchor.href || '';
+      linkText = anchor.textContent?.trim() || '';
+      linkTitle = anchor.title || '';
+      linkTarget = anchor.target || '';
     }
 
-    const map = [
-      { name: 'title' },
-      { name: 'description' },
-      { name: 'link' },
-      { name: 'linkText' },
-      { name: 'linkTitle' },
-      { name: 'linkTarget' },
-      { name: 'linkType' },
-      { name: 'linkStyle' },
-    ];
+    // Fallback to explicit button fields if provided as separate cells (matches partials)
+    link = cells[2]?.querySelector('a')?.href || cells[2]?.textContent?.trim() || link;
+    linkText = cells[3]?.textContent?.trim() || linkText;
+    linkTitle = cells[4]?.textContent?.trim() || linkTitle;
+    linkTarget = cells[5]?.textContent?.trim() || linkTarget;
+    linkType = cells[6]?.textContent?.trim() || linkType;
+    linkStyle = cells[7]?.textContent?.trim() || linkStyle;
 
-    const options = {};
-    map.forEach((entry, index) => {
-      const node = row.children[index];
-      options[entry.name] = node ? node.textContent.trim() : '';
-      if (entry.name === 'link' && node) {
-        const anchor = node.querySelector('a');
-        if (anchor) options.link = anchor.href;
-      }
-    });
-    items.push(options);
-  });
+    return {
+      title,
+      description,
+      link,
+      linkText,
+      linkTitle,
+      linkTarget,
+      linkType,
+      linkStyle,
+    };
+  }).slice(0, 6);
 
-  const limited = items.slice(0, 6);
-
+  // Build DOM
   const wrapper = document.createElement('div');
   wrapper.className = 'framed-grid';
 
   const list = document.createElement('ul');
-  limited.forEach((item, index) => {
+  items.forEach((item, index) => {
     const li = document.createElement('li');
     li.className = 'framed-grid-item';
 
     const content = document.createElement('div');
     content.className = 'framed-grid-content';
 
-    const titleEl = document.createElement('h3');
-    titleEl.className = 'framed-grid-title';
-    titleEl.textContent = item.title || '';
+    if (item.title) {
+      const titleEl = document.createElement('h3');
+      titleEl.className = 'framed-grid-title';
+      titleEl.textContent = item.title;
+      content.appendChild(titleEl);
+    }
 
-    const descEl = document.createElement('p');
-    descEl.className = 'framed-grid-description';
-    descEl.textContent = item.description || '';
+    if (item.description) {
+      const descEl = document.createElement('p');
+      descEl.className = 'framed-grid-description';
+      descEl.textContent = item.description;
+      content.appendChild(descEl);
+    }
 
-    const buttonWrap = document.createElement('div');
-    buttonWrap.className = 'framed-grid-button';
     if (item.link) {
+      const buttonWrap = document.createElement('div');
+      buttonWrap.className = 'framed-grid-button';
       const a = document.createElement('a');
       a.classList.add('button');
       a.href = item.link;
@@ -86,11 +101,8 @@ export default function decorate(block) {
       });
       buttonWrap.appendChild(a);
       moveClassToTargetedChild(block, a);
+      content.appendChild(buttonWrap);
     }
-
-    content.appendChild(titleEl);
-    content.appendChild(descEl);
-    content.appendChild(buttonWrap);
 
     li.appendChild(content);
 

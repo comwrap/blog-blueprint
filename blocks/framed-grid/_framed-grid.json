@@ -30,27 +30,27 @@
           }
         }
       }
-    },
-    {
-      "title": "Framed Grid Background",
-      "id": "framed-grid-background",
-      "plugins": {
-        "xwalk": {
-          "page": {
-            "resourceType": "core/franklin/components/block/v1/block/item",
-            "template": {
-              "name": "Framed Grid Background",
-              "model": "framed-grid-background"
-            }
-          }
-        }
-      }
     }
   ],
   "models": [
     {
       "id": "framed-grid",
-      "fields": []
+      "fields": [
+        {
+          "component": "reference",
+          "name": "image",
+          "label": "Background Image",
+          "valueType": "string",
+          "multi": false
+        },
+        {
+          "component": "text",
+          "name": "imageAlt",
+          "label": "Background Image Alt",
+          "value": "",
+          "valueType": "string"
+        }
+      ]
     },
     {
       "id": "framed-grid-item",
@@ -73,36 +73,14 @@
           "...": "../../models/partials/_button.json#/fields"
         }
       ]
-    },
-    {
-      "id": "framed-grid-background",
-      "fields": [
-        {
-          "component": "reference",
-          "name": "image",
-          "label": "Background Image",
-          "valueType": "string",
-          "multi": false
-        },
-        {
-          "component": "text",
-          "name": "imageAlt",
-          "label": "Background Image Alt",
-          "value": "",
-          "valueType": "string"
-        }
-      ]
     }
   ],
   "filters": [
     {
       "id": "framed-grid",
       "components": [
-        "framed-grid-background",
         "framed-grid-item"
-      ],
-      "maxItems": 7,
-      "hint": "Add one background first (optional) then up to 6 items. Background image will appear behind 1st, 3rd, and 5th items."
+      ]
     }
   ]
 } 

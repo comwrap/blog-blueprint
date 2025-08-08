@@ -643,7 +643,22 @@
   },
   {
     "id": "framed-grid",
-    "fields": []
+    "fields": [
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Background Image",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Background Image Alt",
+        "value": "",
+        "valueType": "string"
+      }
+    ]
   },
   {
     "id": "framed-grid-item",
@@ -737,25 +752,6 @@
             "value": "text"
           }
         ]
-      }
-    ]
-  },
-  {
-    "id": "framed-grid-background",
-    "fields": [
-      {
-        "component": "reference",
-        "name": "image",
-        "label": "Background Image",
-        "valueType": "string",
-        "multi": false
-      },
-      {
-        "component": "text",
-        "name": "imageAlt",
-        "label": "Background Image Alt",
-        "value": "",
-        "valueType": "string"
       }
     ]
   },
