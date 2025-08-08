@@ -62,6 +62,15 @@
     ]
   },
   {
+    "id": "framed-grid",
+    "components": [
+      "framed-grid-background",
+      "framed-grid-item"
+    ],
+    "maxItems": 7,
+    "hint": "Add one background first (optional) then up to 6 items. Background image will appear behind 1st, 3rd, and 5th items."
+  },
+  {
     "id": "gallery",
     "components": [
       "galleryimage",

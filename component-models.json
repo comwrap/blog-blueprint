@@ -642,6 +642,124 @@
     ]
   },
   {
+    "id": "framed-grid",
+    "fields": []
+  },
+  {
+    "id": "framed-grid-item",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title",
+        "value": "",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "value": "",
+        "valueType": "string"
+      },
+      {
+        "component": "aem-content",
+        "name": "custombutton-link",
+        "label": "Link"
+      },
+      {
+        "component": "text",
+        "name": "custombutton-link-text",
+        "label": "Text"
+      },
+      {
+        "component": "text",
+        "name": "custombutton-link-title",
+        "label": "Title"
+      },
+      {
+        "component": "select",
+        "name": "custombutton-link-target",
+        "label": "Link Target",
+        "options": [
+          {
+            "name": "Same Window",
+            "value": ""
+          },
+          {
+            "name": "New Tab",
+            "value": "_blank"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "custombutton-type",
+        "label": "Button Type",
+        "options": [
+          {
+            "name": "Link",
+            "value": "link"
+          },
+          {
+            "name": "Download",
+            "value": "download"
+          },
+          {
+            "name": "Email",
+            "value": "email"
+          },
+          {
+            "name": "Telephone",
+            "value": "telephone"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "custombutton-style",
+        "label": "Button Style",
+        "options": [
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          },
+          {
+            "name": "Tertiary",
+            "value": "tertiary"
+          },
+          {
+            "name": "Text",
+            "value": "text"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "framed-grid-background",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Background Image",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Background Image Alt",
+        "value": "",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "gallery",
     "fields": [
       {

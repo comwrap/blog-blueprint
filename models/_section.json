@@ -67,7 +67,8 @@
         "teaser",
         "video",
         "gallery",
-        "event-teaser"
+        "event-teaser",
+        "framed-grid"
       ]
     }
   ]

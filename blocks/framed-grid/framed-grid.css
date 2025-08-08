@@ -1,0 +1,77 @@
+/* Framed Grid block */
+.framed-grid > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-l);
+}
+
+@media (width >= 900px) {
+  .framed-grid > ul {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.framed-grid > ul > li.framed-grid-item {
+  position: relative;
+  overflow: hidden;
+  min-height: 240px;
+  border: 1px solid rgba(var(--dark), 0.1);
+  background: var(--light-color);
+}
+
+.framed-grid .framed-grid-content {
+  position: relative;
+  z-index: 2;
+  padding: var(--spacing-l);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-s);
+}
+
+.framed-grid .framed-grid-title {
+  margin: 0;
+}
+
+.framed-grid .framed-grid-description {
+  margin: 0;
+}
+
+.framed-grid .framed-grid-button .button {
+  margin-top: var(--spacing-s);
+}
+
+/* Background frame shown only on 1st, 3rd, 5th items */
+.framed-grid > ul > li.framed-grid-has-frame {
+  background-color: transparent;
+}
+
+.framed-grid .framed-grid-frame {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.framed-grid .framed-grid-frame picture,
+.framed-grid .framed-grid-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Subtle overlay to keep text readable over background frames */
+.framed-grid > ul > li.framed-grid-has-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgb(0 0 0 / 35%), rgb(0 0 0 / 25%));
+  z-index: 1;
+}
+
+.framed-grid > ul > li.framed-grid-has-frame .framed-grid-title,
+.framed-grid > ul > li.framed-grid-has-frame .framed-grid-description {
+  color: var(--background-color);
+} 
