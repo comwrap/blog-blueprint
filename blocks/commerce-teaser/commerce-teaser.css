@@ -1,0 +1,97 @@
+/* Commerce Teaser - Card layout */
+
+.commerce-teaser {
+  /* wrapper class added by authoring; keep a minimal reset here if needed */
+}
+
+.commerce-teaser-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--background-color);
+  border: 1px solid #dadada;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #0000000a;
+  overflow: hidden;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.commerce-teaser-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px #0000001f;
+}
+
+.ct-image picture,
+.ct-image img {
+  display: block;
+  width: 100%;
+}
+
+.ct-image img {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.ct-body {
+  padding: var(--spacing-m);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-s);
+}
+
+.ct-title {
+  margin: 0;
+  font-size: var(--heading-font-size-m);
+  line-height: 1.25;
+}
+
+.ct-title a:any-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ct-title a:hover {
+  text-decoration: underline;
+}
+
+.ct-price {
+  font-size: var(--heading-font-size-l);
+  font-weight: var(--font-bold);
+  color: rgb(var(--highlight));
+}
+
+.ct-description {
+  margin: 0;
+  color: var(--text-color);
+  font-size: var(--body-font-size-s);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ct-cta {
+  padding: 0 var(--spacing-m) var(--spacing-m);
+}
+
+.ct-cta .button {
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.ct-cta .button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px #00000024;
+}
+
+@media (width >= 900px) {
+  .commerce-teaser-card {
+    max-width: 420px;
+  }
+}
+
+/* Accessibility: focus visible outlines */
+.commerce-teaser-card:focus-within {
+  outline: 2px solid var(--link-color);
+  outline-offset: 2px;
+}
+
