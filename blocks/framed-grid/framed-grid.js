@@ -1,6 +1,4 @@
 import { moveClassToTargetedChild } from '../../scripts/utils.js';
-import { renderButton } from '../../components/button/button.js';
-import { createOptimizedPicture } from '../../scripts/aem.js';
 
 export default function decorate(block) {
   const rows = [...block.children];
@@ -64,6 +62,8 @@ export default function decorate(block) {
   wrapper.className = 'framed-grid';
 
   const list = document.createElement('ul');
+  const framedItems = [];
+
   items.forEach((item, index) => {
     const li = document.createElement('li');
     li.className = 'framed-grid-item';
@@ -91,14 +91,11 @@ export default function decorate(block) {
       const a = document.createElement('a');
       a.classList.add('button');
       a.href = item.link;
-      renderButton({
-        linkButton: a,
-        linkText: item.linkText || '',
-        linkTitle: item.linkTitle || '',
-        linkTarget: item.linkTarget || '',
-        linkType: item.linkType || '',
-        linkStyle: item.linkStyle || '',
-      });
+      // Render button styles/text if provided
+      a.textContent = item.linkText || a.textContent || '';
+      if (item.linkTitle) a.title = item.linkTitle;
+      if (item.linkTarget) a.target = item.linkTarget;
+      if (item.linkStyle) a.classList.add(item.linkStyle);
       buttonWrap.appendChild(a);
       moveClassToTargetedChild(block, a);
       content.appendChild(buttonWrap);
@@ -110,17 +107,10 @@ export default function decorate(block) {
       li.classList.add('framed-grid-has-frame');
       const frame = document.createElement('div');
       frame.className = 'framed-grid-frame';
-      const picture = createOptimizedPicture(
-        backgroundImageUrl,
-        backgroundImageAlt || 'Background',
-        false,
-        [
-          { width: '750' },
-          { width: '1200' },
-        ],
-      );
-      frame.appendChild(picture);
+      frame.setAttribute('role', 'img');
+      if (backgroundImageAlt) frame.setAttribute('aria-label', backgroundImageAlt);
       li.appendChild(frame);
+      framedItems.push(frame);
     }
 
     list.appendChild(li);
@@ -129,4 +119,31 @@ export default function decorate(block) {
   wrapper.appendChild(list);
   block.textContent = '';
   block.appendChild(wrapper);
+
+  // Align framed backgrounds to a single shared background
+  function positionFrames() {
+    if (!backgroundImageUrl || framedItems.length === 0) return;
+    const wrapperRect = wrapper.getBoundingClientRect();
+
+    framedItems.forEach((frame) => {
+      const liRect = frame.parentElement.getBoundingClientRect();
+      const offsetX = liRect.left - wrapperRect.left;
+      const offsetY = liRect.top - wrapperRect.top;
+
+      // Size the background to the wrapper, and offset to align slice
+      frame.style.backgroundImage = `url("${backgroundImageUrl}")`;
+      frame.style.backgroundRepeat = 'no-repeat';
+      frame.style.backgroundSize = `${Math.round(wrapperRect.width)}px ${Math.round(wrapperRect.height)}px`;
+      frame.style.backgroundPosition = `-${Math.round(offsetX)}px -${Math.round(offsetY)}px`;
+    });
+  }
+
+  // Reposition on load and on resize
+  positionFrames();
+  window.addEventListener('resize', () => {
+    window.requestAnimationFrame(positionFrames);
+  });
+
+  const ro = new ResizeObserver(() => positionFrames());
+  ro.observe(wrapper);
 }
