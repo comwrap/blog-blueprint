@@ -1,4 +1,5 @@
 import { moveClassToTargetedChild } from '../../scripts/utils.js';
+import { moveInstrumentation } from '../../scripts/scripts.js';
 
 export default function decorate(block) {
   const rows = [...block.children];
@@ -46,6 +47,7 @@ export default function decorate(block) {
     linkStyle = cells[7]?.textContent?.trim() || linkStyle;
 
     return {
+      row,
       title,
       description,
       link,
@@ -62,11 +64,16 @@ export default function decorate(block) {
   wrapper.className = 'framed-grid';
 
   const list = document.createElement('ul');
+  list.setAttribute('role', 'list');
   const framedItems = [];
 
   items.forEach((item, index) => {
     const li = document.createElement('li');
     li.className = 'framed-grid-item';
+    li.setAttribute('role', 'listitem');
+
+    // Preserve authoring instrumentation from the source row
+    moveInstrumentation(item.row, li);
 
     const content = document.createElement('div');
     content.className = 'framed-grid-content';
