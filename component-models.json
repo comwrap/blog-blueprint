@@ -837,6 +837,344 @@
     ]
   },
   {
+    "id": "header-teaser",
+    "fields": [
+      {
+        "component": "text",
+        "name": "pretitle",
+        "label": "Pretitle"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "select",
+        "name": "titleLevel",
+        "label": "Title Level",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "label": "Text"
+      },
+      {
+        "component": "select",
+        "name": "mediaType",
+        "label": "Desktop Media Type",
+        "options": [
+          {
+            "name": "Image",
+            "value": "image"
+          },
+          {
+            "name": "Video",
+            "value": "video"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Desktop Image",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Desktop Image Alt"
+      },
+      {
+        "component": "aem-content",
+        "name": "video",
+        "label": "Desktop Video"
+      },
+      {
+        "component": "select",
+        "name": "mobileMediaType",
+        "label": "Mobile Media Type",
+        "options": [
+          {
+            "name": "Same as Desktop",
+            "value": "same"
+          },
+          {
+            "name": "Image",
+            "value": "image"
+          },
+          {
+            "name": "Video",
+            "value": "video"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "name": "mobileImage",
+        "label": "Mobile Image",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "name": "mobileImageAlt",
+        "label": "Mobile Image Alt"
+      },
+      {
+        "component": "aem-content",
+        "name": "mobileVideo",
+        "label": "Mobile Video"
+      },
+      {
+        "component": "aem-content",
+        "name": "cta1Link",
+        "label": "CTA 1 Link"
+      },
+      {
+        "component": "text",
+        "name": "cta1Text",
+        "label": "CTA 1 Text"
+      },
+      {
+        "component": "text",
+        "name": "cta1Title",
+        "label": "CTA 1 Title"
+      },
+      {
+        "component": "select",
+        "name": "cta1Target",
+        "label": "CTA 1 Target",
+        "options": [
+          {
+            "name": "Same Window",
+            "value": ""
+          },
+          {
+            "name": "New Tab",
+            "value": "_blank"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "cta1Type",
+        "label": "CTA 1 Type",
+        "options": [
+          {
+            "name": "Link",
+            "value": "link"
+          },
+          {
+            "name": "Download",
+            "value": "download"
+          },
+          {
+            "name": "Email",
+            "value": "email"
+          },
+          {
+            "name": "Telephone",
+            "value": "telephone"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "cta1Style",
+        "label": "CTA 1 Style",
+        "options": [
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          },
+          {
+            "name": "Tertiary",
+            "value": "tertiary"
+          },
+          {
+            "name": "Text",
+            "value": "text"
+          }
+        ]
+      },
+      {
+        "component": "aem-content",
+        "name": "cta2Link",
+        "label": "CTA 2 Link"
+      },
+      {
+        "component": "text",
+        "name": "cta2Text",
+        "label": "CTA 2 Text"
+      },
+      {
+        "component": "text",
+        "name": "cta2Title",
+        "label": "CTA 2 Title"
+      },
+      {
+        "component": "select",
+        "name": "cta2Target",
+        "label": "CTA 2 Target",
+        "options": [
+          {
+            "name": "Same Window",
+            "value": ""
+          },
+          {
+            "name": "New Tab",
+            "value": "_blank"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "cta2Type",
+        "label": "CTA 2 Type",
+        "options": [
+          {
+            "name": "Link",
+            "value": "link"
+          },
+          {
+            "name": "Download",
+            "value": "download"
+          },
+          {
+            "name": "Email",
+            "value": "email"
+          },
+          {
+            "name": "Telephone",
+            "value": "telephone"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "cta2Style",
+        "label": "CTA 2 Style",
+        "options": [
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          },
+          {
+            "name": "Tertiary",
+            "value": "tertiary"
+          },
+          {
+            "name": "Text",
+            "value": "text"
+          }
+        ]
+      },
+      {
+        "component": "multiselect",
+        "name": "styles",
+        "label": "Styles",
+        "options": [
+          {
+            "name": "Position Left",
+            "value": "pos-left"
+          },
+          {
+            "name": "Position Center",
+            "value": "pos-center"
+          },
+          {
+            "name": "Position Right",
+            "value": "pos-right"
+          },
+          {
+            "name": "Text Align Left",
+            "value": "text-left"
+          },
+          {
+            "name": "Text Align Center",
+            "value": "text-center"
+          },
+          {
+            "name": "Text Align Right",
+            "value": "text-right"
+          },
+          {
+            "name": "No Background",
+            "value": "no-bg"
+          },
+          {
+            "name": "Glass 25%",
+            "value": "glass-25"
+          },
+          {
+            "name": "Glass 50%",
+            "value": "glass-50"
+          },
+          {
+            "name": "Glass 75%",
+            "value": "glass-75"
+          },
+          {
+            "name": "Overlay Dark",
+            "value": "overlay-dark"
+          },
+          {
+            "name": "Overlay Light",
+            "value": "overlay-light"
+          },
+          {
+            "name": "Height Short",
+            "value": "height-short"
+          },
+          {
+            "name": "Height Medium",
+            "value": "height-medium"
+          },
+          {
+            "name": "Height Full",
+            "value": "height-full"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "hero",
     "fields": [
       {

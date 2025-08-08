@@ -356,6 +356,22 @@
           }
         },
         {
+          "title": "Header Teaser",
+          "id": "header-teaser",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Header Teaser",
+                  "model": "header-teaser",
+                  "filter": "header-teaser"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Hero",
           "id": "hero",
           "plugins": {
