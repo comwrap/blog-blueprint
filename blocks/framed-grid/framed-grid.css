@@ -35,12 +35,13 @@
     gap: var(--spacing-xxxl) var(--spacing-l);
   }
 
-  .framed-grid.layout-half > ul {
-    grid-template-columns: repeat(2, 1fr);
+  /* Per-item widths */
+  .framed-grid > ul > li.framed-grid-item.item-half {
+    grid-column: span 2;
   }
 
-  .framed-grid.layout-quarter > ul {
-    grid-template-columns: repeat(4, 1fr);
+  .framed-grid > ul > li.framed-grid-item.item-quarter {
+    grid-column: span 1;
   }
 }
 

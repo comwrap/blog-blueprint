@@ -49,16 +49,6 @@
           "label": "Background Image Alt",
           "value": "",
           "valueType": "string"
-        },
-        {
-          "component": "select",
-          "name": "layout",
-          "label": "Item Width",
-          "valueType": "string",
-          "options": [
-            { "name": "1/2 row", "value": "half" },
-            { "name": "1/4 row", "value": "quarter" }
-          ]
         }
       ]
     },
@@ -78,6 +68,17 @@
           "label": "Description",
           "value": "",
           "valueType": "string"
+        },
+        {
+          "component": "select",
+          "name": "width",
+          "label": "Item Width",
+          "valueType": "string",
+          "options": [
+            { "name": "Auto", "value": "" },
+            { "name": "1/2 row", "value": "half" },
+            { "name": "1/4 row", "value": "quarter" }
+          ]
         },
         {
           "...": "../../models/partials/_button.json#/fields"

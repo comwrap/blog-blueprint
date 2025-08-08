@@ -7,13 +7,11 @@ export default function decorate(block) {
   // Block-level background config from the first row
   let backgroundImageUrl = '';
   let backgroundImageAlt = '';
-  let layout = '';
   if (rows[0]) {
     const img = rows[0].querySelector('img');
     const a = rows[0].querySelector('a');
     backgroundImageUrl = img?.src || a?.href || '';
     backgroundImageAlt = img?.alt || rows[0].children?.[1]?.textContent?.trim() || '';
-    layout = rows[0].children?.[2]?.textContent?.trim() || '';
   }
 
   // Remaining rows are items
@@ -23,6 +21,7 @@ export default function decorate(block) {
     const cells = [...row.children];
     const title = cells[0]?.textContent?.trim() || '';
     const description = cells[1]?.textContent?.trim() || '';
+    const width = cells[2]?.textContent?.trim() || '';
 
     let link = '';
     let linkText = '';
@@ -41,17 +40,18 @@ export default function decorate(block) {
     }
 
     // Fallback to explicit button fields if provided as separate cells (matches partials)
-    link = cells[2]?.querySelector('a')?.href || cells[2]?.textContent?.trim() || link;
-    linkText = cells[3]?.textContent?.trim() || linkText;
-    linkTitle = cells[4]?.textContent?.trim() || linkTitle;
-    linkTarget = cells[5]?.textContent?.trim() || linkTarget;
-    linkType = cells[6]?.textContent?.trim() || linkType;
-    linkStyle = cells[7]?.textContent?.trim() || linkStyle;
+    link = cells[3]?.querySelector('a')?.href || cells[3]?.textContent?.trim() || link;
+    linkText = cells[4]?.textContent?.trim() || linkText;
+    linkTitle = cells[5]?.textContent?.trim() || linkTitle;
+    linkTarget = cells[6]?.textContent?.trim() || linkTarget;
+    linkType = cells[7]?.textContent?.trim() || linkType;
+    linkStyle = cells[8]?.textContent?.trim() || linkStyle;
 
     return {
       row,
       title,
       description,
+      width,
       link,
       linkText,
       linkTitle,
@@ -64,8 +64,6 @@ export default function decorate(block) {
   // Build DOM
   const wrapper = document.createElement('div');
   wrapper.className = 'framed-grid';
-  if (layout === 'half') wrapper.classList.add('layout-half');
-  if (layout === 'quarter') wrapper.classList.add('layout-quarter');
 
   const list = document.createElement('ul');
   list.setAttribute('role', 'list');
@@ -75,6 +73,10 @@ export default function decorate(block) {
     const li = document.createElement('li');
     li.className = 'framed-grid-item';
     li.setAttribute('role', 'listitem');
+
+    // Apply per-item width
+    if (item.width === 'half') li.classList.add('item-half');
+    if (item.width === 'quarter') li.classList.add('item-quarter');
 
     // Preserve authoring instrumentation from the source row
     moveInstrumentation(item.row, li);
