@@ -31,8 +31,8 @@
 
 @media (width >= 900px) {
   .framed-grid > ul {
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-xxxl) var(--spacing-l);
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-xxl);
   }
 
   /* Per-item widths */
@@ -49,21 +49,7 @@
   position: relative;
   overflow: hidden;
   min-height: 240px;
-  border: 8px solid var(--background-color); /* white frame */
   background: var(--light-color);
-}
-
-/* Reveal single background slice inside these specific items */
-.framed-grid > ul > li.framed-grid-item.framed-grid-has-frame {
-  background: transparent;
-}
-
-.framed-grid > ul > li.framed-grid-item .framed-grid-frame {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background-repeat: no-repeat;
-  background-size: cover; /* will be overridden in JS to match wrapper size */
 }
 
 .framed-grid .framed-grid-content {
@@ -83,8 +69,27 @@
   margin: 0;
 }
 
-.framed-grid .framed-grid-button .button {
-  margin-top: var(--spacing-s);
+/* Accent items (2nd, 4th, 6th) */
+.framed-grid > ul > li.framed-grid-item.framed-grid-accent {
+  background: #ff443a;
+}
+
+.framed-grid > ul > li.framed-grid-item.framed-grid-accent .framed-grid-title,
+.framed-grid > ul > li.framed-grid-item.framed-grid-accent .framed-grid-description {
+  color: #fff;
+}
+
+/* Reveal single background slice inside these specific items */
+.framed-grid > ul > li.framed-grid-item.framed-grid-has-frame {
+  background: transparent;
+}
+
+.framed-grid > ul > li.framed-grid-item .framed-grid-frame {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-repeat: no-repeat;
+  background-size: cover; /* will be overridden in JS to match wrapper size */
 }
 
 /* Optional overlay to improve contrast on framed items */

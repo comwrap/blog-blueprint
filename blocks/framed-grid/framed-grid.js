@@ -1,5 +1,6 @@
 import { moveClassToTargetedChild } from '../../scripts/utils.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
+import { createOptimizedPicture } from '../../scripts/aem.js';
 
 export default function decorate(block) {
   const rows = [...block.children];
@@ -7,11 +8,37 @@ export default function decorate(block) {
   // Block-level background config from the first row
   let backgroundImageUrl = '';
   let backgroundImageAlt = '';
+  let backgroundImageUrlDesktop = '';
+  let backgroundImageUrlMobile = '';
+
+  const buildOptimizedBg = (src, alt) => {
+    try {
+      const pic = createOptimizedPicture(src, alt || '', false, [
+        { media: '(min-width: 900px)', width: '1200' },
+        { width: '750' },
+      ]);
+      const sources = [...pic.querySelectorAll('source')];
+      // Fallback <img> is mobile
+      const mobile = pic.querySelector('img')?.getAttribute('src') || src;
+      // The last fallback <source> before <img> is desktop (non-webp)
+      const desktop = sources[sources.length - 1]?.getAttribute('srcset') || src;
+      return { mobile, desktop };
+    } catch (e) {
+      return { mobile: src, desktop: src };
+    }
+  };
+
   if (rows[0]) {
     const img = rows[0].querySelector('img');
     const a = rows[0].querySelector('a');
-    backgroundImageUrl = img?.src || a?.href || '';
+    const src = img?.src || a?.href || '';
     backgroundImageAlt = img?.alt || rows[0].children?.[1]?.textContent?.trim() || '';
+    if (src) {
+      const { mobile, desktop } = buildOptimizedBg(src, backgroundImageAlt);
+      backgroundImageUrlMobile = mobile;
+      backgroundImageUrlDesktop = desktop;
+      backgroundImageUrl = mobile; // default
+    }
   }
 
   // Remaining rows are items
@@ -116,7 +143,7 @@ export default function decorate(block) {
 
     li.appendChild(content);
 
-    if ([0, 2, 4].includes(index) && backgroundImageUrl) {
+    if ([0, 2, 4].includes(index) && (backgroundImageUrlMobile || backgroundImageUrlDesktop)) {
       li.classList.add('framed-grid-has-frame');
       const frame = document.createElement('div');
       frame.className = 'framed-grid-frame';
@@ -124,6 +151,8 @@ export default function decorate(block) {
       if (backgroundImageAlt) frame.setAttribute('aria-label', backgroundImageAlt);
       li.appendChild(frame);
       framedItems.push(frame);
+    } else if ([1, 3, 5].includes(index)) {
+      li.classList.add('framed-grid-accent');
     }
 
     list.appendChild(li);
@@ -135,8 +164,12 @@ export default function decorate(block) {
 
   // Align framed backgrounds to a single shared background
   function positionFrames() {
-    if (!backgroundImageUrl || framedItems.length === 0) return;
+    if (framedItems.length === 0) return;
     const wrapperRect = wrapper.getBoundingClientRect();
+
+    const preferredUrl = (window.innerWidth >= 900 && backgroundImageUrlDesktop)
+      ? backgroundImageUrlDesktop
+      : (backgroundImageUrlMobile || backgroundImageUrlDesktop || backgroundImageUrl);
 
     framedItems.forEach((frame) => {
       const liRect = frame.parentElement.getBoundingClientRect();
@@ -144,7 +177,7 @@ export default function decorate(block) {
       const offsetY = liRect.top - wrapperRect.top;
 
       // Size the background to the wrapper, and offset to align slice
-      frame.style.backgroundImage = `url("${backgroundImageUrl}")`;
+      frame.style.backgroundImage = preferredUrl ? `url("${preferredUrl}")` : '';
       frame.style.backgroundRepeat = 'no-repeat';
       frame.style.backgroundSize = `${Math.round(wrapperRect.width)}px ${Math.round(wrapperRect.height)}px`;
       frame.style.backgroundPosition = `-${Math.round(offsetX)}px -${Math.round(offsetY)}px`;
