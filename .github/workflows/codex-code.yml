@@ -132,6 +132,7 @@ jobs:
           PREVIEW_URL="https://$SANITIZED_BRANCH_NAME--$REPO_NAME--$REPO_OWNER_FORK.hlx.page"
           LIVE_BEFORE_URL="https://main--$REPO_NAME--$REPO_OWNER_FORK.aem.live/"
           LIVE_AFTER_URL="https://$SANITIZED_BRANCH_NAME--$REPO_NAME--$REPO_OWNER_FORK.aem.live/"
+          PR_TITLE="$TICKET_ID: Implement feature $TICKET_ID (AI Assisted)"
 
           # Build PR body from template if available
           PR_TEMPLATE_PATH=".github/pull_request_template.md"
