@@ -90,7 +90,15 @@ jobs:
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           FEATURE_BRANCH_NAME="feature/$TICKET_ID"
-          git checkout -b "$FEATURE_BRANCH_NAME" "origin/$DEFAULT_BRANCH"
+          git fetch origin
+          if git ls-remote --exit-code --heads origin "$FEATURE_BRANCH_NAME" >/dev/null 2>&1; then
+            echo "Remote branch $FEATURE_BRANCH_NAME exists. Checking out and rebasing..."
+            git checkout "$FEATURE_BRANCH_NAME" || git checkout -b "$FEATURE_BRANCH_NAME"
+            git pull --rebase origin "$FEATURE_BRANCH_NAME" || true
+          else
+            echo "Remote branch $FEATURE_BRANCH_NAME does not exist. Creating from origin/$DEFAULT_BRANCH..."
+            git checkout -b "$FEATURE_BRANCH_NAME" "origin/$DEFAULT_BRANCH"
+          fi
           
           FINAL_PROMPT="${CODEX_PROMPT}${DEMO_DATA_PROMPT}"
           CODEX_CMD_ARGS=("--full-auto" "-m" "$CODEX_MODEL")
@@ -106,7 +114,11 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then
             git add -A
             git commit -m "feat($TICKET_ID): Apply AI-generated changes [skip ci]"
-            git push -u origin "$FEATURE_BRANCH_NAME"
+            if ! git push -u origin "$FEATURE_BRANCH_NAME"; then
+              echo "Push rejected (likely non-fast-forward). Rebasing with remote and retrying..."
+              git pull --rebase origin "$FEATURE_BRANCH_NAME" || true
+              git push -u origin "$FEATURE_BRANCH_NAME"
+            fi
             echo "changes_pushed=true" >> $GITHUB_OUTPUT
           else
             echo "No file changes detected."
