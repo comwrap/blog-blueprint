@@ -21,6 +21,15 @@ on:
       JIRA_IMAGE_FILENAMES:
         description: 'Comma-separated list of original image filenames from Jira.'
         required: false
+      FIGMA_URL:
+        description: 'Direct Figma link to the component/frame (will auto-extract file key and node id)'
+        required: false
+      FIGMA_FILE_KEY:
+        description: 'Figma file key (from figma.com/file/<key>/...)'
+        required: false
+      FIGMA_NODE_IDS:
+        description: 'Comma-separated Figma node IDs to fetch (e.g., 0:1,1:2)'
+        required: false
   repository_dispatch:
     types: [codex-run]
 
@@ -35,6 +44,10 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       N8N_MR_WEBHOOK_URL: ${{ secrets.N8N_PR_WEBHOOK_URL }}
       CODEX_PUSH_TOKEN: ${{ secrets.CODEX_PUSH_TOKEN }}
+      # Jira access (optional, for auto-detecting Figma link from ticket)
+      JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+      JIRA_EMAIL: ${{ secrets.JIRA_API_USER }}
+      JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
       
       # Inputs from dispatch events
       CODEX_PROMPT: |
@@ -43,6 +56,9 @@ jobs:
       CODEX_MODEL: ${{ github.event.inputs.CODEX_MODEL || github.event.client_payload.CODEX_MODEL }}
       JIRA_IMAGE_URLS: ${{ github.event.inputs.JIRA_IMAGE_URLS || github.event.client_payload.JIRA_IMAGE_URLS }}
       JIRA_IMAGE_FILENAMES: ${{ github.event.inputs.JIRA_IMAGE_FILENAMES || github.event.client_payload.JIRA_IMAGE_FILENAMES }}
+      FIGMA_URL: ${{ github.event.inputs.FIGMA_URL || github.event.client_payload.FIGMA_URL }}
+      FIGMA_FILE_KEY: ${{ github.event.inputs.FIGMA_FILE_KEY || github.event.client_payload.FIGMA_FILE_KEY }}
+      FIGMA_NODE_IDS: ${{ github.event.inputs.FIGMA_NODE_IDS || github.event.client_payload.FIGMA_NODE_IDS }}
       
       # Repository context
       GH_REPO: ${{ github.repository }}
@@ -63,28 +79,77 @@ jobs:
           git config --global user.email "actions-bot@github.com"
           npm install -g @openai/codex
           
-      - name: 4. Create Codex Config for Figma MCP
-        # This crucial step configures the Figma connection on every run
-        if: env.FIGMA_ACCESS_TOKEN != ''
+      - name: 4. Find Figma URL in Jira ticket (if provided)
+        if: env.FIGMA_URL == '' && env.JIRA_BASE_URL != '' && env.JIRA_EMAIL != '' && env.JIRA_API_TOKEN != '' && env.TICKET_ID != ''
+        shell: bash
         run: |
-          echo "Setting up Figma MCP server for Codex CLI..."
-          mkdir -p ~/.codex
-          cat <<EOF > ~/.codex/config.toml
-          [mcp_servers.figma]
-          command = "npx"
-          args = ["-y", "figma-developer-mcp", "--figma-api-key=${FIGMA_ACCESS_TOKEN}", "--stdio"]
-          EOF
-          echo "Codex config for Figma MCP created successfully. Verifying content:"
-          cat ~/.codex/config.toml
+          set -euo pipefail
+          echo "Searching Jira ticket $TICKET_ID for a Figma link..."
+          ISSUE_URL="$JIRA_BASE_URL/rest/api/3/issue/$TICKET_ID?expand=renderedFields&fields=summary,description,comment"
+          curl -sS -u "$JIRA_EMAIL:$JIRA_API_TOKEN" -H "Accept: application/json" "$ISSUE_URL" -o /tmp/jira_issue.json
+          CANDIDATE=$(jq -r '.. | strings | select(test("https?://(www\\.)?figma\\.com/(file|design)/"))' /tmp/jira_issue.json | head -n 1 || true)
+          if [ -n "${CANDIDATE:-}" ]; then
+            echo "Found Figma URL in Jira: $CANDIDATE"
+            echo "FIGMA_URL=$CANDIDATE" >> "$GITHUB_ENV"
+          else
+            echo "No Figma URL found in Jira ticket $TICKET_ID."
+          fi
 
-      - name: 5. Install Project Dependencies
+      - name: 5. Parse Figma URL (auto-detect file key and node id)
+        if: env.FIGMA_URL != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          RAW_URL="$FIGMA_URL"
+          FILE_KEY=$(printf "%s" "$RAW_URL" | sed -nE 's#https?://www\\.figma\\.com/(file|design)/([^/]+)/.*#\2#p')
+          RAW_NODE=$(printf "%s" "$RAW_URL" | sed -nE 's/.*[?&]node-id=([^&]+).*/\1/p' | sed -e 's/%3A/:/gi' -e 's/-/:/g')
+          if [ -n "${FILE_KEY:-}" ] && [ -z "${FIGMA_FILE_KEY:-}" ]; then echo "FIGMA_FILE_KEY=$FILE_KEY" >> "$GITHUB_ENV"; fi
+          if [ -n "${RAW_NODE:-}" ] && [ -z "${FIGMA_NODE_IDS:-}" ]; then echo "FIGMA_NODE_IDS=$RAW_NODE" >> "$GITHUB_ENV"; fi
+          echo "Parsed FIGMA_FILE_KEY=${FILE_KEY:-$FIGMA_FILE_KEY} FIGMA_NODE_IDS=${RAW_NODE:-$FIGMA_NODE_IDS}"
+
+      - name: 6. Fetch Figma data (no MCP)
+        if: env.FIGMA_ACCESS_TOKEN != '' && env.FIGMA_FILE_KEY != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p figma-data
+          echo "Fetching Figma file: $FIGMA_FILE_KEY"
+          curl -sS -H "X-Figma-Token: $FIGMA_ACCESS_TOKEN" \
+            "https://api.figma.com/v1/files/$FIGMA_FILE_KEY" \
+            -o figma-data/file.json
+          if [ -n "${FIGMA_NODE_IDS:-}" ]; then
+            echo "Fetching Figma nodes: $FIGMA_NODE_IDS"
+            curl -sS -G -H "X-Figma-Token: $FIGMA_ACCESS_TOKEN" \
+              --data-urlencode "ids=$FIGMA_NODE_IDS" \
+              "https://api.figma.com/v1/files/$FIGMA_FILE_KEY/nodes" \
+              -o figma-data/nodes.json
+            echo "Exporting Figma images (SVG) for nodes: $FIGMA_NODE_IDS"
+            curl -sS -G -H "X-Figma-Token: $FIGMA_ACCESS_TOKEN" \
+              --data-urlencode "ids=$FIGMA_NODE_IDS" \
+              --data-urlencode "format=svg" \
+              --data-urlencode "svg_include_id=true" \
+              "https://api.figma.com/v1/images/$FIGMA_FILE_KEY" \
+              -o figma-data/images.json
+            mkdir -p figma-data/images
+            for id in $(echo "$FIGMA_NODE_IDS" | tr ',' ' '); do
+              url=$(jq -r --arg id "$id" '.images[$id]' figma-data/images.json)
+              if [ -n "$url" ] && [ "$url" != "null" ]; then
+                curl -sSL "$url" -o "figma-data/images/${id}.svg"
+              fi
+            done
+          else
+            echo "FIGMA_NODE_IDS not provided; skipping nodes fetch."
+          fi
+          echo "Figma data saved under figma-data/"
+
+      - name: 7. Install Project Dependencies
         run: npm install
         
-      - name: 6. Set Workspace Permissions for Non-Root User
+      - name: 8. Set Workspace Permissions for Non-Root User
         run: |
           chown -R node:node "$GITHUB_WORKSPACE"
 
-      - name: 7. Execute Main AI, Build, and Git Logic
+      - name: 9. Execute Main AI, Build, and Git Logic
         id: main_script
         shell: bash
         run: |
@@ -100,10 +165,14 @@ jobs:
             git checkout -b "$FEATURE_BRANCH_NAME" "origin/$DEFAULT_BRANCH"
           fi
           
-          FINAL_PROMPT="${CODEX_PROMPT}${DEMO_DATA_PROMPT}"
+          FIGMA_CONTEXT_PROMPT=""
+          if [ -n "${FIGMA_FILE_KEY:-}" ]; then
+            FIGMA_CONTEXT_PROMPT=$'\n\nFigma context:\n- URL: '"${FIGMA_URL:-}"$'\n- File JSON: figma-data/file.json\n- Nodes JSON: figma-data/nodes.json (ids: '"${FIGMA_NODE_IDS:-}"$')\n- Exported SVGs: figma-data/images/*.svg\nGenerate the HTML and CSS for the component(s) to implement as a Franklin block.'
+          fi
+          FINAL_PROMPT="${CODEX_PROMPT}${FIGMA_CONTEXT_PROMPT}${DEMO_DATA_PROMPT}"
           CODEX_CMD_ARGS=("--full-auto" "-m" "$CODEX_MODEL")
           
-          # This command now automatically uses the Figma MCP server whenever a figma.com URL is in the prompt
+          # Running Codex without Figma MCP; any Figma data needed is available in figma-data/
           codex exec "${CODEX_CMD_ARGS[@]}" "$FINAL_PROMPT"
           
           rm -f jira_dl_image_*
