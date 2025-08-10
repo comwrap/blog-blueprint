@@ -455,6 +455,172 @@
     ]
   },
   {
+    "id": "content-image-teaser",
+    "fields": [
+      {
+        "component": "text",
+        "name": "teaser-pretitle",
+        "value": "",
+        "label": "Pretitle"
+      },
+      {
+        "component": "text",
+        "name": "teaser-title",
+        "value": "",
+        "label": "Title"
+      },
+      {
+        "component": "select",
+        "name": "teaser-titleType",
+        "label": "Title Type",
+        "options": [
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ],
+        "value": "h2"
+      },
+      {
+        "component": "richtext",
+        "name": "teaser-description",
+        "value": "",
+        "label": "Text"
+      },
+      {
+        "component": "reference",
+        "name": "teaser-image",
+        "label": "Image",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "name": "teaser-imageAlt",
+        "label": "Image Alt Text",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "name": "teaser-align",
+        "label": "Text Box Alignment",
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          }
+        ],
+        "value": "left"
+      },
+      {
+        "component": "boolean",
+        "name": "teaser-coralLine",
+        "label": "Enable Coral Accent Line",
+        "value": false
+      },
+      {
+        "component": "aem-content",
+        "name": "custombutton-link",
+        "label": "Link"
+      },
+      {
+        "component": "text",
+        "name": "custombutton-link-text",
+        "label": "Text"
+      },
+      {
+        "component": "text",
+        "name": "custombutton-link-title",
+        "label": "Title"
+      },
+      {
+        "component": "select",
+        "name": "custombutton-link-target",
+        "label": "Link Target",
+        "options": [
+          {
+            "name": "Same Window",
+            "value": ""
+          },
+          {
+            "name": "New Tab",
+            "value": "_blank"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "custombutton-type",
+        "label": "Button Type",
+        "options": [
+          {
+            "name": "Link",
+            "value": "link"
+          },
+          {
+            "name": "Download",
+            "value": "download"
+          },
+          {
+            "name": "Email",
+            "value": "email"
+          },
+          {
+            "name": "Telephone",
+            "value": "telephone"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "custombutton-style",
+        "label": "Button Style",
+        "options": [
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          },
+          {
+            "name": "Tertiary",
+            "value": "tertiary"
+          },
+          {
+            "name": "Text",
+            "value": "text"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "custom-button",
     "fields": [
       {
