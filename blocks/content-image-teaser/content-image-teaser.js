@@ -24,10 +24,8 @@ export default function decorate(block) {
   const blockItemMap = [
     { name: 'pretitle' },
     { name: 'title' },
-    { name: 'titleType' },
     { name: 'description' },
     { name: 'image' },
-    { name: 'imageAlt' },
     { name: 'align' },
     { name: 'coralLine' },
     { name: 'link' },
@@ -131,7 +129,8 @@ export default function decorate(block) {
   }
 
   /* ---------------- Assemble ---------------- */
-  // Order depends on alignment – for visual order we rely on flex-direction, but on mobile they stack.
+  // Order depends on alignment – for visual order we rely on flex-direction,
+  // but on mobile they stack.
   wrapper.appendChild(imageDiv);
   wrapper.appendChild(textDiv);
 

@@ -526,6 +526,10 @@
             "value": "left"
           },
           {
+            "name": "Center",
+            "value": "center"
+          },
+          {
             "name": "Right",
             "value": "right"
           }
@@ -533,7 +537,7 @@
         "value": "left"
       },
       {
-        "component": "checkbox",
+        "component": "boolean",
         "name": "teaser-coralLine",
         "label": "Enable Coral Accent Line",
         "value": false
