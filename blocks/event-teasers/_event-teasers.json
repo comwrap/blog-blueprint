@@ -1,0 +1,75 @@
+{
+  "definitions": [
+    {
+      "title": "Event Teasers Slider",
+      "id": "event-teasers",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Event Teasers Slider",
+              "model": "event-teasers",
+              "filter": "event-teasers"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "event-teasers",
+      "fields": [
+        {
+          "component": "text",
+          "name": "category",
+          "label": "Event Category"
+        },
+        {
+          "component": "text",
+          "name": "title",
+          "label": "Event Title"
+        },
+        {
+          "component": "text",
+          "name": "date",
+          "label": "Event Date"
+        },
+        {
+          "component": "text",
+          "name": "location",
+          "label": "Event Location"
+        },
+        {
+          "component": "text",
+          "name": "link",
+          "label": "Event Link"
+        },
+        {
+          "component": "text",
+          "name": "label",
+          "value": "LEARN MORE",
+          "label": "Button Label"
+        },
+        {
+          "component": "select",
+          "name": "target",
+          "label": "Link Target",
+          "options": [
+            {
+              "name": "Same Window",
+              "value": ""
+            },
+            {
+              "name": "New Window",
+              "value": "_blank"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "filters": []
+}
+
