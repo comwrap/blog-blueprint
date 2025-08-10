@@ -1,6 +1,7 @@
 import { setBlockItemOptions, moveClassToTargetedChild } from '../../scripts/utils.js';
 import { renderButton } from '../../components/button/button.js';
 import { createOptimizedPicture } from '../../scripts/aem.js';
+import { moveInstrumentation } from '../../scripts/scripts.js';
 
 /**
  * Decorates the content/image teaser block
@@ -55,12 +56,25 @@ export default function decorate(block) {
   imageDiv.className = 'teaser-image';
 
   if (config.image) {
+    // Attempt to preserve Universal Editor instrumentation attributes
+    let originalImgEl;
+    const imageCell = block.children[4];
+    if (imageCell) {
+      // Look for an existing <picture> or <img> element provided by the author
+      originalImgEl = imageCell.querySelector('picture, img');
+    }
+
     const optimizedPic = createOptimizedPicture(
       config.image,
       config.imageAlt || '',
       false,
       [{ media: '(min-width: 900px)' }],
     );
+
+    if (originalImgEl) {
+      moveInstrumentation(originalImgEl, optimizedPic);
+    }
+
     imageDiv.appendChild(optimizedPic);
   } else {
     const img = document.createElement('img');
@@ -125,4 +139,3 @@ export default function decorate(block) {
   block.textContent = '';
   block.appendChild(wrapper);
 }
-
