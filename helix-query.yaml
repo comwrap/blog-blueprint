@@ -23,7 +23,7 @@ indices:
         value: |
           attribute(el, 'content')
       tags:
-        select: head > meta[property="cq:tags"]
+        select: head > meta[name="cq:tags"]
         values: |
           attribute(el, 'content')
       image:
