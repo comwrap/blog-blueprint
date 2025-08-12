@@ -12,13 +12,58 @@
         "component": "text",
         "valueType": "string",
         "name": "jcr:description",
-        "label": "Description"
+        "label": "Intro Text"
       },
       {
         "component": "text",
         "valueType": "string",
+        "name": "og:title",
+        "label": "Meta Title"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "og:description",
+        "label": "Meta Description"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "og:image",
+        "label": "Image"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "robots",
+        "label": "Robots",
+        "options": [
+          {
+            "name": "index, follow",
+            "value": "index, follow"
+          },
+          {
+            "name": "noindex, follow",
+            "value": "noindex, follow"
+          },
+          {
+            "name": "index, nofollow",
+            "value": "index, nofollow"
+          },
+          {
+            "name": "noindex, nofollow",
+            "value": "noindex, nofollow"
+          }
+        ]
+      },
+      {
+        "component": "aem-content",
+        "valueType": "string",
+        "validation": {
+          "rootPath": "/content/blog-blueprint"
+        },
         "name": "cq:canonicalUrl",
-        "label": "Canonical"
+        "label": "Canonical URL"
       },
       {
         "component": "aem-tag",
@@ -349,15 +394,15 @@
       {
         "component": "select",
         "name": "articlefeed-type",
-        "label": "Video Type",
+        "label": "Get Pages By",
         "valueType": "string",
         "options": [
           {
-            "name": "parent page",
+            "name": "Parent Page",
             "value": "parent_page"
           },
           {
-            "name": "Individual pages",
+            "name": "Individual Pages",
             "value": "individual_pages"
           },
           {

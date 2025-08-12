@@ -24,15 +24,15 @@
         {
           "component": "select",
           "name": "articlefeed-type",
-          "label": "Video Type",
+          "label": "Get Pages By",
           "valueType": "string",
           "options": [
             {
-              "name": "parent page",
+              "name": "Parent Page",
               "value": "parent_page"
             },
             {
-              "name": "Individual pages",
+              "name": "Individual Pages",
               "value": "individual_pages"
             },
             {
