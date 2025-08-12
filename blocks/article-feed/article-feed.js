@@ -43,7 +43,6 @@ export default async function decorate(block) {
   // 1: parent-page-link (aem-content)
   // 2: individual-pages-link (aem-content, potentially multiple links)
   // 3: tag (aem-tag)
-  console.log('block', block);
   const type = getTextValue(block, 0) || 'parent_page';
   const parentPageHref = getLinksFromCell(block, 1)[0] || '';
   const individualLinks = getLinksFromCell(block, 2);
@@ -104,7 +103,6 @@ export default async function decorate(block) {
     const articleElement = document.createElement('article');
     articleElement.classList.add('article');
     articleLink.appendChild(articleElement);
-
     if (article.image) {
       const image = document.createElement('img');
       image.src = article.image;
