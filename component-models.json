@@ -12,13 +12,58 @@
         "component": "text",
         "valueType": "string",
         "name": "jcr:description",
-        "label": "Description"
+        "label": "Intro Text"
       },
       {
         "component": "text",
         "valueType": "string",
+        "name": "og:title",
+        "label": "Meta Title"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "og:description",
+        "label": "Meta Description"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "og:image",
+        "label": "Image"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "robots",
+        "label": "Robots",
+        "options": [
+          {
+            "name": "index, follow",
+            "value": "index, follow"
+          },
+          {
+            "name": "noindex, follow",
+            "value": "noindex, follow"
+          },
+          {
+            "name": "index, nofollow",
+            "value": "index, nofollow"
+          },
+          {
+            "name": "noindex, nofollow",
+            "value": "noindex, nofollow"
+          }
+        ]
+      },
+      {
+        "component": "aem-content",
+        "valueType": "string",
+        "validation": {
+          "rootPath": "/content/blog-blueprint"
+        },
         "name": "cq:canonicalUrl",
-        "label": "Canonical"
+        "label": "Canonical URL"
       },
       {
         "component": "aem-tag",
@@ -347,13 +392,77 @@
     "id": "articlefeed",
     "fields": [
       {
+        "component": "select",
+        "name": "articlefeed-type",
+        "label": "Get Pages By",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Parent Page",
+            "value": "parent_page"
+          },
+          {
+            "name": "Individual Pages",
+            "value": "individual_pages"
+          },
+          {
+            "name": "Tag",
+            "value": "tag"
+          }
+        ]
+      },
+      {
         "component": "aem-content",
-        "name": "link",
+        "name": "parent-page-link",
         "label": "Parent page",
         "value": "",
         "valueType": "string",
         "validation": {
           "rootPath": "/content/blog-blueprint"
+        },
+        "condition": {
+          "==": [
+            {
+              "var": "articlefeed-type"
+            },
+            "parent_page"
+          ]
+        }
+      },
+      {
+        "component": "aem-content",
+        "name": "individual-pages-link",
+        "label": "Parent page",
+        "value": "",
+        "valueType": "string",
+        "validation": {
+          "rootPath": "/content/blog-blueprint"
+        },
+        "condition": {
+          "==": [
+            {
+              "var": "articlefeed-type"
+            },
+            "individual_pages"
+          ]
+        }
+      },
+      {
+        "component": "aem-tag",
+        "name": "tag",
+        "label": "tags",
+        "value": "",
+        "valueType": "string",
+        "validation": {
+          "rootPath": "/content/blog-blueprint"
+        },
+        "condition": {
+          "==": [
+            {
+              "var": "articlefeed-type"
+            },
+            "tag"
+          ]
         }
       }
     ]
