@@ -22,14 +22,57 @@
       "id": "articlefeed",
       "fields": [
         {
+          "component": "select",
+          "name": "articlefeed-type",
+          "label": "Video Type",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "parent page",
+              "value": "parent_page"
+            },
+            {
+              "name": "Individual pages",
+              "value": "individual_pages"
+            },
+            {
+              "name": "Tag",
+              "value": "tag"
+            }
+          ]
+        },
+        {
           "component": "aem-content",
-          "name": "link",
+          "name": "parent-page-link",
           "label": "Parent page",
           "value": "",
           "valueType": "string",
           "validation": {
             "rootPath": "/content/blog-blueprint"
-          }
+          },
+          "condition": { "==": [{"var" : "articlefeed-type"}, "parent_page"] }
+        },
+        {
+          "component": "aem-content",
+          "name": "individual-pages-link",
+          "label": "Parent page",
+          "value": "",
+          "valueType": "string",
+          "validation": {
+            "rootPath": "/content/blog-blueprint"
+          },
+          "condition": { "==": [{"var" : "articlefeed-type"}, "individual_pages"] }
+        },
+        {
+          "component": "aem-tag",
+          "name": "tag",
+          "label": "tags",
+          "value": "",
+          "valueType": "string",
+          "validation": {
+            "rootPath": "/content/blog-blueprint"
+          },
+          "condition": { "==": [{"var" : "articlefeed-type"}, "tag"] }
         }
       ]
     }
