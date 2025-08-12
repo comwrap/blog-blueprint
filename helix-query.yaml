@@ -23,13 +23,13 @@ indices:
         value: |
           attribute(el, 'content')
       tags:
-        select: head > meta[name="cq:tags"]
+        select: head > meta[name="cq-tags"]
         values: |
           attribute(el, 'content')
       image:
         select: head > meta[property="og:image"]
         value: |
-          match(attribute(el, 'content'), 'https:\/\/[^/]+(\/.*)')
+          attribute(el, 'content')
       template:
         select: head > meta[name="template"]
         value: |
