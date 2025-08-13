@@ -643,8 +643,8 @@
         ]
       },
       {
-        "component": "aem-content",
-        "name": "icon",
+        "component": "reference",
+        "name": "custombutton-icon",
         "label": "Icon Picker",
         "validation": {
           "rootPath": "/content/blog-blueprint"
@@ -891,8 +891,8 @@
         ]
       },
       {
-        "component": "aem-content",
-        "name": "icon",
+        "component": "reference",
+        "name": "custombutton-icon",
         "label": "Icon Picker",
         "validation": {
           "rootPath": "/content/blog-blueprint"
@@ -1203,8 +1203,8 @@
         ]
       },
       {
-        "component": "aem-content",
-        "name": "icon",
+        "component": "reference",
+        "name": "custombutton-icon",
         "label": "Icon Picker",
         "validation": {
           "rootPath": "/content/blog-blueprint"
@@ -1316,8 +1316,8 @@
         ]
       },
       {
-        "component": "aem-content",
-        "name": "icon",
+        "component": "reference",
+        "name": "custombutton-icon",
         "label": "Icon Picker",
         "validation": {
           "rootPath": "/content/blog-blueprint"
