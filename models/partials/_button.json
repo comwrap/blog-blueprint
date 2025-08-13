@@ -49,6 +49,14 @@
           "...": "../../models/partials/_button-styles.json#/options"
         }
       ]
+    },
+    {
+      "component": "aem-content",
+      "name": "icon",
+      "label": "Icon Picker",
+      "validation": {
+        "rootPath": "/content/blog-blueprint"
+      }
     }
   ]
 }

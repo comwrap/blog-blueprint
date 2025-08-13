@@ -641,6 +641,14 @@
             "value": "text"
           }
         ]
+      },
+      {
+        "component": "aem-content",
+        "name": "icon",
+        "label": "Icon Picker",
+        "validation": {
+          "rootPath": "/content/blog-blueprint"
+        }
       }
     ]
   },
@@ -881,6 +889,14 @@
             "value": "text"
           }
         ]
+      },
+      {
+        "component": "aem-content",
+        "name": "icon",
+        "label": "Icon Picker",
+        "validation": {
+          "rootPath": "/content/blog-blueprint"
+        }
       }
     ]
   },
@@ -1185,6 +1201,14 @@
             "value": "text"
           }
         ]
+      },
+      {
+        "component": "aem-content",
+        "name": "icon",
+        "label": "Icon Picker",
+        "validation": {
+          "rootPath": "/content/blog-blueprint"
+        }
       }
     ]
   },
@@ -1290,6 +1314,14 @@
             "value": "text"
           }
         ]
+      },
+      {
+        "component": "aem-content",
+        "name": "icon",
+        "label": "Icon Picker",
+        "validation": {
+          "rootPath": "/content/blog-blueprint"
+        }
       }
     ]
   },
