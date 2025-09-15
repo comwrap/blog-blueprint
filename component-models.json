@@ -443,17 +443,17 @@
             "valueType": "string",
             "validation": {
               "rootPath": "/content/blog-blueprint"
-            },
-            "condition": {
-              "==": [
-                {
-                  "var": "articlefeed-type"
-                },
-                "individual_pages"
-              ]
             }
           }
-        ]
+        ],
+        "condition": {
+          "==": [
+            {
+              "var": "articlefeed-type"
+            },
+            "individual_pages"
+          ]
+        }
       },
       {
         "component": "aem-tag",
