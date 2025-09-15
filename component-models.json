@@ -430,19 +430,11 @@
         }
       },
       {
-        "component": "container",
-        "name": "individual-pages-container",
-        "label": "Individual Pages",
+        "component": "aem-content",
+        "name": "individual-pages-link",
+        "label": "Individual page",
+        "valueType": "string",
         "multi": true,
-        "fields": [
-          {
-            "component": "reference",
-            "name": "individual-pages-link",
-            "label": "Individual page",
-            "value": "",
-            "valueType": "string"
-          }
-        ],
         "condition": {
           "==": [
             {

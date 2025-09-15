@@ -52,19 +52,11 @@
           "condition": { "==": [{ "var": "articlefeed-type" }, "parent_page"] }
         },
         {
-          "component": "container",
-          "name": "individual-pages-container",
-          "label": "Individual Pages",
+          "component": "aem-content",
+          "name": "individual-pages-link",
+          "label": "Individual page",
+          "valueType": "string",
           "multi": true,
-          "fields": [
-            {
-              "component": "reference",
-              "name": "individual-pages-link",
-              "label": "Individual page",
-              "value": "",
-              "valueType": "string"
-            }
-          ],
           "condition": { "==": [{ "var": "articlefeed-type" }, "individual_pages"] }
         },
         {
