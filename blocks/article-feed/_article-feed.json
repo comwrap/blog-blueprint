@@ -58,14 +58,11 @@
           "multi": true,
           "fields": [
             {
-              "component": "aem-content",
+              "component": "reference",
               "name": "individual-pages-link",
               "label": "Individual page",
               "value": "",
-              "valueType": "string",
-              "validation": {
-                "rootPath": "/content/blog-blueprint"
-              }
+              "valueType": "string"
             }
           ],
           "condition": { "==": [{ "var": "articlefeed-type" }, "individual_pages"] }
