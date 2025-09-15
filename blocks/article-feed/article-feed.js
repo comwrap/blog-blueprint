@@ -37,6 +37,23 @@ function parseSelectedTags(raw) {
     .filter(Boolean);
 }
 
+/**
+ * Normalize a tag token to a comparable slug.
+ * Takes the last segment after '/' or ':' and lowercases it.
+ * Also slugifies non-alphanumeric characters to '-'.
+ * @param {string} token
+ */
+function normalizeTagToken(token) {
+  if (!token) return '';
+  let s = String(token).toLowerCase().trim();
+  const afterSlash = s.split('/');
+  s = afterSlash[afterSlash.length - 1];
+  const afterColon = s.split(':');
+  s = afterColon[afterColon.length - 1];
+  s = s.replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  return s;
+}
+
 export default async function decorate(block) {
   // Model mapping (by column index):
   // 0: articlefeed-type (select: parent_page | individual_pages | tag)
@@ -58,7 +75,7 @@ export default async function decorate(block) {
 
   const parentPath = normalizePath(parentPageHref);
   const individualPaths = new Set(individualLinks.map(normalizePath));
-  const selectedTagsNormalized = selectedTags.map((t) => t.toLowerCase());
+  const selectedTagSlugs = selectedTags.map(normalizeTagToken).filter(Boolean);
 
   const container = document.createElement('div');
   container.classList.add('article-container');
@@ -76,26 +93,37 @@ export default async function decorate(block) {
     }
 
     if (type === 'tag') {
-      if (!selectedTagsNormalized.length) return false;
-      let articleTags = [];
-      if (Array.isArray(article.tags)) {
-        articleTags = article.tags;
-      } else if (typeof article.tags === 'string') {
-        articleTags = article.tags.split(/[;,]/).map((t) => t.trim()).filter(Boolean);
+      if (!selectedTagSlugs.length) return false;
+      const articleTagsRaw = article.tags;
+      if (!articleTagsRaw) return false;
+      const articleTags = Array.isArray(articleTagsRaw)
+        ? articleTagsRaw
+        : String(articleTagsRaw).split(/[,;\s]+/);
+      const articleTagSlugs = articleTags
+        .map(normalizeTagToken)
+        .filter(Boolean);
+      if (!articleTagSlugs.length) return false;
+      const tagMatch = selectedTagSlugs.some((slug) => articleTagSlugs.includes(slug));
+      if (!tagMatch) return false;
+      if (parentPath) {
+        return (
+          normalizedPath.startsWith(parentPath)
+          && normalizedPath !== parentPath
+        );
       }
-      const articleTagsNormalized = articleTags.map((t) => t.toLowerCase());
-      return selectedTagsNormalized.some((t) => articleTagsNormalized.includes(t));
+      return true;
     }
 
     // default: parent_page
+    console.log('parentPath', parentPath);
     if (!parentPath) return false;
-    return (
-      normalizedPath.startsWith(parentPath)
-      && normalizedPath !== parentPath
-    );
+    console.log('normalizedPath', normalizedPath);
+    console.log('parentPath', parentPath);
+    return normalizedPath === parentPath;
   };
 
   const blogArticles = (articles.data || []).filter(shouldInclude);
+  console.log('blogArticles', blogArticles);
 
   blogArticles.forEach((article) => {
     const articleLink = document.createElement('a');
