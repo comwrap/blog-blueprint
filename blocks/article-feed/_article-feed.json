@@ -53,31 +53,9 @@
           "condition": { "==": [{ "var": "articlefeed-type" }, "parent_page"] }
         },
         {
-          "component": "aem-content",
-          "name": "individual-pages-link",
-          "label": "Parent page",
-          "value": "",
-          "valueType": "string",
-          "validation": {
-            "rootPath": "/content/blog-blueprint"
-          },
-          "condition": { "==": [{ "var": "articlefeed-type" }, "individual_pages"] }
-        },
-        {
-          "component": "aem-tag",
-          "name": "tag",
-          "label": "tags",
-          "value": "",
-          "valueType": "string",
-          "validation": {
-            "rootPath": "/content/blog-blueprint"
-          },
-          "condition": { "==": [{ "var": "articlefeed-type" }, "tag"] }
-        },
-        {
           "component": "container",
-          "name": "test",
-          "label": "Multi Text",
+          "name": "individual-pages-container",
+          "label": "Individual Pages",
           "multi": true,
           "fields": [
             {
@@ -92,6 +70,17 @@
               "condition": { "==": [{ "var": "articlefeed-type" }, "individual_pages"] }
             }
           ]
+        },
+        {
+          "component": "aem-tag",
+          "name": "tag",
+          "label": "tags",
+          "value": "",
+          "valueType": "string",
+          "validation": {
+            "rootPath": "/content/blog-blueprint"
+          },
+          "condition": { "==": [{ "var": "articlefeed-type" }, "tag"] }
         }
       ]
     }
