@@ -438,7 +438,7 @@
           {
             "component": "aem-content",
             "name": "individual-pages-link",
-            "label": "Parent page",
+            "label": "Individual page",
             "value": "",
             "valueType": "string",
             "validation": {
