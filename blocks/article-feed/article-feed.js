@@ -115,15 +115,11 @@ export default async function decorate(block) {
     }
 
     // default: parent_page
-    console.log('parentPath', parentPath);
     if (!parentPath) return false;
-    console.log('normalizedPath', normalizedPath);
-    console.log('parentPath', parentPath);
     return normalizedPath === parentPath;
   };
 
   const blogArticles = (articles.data || []).filter(shouldInclude);
-  console.log('blogArticles', blogArticles);
 
   blogArticles.forEach((article) => {
     const articleLink = document.createElement('a');

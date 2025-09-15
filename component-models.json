@@ -464,6 +464,32 @@
             "tag"
           ]
         }
+      },
+      {
+        "component": "container",
+        "name": "test",
+        "label": "Multi Text",
+        "multi": true,
+        "fields": [
+          {
+            "component": "aem-content",
+            "name": "individual-pages-link",
+            "label": "Parent page",
+            "value": "",
+            "valueType": "string",
+            "validation": {
+              "rootPath": "/content/blog-blueprint"
+            },
+            "condition": {
+              "==": [
+                {
+                  "var": "articlefeed-type"
+                },
+                "individual_pages"
+              ]
+            }
+          }
+        ]
       }
     ]
   },
