@@ -469,6 +469,28 @@
             "tag"
           ]
         }
+      },
+      {
+        "component": "container",
+        "name": "test",
+        "label": "Multi Text",
+        "multi": true,
+        "fields": [
+          {
+            "component": "reference",
+            "name": "image",
+            "value": "",
+            "label": "Sample Image",
+            "valueType": "string"
+          },
+          {
+            "component": "text",
+            "name": "alt",
+            "value": "",
+            "label": "Alt Text",
+            "valueType": "string"
+          }
+        ]
       }
     ]
   },
