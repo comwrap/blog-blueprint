@@ -74,3 +74,118 @@ export function createTag(tag, attributes = {}) {
   });
   return element;
 }
+
+async function fetchIndex(indexFile, pageSize = 500) {
+  const handleIndex = async (offset) => {
+    const resp = await fetch(`/${indexFile}.json?limit=${pageSize}&offset=${offset}`);
+    const json = await resp.json();
+
+    const newIndex = {
+      complete: (json.limit + json.offset) === json.total,
+      offset: json.offset + pageSize,
+      promise: null,
+      data: [...window.index[indexFile].data, ...json.data],
+    };
+
+    return newIndex;
+  };
+
+  window.index = window.index || {};
+  window.index[indexFile] = window.index[indexFile] || {
+    data: [],
+    offset: 0,
+    complete: false,
+    promise: null,
+  };
+
+  // Return index if already loaded
+  if (window.index[indexFile].complete) {
+    return window.index[indexFile];
+  }
+
+  // Return promise if index is currently loading
+  if (window.index[indexFile].promise) {
+    return window.index[indexFile].promise;
+  }
+
+  window.index[indexFile].promise = handleIndex(window.index[indexFile].offset);
+  const newIndex = await (window.index[indexFile].promise);
+  window.index[indexFile] = newIndex;
+
+  return newIndex;
+}
+
+/**
+ * Queries an entire query index.
+ * @param {string} indexFile The index file path name (e.g. "us/en/query-index").
+ *                           NOTE: without leading "/" and without trailing ".json".
+ * @param {*} pageSize The page size of the {@link fetchIndex} calls.
+ * @returns {Promise<any>} The entire query index.
+ */
+export async function queryEntireIndex(indexFile, pageSize = 500) {
+  window.queryIndex = window.queryIndex || {};
+  if (!window.queryIndex[indexFile]) {
+    window.queryIndex[indexFile] = {
+      data: [],
+      offset: 0,
+      complete: false,
+      promise: null,
+    };
+  }
+
+  // Return immediately if already complete
+  if (window.queryIndex[indexFile].complete) {
+    return window.queryIndex[indexFile];
+  }
+
+  // Wait for in-progress fetches
+  if (window.queryIndex[indexFile].promise) {
+    return window.queryIndex[indexFile].promise;
+  }
+
+  // Fetch all pages in sequence and accumulate data
+  window.queryIndex[indexFile].promise = (async () => {
+    let { offset } = window.queryIndex[indexFile];
+    let complete = false;
+
+    while (!complete) {
+      const {
+        data,
+        offset: nextOffset,
+        complete: isComplete,
+      // eslint-disable-next-line no-await-in-loop
+      } = await fetchIndex(indexFile, pageSize);
+
+      window.queryIndex[indexFile].data.push(...data);
+      offset = nextOffset;
+      complete = isComplete;
+    }
+
+    window.queryIndex[indexFile].offset = offset;
+    window.queryIndex[indexFile].complete = true;
+    window.queryIndex[indexFile].promise = null;
+    return window.queryIndex[indexFile];
+  })();
+
+  return window.queryIndex[indexFile].promise;
+}
+
+/**
+ * Fetch query-index.json preferring localized path (/<country>-<lang>/query-index.json)
+ * with a fallback to the root (/query-index.json). The result is cached in
+ * the module-scoped queryIndexPromise.
+ * @returns {Promise<any>} Parsed JSON of the query index
+ */
+export function getQueryIndex() {
+  let queryIndexPromise = null;
+  if (queryIndexPromise === null) {
+    const [currentCountry, currentLanguage] = getCurrentCountryLanguage();
+    const localizedUrl = `/${currentCountry}-${currentLanguage}/query-index.json`;
+    const fallbackUrl = '/query-index.json';
+    queryIndexPromise = fetchIndex(localizedUrl)
+      .then((res) => (res.ok ? res : Promise.reject(new Error('Localized query-index not found'))))
+      .then((res) => res.json())
+      .catch(() => fetch(fallbackUrl).then((res) => res.json()));
+  }
+  return queryIndexPromise;
+}

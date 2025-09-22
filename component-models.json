@@ -1232,6 +1232,83 @@
     ]
   },
   {
+    "id": "teaser-list",
+    "fields": [
+      {
+        "component": "select",
+        "name": "teaser-list-type",
+        "label": "Get Pages By",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Parent Page",
+            "value": "parent_page"
+          },
+          {
+            "name": "Individual Pages",
+            "value": "individual_pages"
+          },
+          {
+            "name": "Tag",
+            "value": "tag"
+          }
+        ]
+      },
+      {
+        "component": "aem-content",
+        "name": "parent-page-link",
+        "label": "Parent page",
+        "value": "",
+        "valueType": "string",
+        "validation": {
+          "rootPath": "/content/qnx-xwalk"
+        },
+        "condition": {
+          "==": [
+            {
+              "var": "teaser-list-type"
+            },
+            "parent_page"
+          ]
+        }
+      },
+      {
+        "component": "aem-content",
+        "valueType": "string",
+        "name": "individual-pages-link",
+        "label": "Individual pages link",
+        "description": "Add the paths of the individual pages.",
+        "multi": true,
+        "condition": {
+          "==": [
+            {
+              "var": "teaser-list-type"
+            },
+            "individual_pages"
+          ]
+        }
+      },
+      {
+        "component": "aem-tag",
+        "name": "tag",
+        "label": "tags",
+        "value": "",
+        "valueType": "string",
+        "validation": {
+          "rootPath": "/content/qnx-xwalk"
+        },
+        "condition": {
+          "==": [
+            {
+              "var": "teaser-list-type"
+            },
+            "tag"
+          ]
+        }
+      }
+    ]
+  },
+  {
     "id": "teaser",
     "fields": [
       {
