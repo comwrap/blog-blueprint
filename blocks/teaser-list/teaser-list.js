@@ -65,6 +65,8 @@ export default async function decorate(block) {
     }
   } else if (TEASER_LIST_TYPE.text === 'tag') {
     // TODO: Implement tag
+    const { data } = await getQueryIndex();
+    pagesData = data.filter((page) => page.tags && page.tags.includes(TEASER_TAG.text));
   }
 
   pagesData.forEach((page) => {
