@@ -1,0 +1,94 @@
+.teaser-list {
+    --teaser-list-gap: 40px;
+    --teaser-list-columns: repeat(auto-fit, minmax(404px, 1fr));
+    --teaser-list-padding: 0;
+    --teaser-list-width: 404px;
+    --teaser-list-height: 228px;
+    --teaser-list-aspect-ratio: 16/9;
+    --teaser-list-padding-bottom: 16px;
+    --teaser-list-gap: 32px;
+    --teaser-list-text-gap: 24px;
+    --teaser-text-button-gap: 40px;
+
+    display: grid;
+    grid-template-columns: var(--teaser-list-columns);
+    gap: var(--teaser-list-gap);
+    padding: 0;
+
+    .teaser {
+        display: flex;
+        flex-direction: column;
+        gap: var(--teaser-list-gap);
+        padding-bottom: var(--teaser-list-padding-bottom);
+        width: var(--teaser-list-width);
+    }
+
+    .teaser-image {
+        position: relative;
+        width: 100%;
+        height: var(--teaser-list-height);
+        aspect-ratio: var(--teaser-list-aspect-ratio);
+    }
+
+    .teaser-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .teaser-content {
+        display: flex;
+        flex-direction: column;
+        gap: var(--teaser-list-gap);
+        flex: 1;
+    }
+
+    .teaser-text {
+        display: flex;
+        flex-direction: column;
+        gap: var(--teaser-list-text-gap);
+    }
+
+    .teaser-text > div {
+        display: flex;
+        flex-direction: column;
+        gap: var(--teaser-list-gap);
+    }
+
+    .teaser-headline {
+        font-size: var(--teaser-list-headline-font-size);
+        margin: 0;
+    }
+
+    .teaser-description {
+        font-size: var(--teaser-list-description-font-size);
+        margin: 0;
+    }
+
+    .teaser-button-container {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: var(--teaser-list-gap);
+
+        .button {
+            color: var(--clr-qnx-coral);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .teaser {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .teaser {
+            width: 45%;
+            margin: 0 auto;
+        }
+    }
+
+
+}
