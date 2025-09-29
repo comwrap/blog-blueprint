@@ -1,0 +1,109 @@
+.teaser-list {
+    --teaser-list-height: 228px;
+    --teaser-list-aspect-ratio: 16 / 9;
+    --teaser-list-gap: var(--space-xl);
+    --teaser-gap: var(--space-l);
+    --teaser-list-text-gap: var(--space-m);
+    --teaser-list-4-columns-gap: 30px;
+
+    padding: var(--space-sm) 0;
+
+    .teaser-list-inner {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0;
+        margin: 0;
+        gap: var(--teaser-list-gap);
+    }
+
+    .teaser {
+        display: flex;
+        flex-direction: column;
+        gap: var(--teaser-gap);
+        margin: 0 auto;
+        width: 100%;
+        flex: 0 0 100%;
+    }
+
+    .teaser-image {
+        position: relative;
+        width: 100%;
+        height: var(--teaser-list-height);
+        aspect-ratio: var(--teaser-list-aspect-ratio);
+    }
+
+    .teaser-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .teaser-content {
+        display: flex;
+        flex-direction: column;
+        gap: var(--teaser-list-gap);
+        flex: 1;
+    }
+
+    .teaser-text {
+        display: flex;
+        flex-direction: column;
+        gap: var(--teaser-list-text-gap);
+    }
+
+    .teaser-text > div {
+        display: flex;
+        flex-direction: column;
+        gap: var(--teaser-list-gap);
+    }
+
+    .teaser-headline {
+        font-size: var(--teaser-list-headline-font-size);
+        margin: 0;
+    }
+
+    .teaser-description {
+        font-size: var(--teaser-list-description-font-size);
+        margin: 0;
+    }
+
+    .teaser-button-container {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: var(--teaser-list-gap);
+
+        a.button {
+            color: var(--clr-primary);
+            margin: 0;
+        }
+    }
+
+    @media (width >= 1024px) {
+        &.teaser-list-columns-1 {
+            .teaser {
+                flex: 0 0 100%;
+            }
+        }
+
+        &.teaser-list-columns-2 {
+            .teaser {
+                flex: 0 0 calc((100% - var(--teaser-list-gap)) / 2);
+            }
+        }
+
+        &.teaser-list-columns-3 {
+            .teaser {
+                flex: 0 0 calc((100% - var(--teaser-list-gap) * 2) / 3);
+            }
+        }
+
+        &.teaser-list-columns-4 {
+            .teaser {
+                flex: 0 0 calc(25% - var(--teaser-list-4-columns-gap));
+                max-width: calc(25% - var(--teaser-list-4-columns-gap));
+            }
+        }
+    }
+}
