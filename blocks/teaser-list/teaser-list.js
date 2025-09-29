@@ -1,6 +1,7 @@
 import useBlockConfig from '../../scripts/global/useBlockConfig.js';
 import { getQueryIndex, getDictionary } from '../helpers.js';
 import { createOptimizedPicture } from '../../scripts/aem.js';
+import { ROOT_PATH } from '../../scripts/global/constants.js';
 
 const TEASER_LIST_BUTTON_LABEL = 'Read more';
 const BLOCK_CONFIG = Object.freeze({
@@ -41,7 +42,6 @@ export default async function decorate(block) {
 
   let pagesData = [];
   const data = await getQueryIndex();
-  const ROOT_PATH = '/content/blog-blueprint';
 
   if (TEASER_LIST_TYPE.text === 'parent_page') {
     const teaserParentPath = TEASER_PARENT_PAGE_LINK.text;
