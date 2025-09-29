@@ -1,2 +1,2 @@
 export function getCurrentCountryLanguage(): string[];
-export async function getDictionary(): Prmomise<any> | null;
+export async function getDictionary(): Promise<any> | null;

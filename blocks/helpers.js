@@ -1,3 +1,8 @@
+import {
+  DEFAULT_LANGUAGE,
+  ROOT_PATH,
+  DEFAULT_LOCALE,
+} from '../scripts/global/constants.js';
 /**
  * Get the current country and language codes label by matching the current
  * location pathname to a regex.
@@ -10,54 +15,149 @@ export function getCurrentCountryLanguage() {
   return match ? match.slice(1, 3) : ['', ''];
 }
 
+/**
+ * Get the current language code by matching the current location pathname to a regex.
+ *
+ * IMPORTANT: Assumes a "/language" page structure (no countries).
+ * @returns {string} The current code on success (e.g. "en"), empty string otherwise.
+ */
+export function getCurrentLanguage() {
+  const match = window.location.pathname
+    .replace(ROOT_PATH, '')
+    .match('^/([a-z]{2})');
+  const currentLanguage = match ? match.at(1) : DEFAULT_LANGUAGE;
+  return currentLanguage || DEFAULT_LANGUAGE;
+}
+
 /** @param {string[]} classes */
 export function cx(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-/**  @type {Promise<any> | null} */
-let dictionaryPromise = null;
-export async function getDictionary() {
-  const lang = document.documentElement.lang.toLowerCase() || 'en-us';
-  if (dictionaryPromise === null) {
-    dictionaryPromise = fetch('/api/dictionary.json')
-      .then((res) => res.json());
+/**
+ * Helper function to set a property on an object using a dot-separated path.
+ * It creates nested objects as needed.
+ * @param {object} obj The object to modify.
+ * @param {string} path The dot-separated path (e.g., "path.to.destination").
+ * @param {any} value The value to set at the destination.
+ */
+function setNestedProperty(obj, path, value) {
+  const keys = path.split('.');
+  let current = obj;
+  // Iterate through the keys until the second-to-last key
+  for (let i = 0; i < keys.length - 1; i += 1) {
+    const key = keys[i];
+    // If the nested object doesn't exist, create it.
+    if (!current[key] || typeof current[key] !== 'object') {
+      current[key] = {};
+    }
+    // Move to the next level down.
+    current = current[key];
   }
-
-  /** @type Array<{ key:string} & Record<string, string>> */
-  const dictionary = (await dictionaryPromise).data;
-  const dictionaryLangValues = dictionary.filter((item) => Object.keys(item).includes(lang));
-  const dictionaryLang = dictionaryLangValues.map((item) => {
-    const { key } = item;
-    const value = item[lang];
-    return [key, value];
-  });
-
-  // key is e.g. blogpost.backtotop and value is 'Back to top'. We are creatating a
-  // new object split by '.' and creating nested objects.
-  const dictionaryLangNested = dictionaryLang.reduce(
-    (/** @type {Record<string, any>} */ acc, [key, value]) => {
-      const keys = key.split('.');
-      const last = keys.pop();
-      if (!last) {
-        return acc;
-      }
-      const obj = acc;
-      // eslint-disable-next-line no-shadow
-      keys.reduce((acc, k) => {
-        if (!(k in acc)) {
-          acc[k] = {};
-        }
-        return acc[k];
-      }, obj);
-      obj[last] = value;
-      return acc;
-    },
-    {},
-  );
-  return dictionaryLangNested;
+  // Set the value on the final key.
+  current[keys[keys.length - 1]] = value;
 }
 
+/**
+ * Extracts key-value pairs for a specific column and builds a nested object.
+ * If the given column doesn't exist or any entry is empty for it,
+ * the default language (first) and the default locale (second) are used as fallbacks.
+ * @param {object} dataObject The full input data from the source.
+ * @param {string} column The column to extract.
+ * @returns {object} A new nested object with keys mapped to their translations.
+ */
+function getTranslationsForDictionaryColumn(dataObject, column) {
+  const finalObject = {};
+  dataObject.data.forEach((item) => {
+    // Check if the current item has a translation for the selected column.
+    if (Object.hasOwn(item, column)) {
+      setNestedProperty(
+        finalObject,
+        item.key,
+        item[column] || item[DEFAULT_LANGUAGE] || item[DEFAULT_LOCALE],
+      );
+    } else if (Object.hasOwn(item, DEFAULT_LOCALE)) {
+      // Fallback to the "en" language or "com-en" locale
+      setNestedProperty(finalObject, item.key, item[DEFAULT_LANGUAGE] || item[DEFAULT_LOCALE]);
+    }
+  });
+  return finalObject;
+}
+
+/**
+ * Fetches the dictionary for a given column.
+ * @param {string} column The column to extract.
+ * @returns {Record<string, string>} The dictionary map for the column.
+ */
+async function fetchDictionary(column) {
+  try {
+    const resp = await fetch(`${window.location.origin}${window.hlx.codeBasePath}/api/dictionary.json`);
+    const data = await resp.json();
+    return {
+      promise: null,
+      data: getTranslationsForDictionaryColumn(data, column),
+    };
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.warn(`Could not fetch dictionary for column ${column} due to:`, error);
+    return {
+      promise: null,
+      data: {},
+    };
+  }
+}
+/**
+ * Gets the dictionary object for the given column.
+ * @param {string?} column The target column.
+ * @returns {Promise<object>} The dictionary object.
+ */
+export async function getDictionaryColumn(column = null) {
+  // Initialize window
+  window.dictionary = window.dictionary || {};
+  window.dictionary[column] = window.dictionary[column] || {
+    data: null,
+    promise: null,
+  };
+
+  // IMPORTANT: never replace this entry but only mutate its fields to avoid a race condition!
+  const stableCacheEntry = window.dictionary[column];
+
+  // Return dictionary if already loaded
+  if (stableCacheEntry.data) {
+    return stableCacheEntry.data;
+  }
+
+  // Return promise if dictionary is currently loading
+  if (stableCacheEntry.promise) {
+    return stableCacheEntry.promise;
+  }
+
+  // Fetch dictionary and store the promise
+  stableCacheEntry.promise = fetchDictionary(column).then((result) => {
+    stableCacheEntry.data = result.data;
+    // Clear promise once resolved
+    stableCacheEntry.promise = null;
+    return stableCacheEntry.data;
+  });
+
+  return stableCacheEntry.promise;
+}
+/**
+ * Gets the dictionary object for the current site language, with fallback to the default one.
+ *
+ * IMPORTANT: Assumes that the dictionary spreadsheet has language only columns
+ * (e.g. "en", "zh").
+ * @param {string?} language The language code (e.g. "en").
+ * @returns {Promise<object>} The dictionary object.
+ */
+export async function getDictionary(language = null) {
+  const currentLanguage = language || getCurrentLanguage();
+  let dictionary = await getDictionaryColumn(currentLanguage);
+  if (!dictionary || !dictionary.length) {
+    dictionary = await getDictionaryColumn(DEFAULT_LOCALE);
+  }
+  return dictionary;
+}
 /**
  * Creates an HTML element with the specified tag name and attributes
  * @param {string} tag - The HTML tag name
@@ -171,21 +271,17 @@ export async function queryEntireIndex(indexFile, pageSize = 500) {
 }
 
 /**
- * Fetch query-index.json preferring localized path (/<country>-<lang>/query-index.json)
- * with a fallback to the root (/query-index.json). The result is cached in
- * the module-scoped queryIndexPromise.
- * @returns {Promise<any>} Parsed JSON of the query index
+ * Fetch query-index.json preferring localized path (/<lang>/query-index.json)
+ * with a fallback to the root (/query-index.json).
+ * @returns {Promise<import('./types.js').IndexedPageMetadata[]>} The parsed query index
  */
-export function getQueryIndex() {
-  let queryIndexPromise = null;
-  if (queryIndexPromise === null) {
-    const [currentCountry, currentLanguage] = getCurrentCountryLanguage();
-    const localizedUrl = `/${currentCountry}-${currentLanguage}/query-index.json`;
-    const fallbackUrl = '/query-index';
-    queryIndexPromise = queryEntireIndex(localizedUrl)
-      .then((res) => (res.ok ? res : Promise.reject(new Error('Localized query-index not found'))))
-      .then((res) => res.json())
-      .catch(() => queryEntireIndex(fallbackUrl).then((res) => res.json()));
+export async function getQueryIndex() {
+  /** @type {import('./types.js').IndexedPageMetadata[]?} */
+  let queryIndex = null;
+  try {
+    queryIndex = (await queryEntireIndex(`${getCurrentLanguage()}/query-index`))?.data ?? [];
+  } catch {
+    queryIndex = (await queryEntireIndex('query-index'))?.data ?? [];
   }
-  return queryIndexPromise;
+  return (queryIndex ?? []);
 }

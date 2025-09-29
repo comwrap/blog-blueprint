@@ -14,7 +14,7 @@ export const SAMPLE = 'sample';
 // Defaults
 /** @type {import("./types").ColorScheme} */
 export const DEFAULT_COLOR_SCHEME = 'light';
-export const DEFAULT_COUNTRY = 'com';
+export const DEFAULT_COUNTRY = 'us';
 export const DEFAULT_LANGUAGE = 'en';
 export const DEFAULT_LOCALE = `${DEFAULT_COUNTRY}-${DEFAULT_LANGUAGE}`;
 

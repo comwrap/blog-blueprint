@@ -83,7 +83,8 @@ export default async function decorate(block) {
   teaserList.className = 'teaser-list-inner';
   teaserList.setAttribute('role', 'list');
   pagesData.forEach((page) => {
-    const image = createOptimizedPicture(page.teaserimage, page.title, '16-9');
+    const imageUrl = page.teaserimage || page.image;
+    const image = createOptimizedPicture(imageUrl, page.title, false, [{ media: '(min-width: 600px)', width: '600' }]);
     const title = page.teasertitle || page.title;
 
     const description = page.teaserdescription || page.description;
