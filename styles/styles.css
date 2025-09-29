@@ -213,6 +213,10 @@ body {
     line-height: 1.6;
 }
 
+html {
+    box-sizing: border-box;
+}
+
 body.appear {
     display: block;
 }
