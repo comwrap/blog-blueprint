@@ -768,6 +768,57 @@
     ]
   },
   {
+    "id": "event-teasers",
+    "fields": [
+      {
+        "component": "text",
+        "name": "category",
+        "label": "Event Category"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Event Title"
+      },
+      {
+        "component": "text",
+        "name": "date",
+        "label": "Event Date"
+      },
+      {
+        "component": "text",
+        "name": "location",
+        "label": "Event Location"
+      },
+      {
+        "component": "text",
+        "name": "link",
+        "label": "Event Link"
+      },
+      {
+        "component": "text",
+        "name": "label",
+        "value": "LEARN MORE",
+        "label": "Button Label"
+      },
+      {
+        "component": "select",
+        "name": "target",
+        "label": "Link Target",
+        "options": [
+          {
+            "name": "Same Window",
+            "value": ""
+          },
+          {
+            "name": "New Window",
+            "value": "_blank"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "fragment",
     "fields": [
       {

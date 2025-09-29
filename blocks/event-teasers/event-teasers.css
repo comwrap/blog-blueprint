@@ -1,0 +1,113 @@
+/* Event Teasers Slider */
+
+.event-teasers-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-m);
+}
+
+.event-teasers-slider {
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  display: flex;
+  gap: var(--spacing-m);
+  scroll-snap-type: x mandatory;
+  flex: 1 1 auto;
+}
+
+.event-teaser-card {
+  flex: 0 0 calc(100% - var(--spacing-m));
+  max-width: calc(100% - var(--spacing-m));
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-s);
+  padding: var(--spacing-l);
+  border: 1px solid rgb(var(--color-border));
+  border-radius: 4px;
+  background-color: transparent;
+  transition: background-color 0.3s;
+  scroll-snap-align: start;
+}
+
+.event-teaser-card:hover {
+  background-color: rgb(var(--color-pure-white));
+}
+
+.event-teaser-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.event-divider {
+  height: 1px;
+  background-color: rgb(var(--color-border));
+  width: 100%;
+  margin: var(--spacing-xs) 0;
+}
+
+.event-details {
+  display: flex;
+  gap: var(--spacing-xs);
+  font-size: var(--body-font-size-s);
+  color: rgb(var(--color-secondary-text));
+}
+
+.event-teaser-button .button {
+  margin-top: auto;
+}
+
+/* Responsive card widths */
+
+@media (width >= 600px) {
+  .event-teaser-card {
+    flex-basis: calc(50% - var(--spacing-m));
+    max-width: calc(50% - var(--spacing-m));
+  }
+}
+
+@media (width >= 900px) {
+  .event-teaser-card {
+    flex-basis: calc(33.333% - var(--spacing-m));
+    max-width: calc(33.333% - var(--spacing-m));
+  }
+}
+
+@media (width >= 1200px) {
+  .event-teaser-card {
+    flex-basis: calc(25% - var(--spacing-m));
+    max-width: calc(25% - var(--spacing-m));
+  }
+}
+
+/* Navigation buttons */
+
+.slider-prev,
+.slider-next {
+  background: none;
+  border: none;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  background-color: rgb(var(--color-text));
+  flex: 0 0 auto;
+}
+
+.slider-prev {
+  mask-image: url('/icons/arrow-left.svg');
+}
+
+.slider-next {
+  mask-image: url('/icons/arrow-right.svg');
+}
+
+.slider-prev:disabled,
+.slider-next:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
