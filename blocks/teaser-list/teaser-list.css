@@ -26,20 +26,20 @@
     background: rgba(var(--background-color), 1);
     border-radius: 1rem;
     overflow: hidden;
-    border: 1px solid rgba(var(--text-color), 0.08);
-    box-shadow: 
-        0 4px 20px rgba(0, 0, 0, 0.06),
-        0 1px 4px rgba(0, 0, 0, 0.04);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
+  border: 1px solid rgba(var(--text-color), 0.08);
+  box-shadow: 
+    0 4px 20px rgb(0 0 0 / 6%),
+    0 1px 4px rgb(0 0 0 / 4%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
 }
 
 .teaser-list .teaser:hover {
-    transform: translateY(-6px);
-    box-shadow: 
-        0 12px 32px rgba(0, 0, 0, 0.12),
-        0 2px 8px rgba(0, 0, 0, 0.08);
-    border-color: rgba(var(--text-color), 0.12);
+  transform: translateY(-6px);
+  box-shadow: 
+    0 12px 32px rgb(0 0 0 / 12%),
+    0 2px 8px rgb(0 0 0 / 8%);
+  border-color: rgba(var(--text-color), 0.12);
 }
 
 .teaser-list .teaser-image {

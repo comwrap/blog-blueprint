@@ -8,20 +8,20 @@
   background: rgba(var(--background-color), 1);
   border-radius: 1.25rem;
   box-shadow: 
-    0 10px 40px rgba(0, 0, 0, 0.1),
-    0 2px 8px rgba(0, 0, 0, 0.06);
+    0 10px 40px rgb(0 0 0 / 10%),
+    0 2px 8px rgb(0 0 0 / 6%);
   padding: 3rem;
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgb(255 255 255 / 10%);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .download-wrapper-inner:hover {
   transform: translateY(-4px);
   box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.15),
-    0 4px 12px rgba(0, 0, 0, 0.1);
+    0 20px 60px rgb(0 0 0 / 15%),
+    0 4px 12px rgb(0 0 0 / 10%);
 }
 
 .download-wrapper .download-title {
@@ -96,8 +96,8 @@
   font-size: 1.05rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 
-    0 4px 14px rgba(20, 115, 230, 0.3),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+    0 4px 14px rgb(20 115 230 / 30%),
+    inset 0 -2px 0 rgb(0 0 0 / 10%);
   position: relative;
   overflow: hidden;
 }
@@ -108,19 +108,19 @@
   text-decoration: none;
   transform: translateY(-2px) scale(1.02);
   box-shadow: 
-    0 8px 24px rgba(20, 115, 230, 0.4),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.15);
+    0 8px 24px rgb(20 115 230 / 40%),
+    inset 0 -2px 0 rgb(0 0 0 / 15%);
 }
 
 .download-wrapper .download-button:active {
   transform: translateY(0) scale(1);
   box-shadow: 
-    0 2px 8px rgba(20, 115, 230, 0.3),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+    0 2px 8px rgb(20 115 230 / 30%),
+    inset 0 -1px 0 rgb(0 0 0 / 10%);
 }
 
 .download-wrapper .download-button:focus {
-  outline: 0.125rem solid rgba(20, 115, 230, 0.5);
+  outline: 0.125rem solid rgb(20 115 230 / 50%);
   outline-offset: 0.25rem;
 }
 
@@ -132,10 +132,10 @@
 }
 
 .download-wrapper .download-button:hover .download-icon {
-  animation: downloadBounce 0.6s ease infinite;
+  animation: download-bounce 0.6s ease infinite;
 }
 
-@keyframes downloadBounce {
+@keyframes download-bounce {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(3px); }
 }
@@ -164,10 +164,10 @@
   border-left: 0;
   transform-origin: center;
   transform: translateX(-50%) rotate(45deg);
-  border-radius: 0 0 0.125rem 0;
+  border-radius: 0 0 0.125rem;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .download-wrapper-inner {
     padding: 2rem 1.5rem;
   }

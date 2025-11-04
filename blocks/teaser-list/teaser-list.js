@@ -99,7 +99,7 @@ export default async function decorate(block) {
     const teaserImage = page.teaserimage || page.image;
     const title = page.teasertitle || page.title;
     const image = createImageWithModal(teaserImage, title, '16-9');
-    console.log(image);
+
     const titleElement = TEASERS_TITLE_ELEMENT.text || 'h3';
 
     const description = page.teaserdescription || page.description;
