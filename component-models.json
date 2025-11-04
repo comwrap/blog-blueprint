@@ -1310,6 +1310,43 @@
         }
       },
       {
+        "component": "tab",
+        "name": "teasers",
+        "label": "Teasers"
+      },
+      {
+        "component": "select",
+        "name": "teasersTitleElement",
+        "label": "Teasers Title Type",
+        "options": [
+          {
+            "name": "h2",
+            "value": "h2"
+          },
+          {
+            "name": "h3",
+            "value": "h3"
+          },
+          {
+            "name": "h4",
+            "value": "h4"
+          },
+          {
+            "name": "h5",
+            "value": "h5"
+          },
+          {
+            "name": "h6",
+            "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "teasersLinkLabel",
+        "label": "Teasers Link Label"
+      },
+      {
         "component": "select",
         "name": "classes_teaserColumns",
         "label": "Teaser Columns",

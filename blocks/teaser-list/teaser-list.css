@@ -1,34 +1,37 @@
 .teaser-list {
-    --teaser-list-height: 228px;
+    --teaser-list-height: 189px;
     --teaser-list-aspect-ratio: 16 / 9;
-    --teaser-list-gap: var(--spacing-xl);
-    --teaser-gap: var(--spacing-l);
-    --teaser-list-text-gap: var(--spacing-m);
+    --teaser-list-gap: var(--space-xl);
+    --teaser-gap: var(--space-m);
+    --teaser-list-text-gap: var(--space-m);
     --teaser-list-4-columns-gap: 30px;
+    --teaser-list-number-of-columns: 1;
 
-    padding: var(--spacing-s) 0;
+    /* The number of grid item rows that should always be present in the DOM for aligned subgrids */
+    --teaser-list-item-number-of-subgrid-rows: 4;
+
+    padding: var(--space-sm) 0;
 
     .teaser-list-inner {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(var(--teaser-list-number-of-columns), 1fr);
+        gap: var(--teaser-list-gap);
         padding: 0;
         margin: 0;
-        gap: var(--teaser-list-gap);
-    }
+        list-style: none;
 
-    .teaser {
-        display: flex;
-        flex-direction: column;
-        gap: var(--teaser-gap);
-        width: 100%;
-        flex: 0 0 100%;
+        .teaser {
+            display: grid;
+            grid-template-rows: subgrid;
+            grid-row: span var(--teaser-list-item-number-of-subgrid-rows);
+            gap: var(--teaser-gap);
+        }
     }
 
     .teaser-image {
         position: relative;
         width: 100%;
         height: var(--teaser-list-height);
-        aspect-ratio: var(--teaser-list-aspect-ratio);
     }
 
     .teaser-image img {
@@ -38,33 +41,12 @@
         display: block;
     }
 
-    .teaser-content {
-        display: flex;
-        flex-direction: column;
-        gap: var(--teaser-list-gap);
-        flex: 1;
-    }
-
-    .teaser-text {
-        display: flex;
-        flex-direction: column;
-        gap: var(--teaser-list-text-gap);
-    }
-
-    .teaser-text > div {
-        display: flex;
-        flex-direction: column;
-        gap: var(--teaser-list-gap);
-    }
-
     .teaser-headline {
-        font-size: var(--teaser-list-headline-font-size);
         margin: 0;
     }
 
     .teaser-description {
-        font-size: var(--teaser-list-description-font-size);
-        margin: 0;
+        margin: calc(var(--space-xss) * -1) 0 0;
     }
 
     .teaser-button-container {
@@ -74,39 +56,39 @@
         gap: var(--teaser-list-gap);
 
         a.button {
-            color: var(--background-color);
+            color: var(--clr-primary);
             margin: 0;
         }
     }
+}
 
-    @media (width >= 1024px) {
-        .teaser-list-inner {
-            flex-wrap: nowrap;
+@media (width > 480px) {
+    .teaser-list {
+        --teaser-list-height: 228px;
+        --teaser-gap: var(--space-l);
+
+        .teaser-description {
+            margin: calc(var(--space-m) * -1) 0 0;
         }
+    }
+}
 
+@media (width >= 1024px) {
+    .teaser-list {
         &.teaser-list-columns-1 {
-            .teaser {
-                flex: 0 0 100%;
-            }
+            --teaser-list-number-of-columns: 1;
         }
 
         &.teaser-list-columns-2 {
-            .teaser {
-                flex: 0 0 calc((100% - var(--teaser-list-gap)) / 2);
-            }
+            --teaser-list-number-of-columns: 2;
         }
 
         &.teaser-list-columns-3 {
-            .teaser {
-                flex: 0 0 calc((100% - var(--teaser-list-gap) * 2) / 3);
-            }
+            --teaser-list-number-of-columns: 3;
         }
 
         &.teaser-list-columns-4 {
-            .teaser {
-                flex: 0 0 calc(25% - var(--teaser-list-4-columns-gap));
-                max-width: calc(25% - var(--teaser-list-4-columns-gap));
-            }
+            --teaser-list-number-of-columns: 4;
         }
     }
 }
