@@ -73,10 +73,10 @@
   background: radial-gradient(circle at 30% 50%, 
     rgba(var(--highlight), 0.15) 0%, 
     transparent 70%);
-  animation: pulseGlow 3s ease-in-out infinite;
+  animation: pulse-glow 3s ease-in-out infinite;
 }
 
-@keyframes pulseGlow {
+@keyframes pulse-glow {
   0%, 100% { opacity: 0.5; }
   50% { opacity: 1; }
 }
@@ -182,7 +182,7 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.2), 
+    rgb(255 255 255 / 20%), 
     transparent);
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -254,11 +254,6 @@
   background: rgba(var(--color-pure-white), 0.8);
 }
 
-.teaser article.teaser-background-coral:hover .teaser-title h2 {
-  color: rgba(var(--color-pure-white), 0.95);
-  text-shadow: 0 2px 8px rgb(0 0 0 / 15%);
-}
-
 /* Brown background */
 .teaser article.teaser-background-brown {
   background: linear-gradient(135deg, #8b6f47, #6f5639);
@@ -275,11 +270,6 @@
   background: rgba(var(--color-pure-white), 0.8);
 }
 
-.teaser article.teaser-background-brown:hover .teaser-title h2 {
-  color: rgba(var(--color-pure-white), 0.95);
-  text-shadow: 0 2px 8px rgb(0 0 0 / 15%);
-}
-
 /* Black background */
 .teaser article.teaser-background-black {
   background: linear-gradient(135deg, #1a1a1a, #000);
@@ -294,11 +284,6 @@
 
 .teaser article.teaser-background-black .teaser-pretitle::after {
   background: rgba(var(--color-pure-white), 0.8);
-}
-
-.teaser article.teaser-background-black:hover .teaser-title h2 {
-  color: rgba(var(--color-pure-white), 0.95);
-  text-shadow: 0 2px 8px rgb(255 255 255 / 15%);
 }
 
 /* None background (transparent) */
@@ -389,7 +374,6 @@
   left: 0;
   right: 0;
   z-index: 2;
-  border-radius: 0 0 1.25rem 1.25rem;
   margin: var(--spacing-l, 1.5rem);
   border-radius: 1rem;
 }
@@ -418,8 +402,8 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(to top, 
-    rgba(0, 0, 0, 0.7) 0%, 
-    rgba(0, 0, 0, 0.3) 50%, 
+    rgb(0 0 0 / 70%) 0%, 
+    rgb(0 0 0 / 30%) 50%, 
     transparent 100%);
   z-index: 1;
 }
@@ -456,10 +440,9 @@
   background: linear-gradient(135deg, 
     rgba(var(--highlight), 0.5), 
     rgba(var(--on-background), 0.1));
-  -webkit-mask: 
+  mask: 
     linear-gradient(#fff 0 0) content-box, 
     linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
   mask-composite: exclude;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -475,16 +458,11 @@
   transition: all 0.3s ease;
 }
 
-.regular-teaser .teaser article:hover {
-  border-color: rgba(var(--highlight), 0.5);
-}
-
 /* ========================================
    RESPONSIVE DESIGN
    ======================================== */
 
 @media (width >= 768px) {
-
   .teaser-content {
     padding: var(--spacing-xxl, 2.5rem);
   }
@@ -529,6 +507,30 @@
 .teaser article:focus-within {
   outline: 3px solid rgba(var(--highlight), 0.5);
   outline-offset: 4px;
+}
+
+/* ========================================
+   HOVER STATES
+   ======================================== */
+
+/* Background color hover states */
+.teaser article.teaser-background-coral:hover .teaser-title h2 {
+  color: rgba(var(--color-pure-white), 0.95);
+  text-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+}
+
+.teaser article.teaser-background-brown:hover .teaser-title h2 {
+  color: rgba(var(--color-pure-white), 0.95);
+  text-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+}
+
+.teaser article.teaser-background-black:hover .teaser-title h2 {
+  color: rgba(var(--color-pure-white), 0.95);
+  text-shadow: 0 2px 8px rgb(255 255 255 / 15%);
+}
+
+.regular-teaser .teaser article:hover {
+  border-color: rgba(var(--highlight), 0.5);
 }
 
 @media (prefers-reduced-motion: reduce) {
