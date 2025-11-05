@@ -1376,112 +1376,145 @@
     "id": "teaser",
     "fields": [
       {
+        "component": "container",
+        "label": "Content Box and Image Teaser Options",
+        "name": "container",
+        "valueType": "string",
+        "collapsible": true,
+        "fields": [
+          {
+            "component": "select",
+            "name": "classes_teaserBackground",
+            "label": "Background",
+            "description": "Only applies to Content Box and Image Teaser style",
+            "options": [
+              {
+                "name": "Inheriting from Grid",
+                "value": "teaser-background-inherit"
+              },
+              {
+                "name": "None",
+                "value": "teaser-background-none"
+              },
+              {
+                "name": "Coral",
+                "value": "teaser-background-coral"
+              },
+              {
+                "name": "Brown",
+                "value": "teaser-background-brown"
+              },
+              {
+                "name": "Black",
+                "value": "teaser-background-black"
+              }
+            ]
+          },
+          {
+            "component": "select",
+            "name": "classes_teaserOpacity",
+            "label": "Opacity",
+            "description": "Only applies to Content Box and Image Teaser style. Opacity is applied to the background color of the teaser.",
+            "options": [
+              {
+                "name": "Inheriting from Grid",
+                "value": "teaser-opacity-inherit"
+              },
+              {
+                "name": "0%",
+                "value": "teaser-opacity-0"
+              },
+              {
+                "name": "10%",
+                "value": "teaser-opacity-10"
+              },
+              {
+                "name": "20%",
+                "value": "teaser-opacity-20"
+              },
+              {
+                "name": "35%",
+                "value": "teaser-opacity-35"
+              },
+              {
+                "name": "55%",
+                "value": "teaser-opacity-55"
+              },
+              {
+                "name": "70%",
+                "value": "teaser-opacity-70"
+              },
+              {
+                "name": "100%",
+                "value": "teaser-opacity-100"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "teaser-pretitle",
+        "label": "Pretitle"
+      },
+      {
         "component": "text",
         "name": "teaser-title",
-        "value": "",
         "label": "Title"
       },
       {
         "component": "richtext",
         "name": "teaser-description",
-        "value": "",
         "label": "Description"
       },
       {
         "component": "reference",
-        "name": "teaser-image",
-        "label": "Image",
-        "valueType": "string",
+        "name": "image",
+        "label": "Image Desktop",
         "multi": false
       },
       {
-        "name": "teaser-imageAlt",
         "component": "text",
-        "title": "Image Alt Text"
+        "name": "imageAlt",
+        "label": "Image Alt Text",
+        "description": "Alt text for the image"
+      },
+      {
+        "component": "reference",
+        "name": "image-mobile",
+        "label": "Mobile Image",
+        "multi": false,
+        "description": "Mobile image will be displayed on smaller screens. If not set, the desktop image will be displayed."
       },
       {
         "component": "aem-content",
-        "name": "custombutton-link",
+        "name": "link1",
         "label": "Link"
       },
       {
         "component": "text",
-        "name": "custombutton-link-text",
+        "name": "link1Text",
         "label": "Text"
       },
       {
         "component": "text",
-        "name": "custombutton-link-title",
+        "name": "link1Title",
         "label": "Title"
       },
       {
         "component": "select",
-        "name": "custombutton-link-target",
+        "name": "link1Target",
         "label": "Link Target",
         "options": [
           {
-            "name": "Same Window",
-            "value": ""
+            "name": "Internal",
+            "value": "_self"
           },
           {
-            "name": "New Tab",
+            "name": "Open in new tab",
             "value": "_blank"
           }
         ]
-      },
-      {
-        "component": "select",
-        "name": "custombutton-type",
-        "label": "Button Type",
-        "options": [
-          {
-            "name": "Link",
-            "value": "link"
-          },
-          {
-            "name": "Download",
-            "value": "download"
-          },
-          {
-            "name": "Email",
-            "value": "email"
-          },
-          {
-            "name": "Telephone",
-            "value": "telephone"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "name": "custombutton-style",
-        "label": "Button Style",
-        "options": [
-          {
-            "name": "Primary",
-            "value": "primary"
-          },
-          {
-            "name": "Secondary",
-            "value": "secondary"
-          },
-          {
-            "name": "Tertiary",
-            "value": "tertiary"
-          },
-          {
-            "name": "Text",
-            "value": "text"
-          }
-        ]
-      },
-      {
-        "component": "reference",
-        "name": "custombutton-icon",
-        "label": "Icon Picker",
-        "validation": {
-          "rootPath": "/content/blog-blueprint"
-        }
       }
     ]
   },

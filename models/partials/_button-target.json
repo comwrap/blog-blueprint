@@ -1,0 +1,10 @@
+{
+  "fields": [
+    {
+      "component": "select",
+      "name": "target",
+      "label": "Link Target",
+      "options": [{ "...": "./_link-targets.json" }]
+    }
+  ]
+}

@@ -22,31 +22,70 @@
       "id": "teaser",
       "fields": [
         {
+          "component": "container",
+          "label": "Content Box and Image Teaser Options",
+          "name": "container",
+          "valueType": "string",
+          "collapsible": true,
+          "fields": [
+            {
+              "component": "select",
+              "name": "classes_teaserBackground",
+              "label": "Background",
+              "description": "Only applies to Content Box and Image Teaser style",
+              "options": [
+                { "name": "Inheriting from Grid", "value": "teaser-background-inherit" },
+                { "...": "../../models/partials/_teaser-background-colors.json" }
+              ]
+            },
+            {
+              "component": "select",
+              "name": "classes_teaserOpacity",
+              "label": "Opacity",
+              "description": "Only applies to Content Box and Image Teaser style. Opacity is applied to the background color of the teaser.",
+              "options": [
+                { "name": "Inheriting from Grid", "value": "teaser-opacity-inherit" },
+                { "...": "../../models/partials/_teaser-opacity-options.json" }
+              ]
+            }
+          ]
+        },
+        {
+          "component": "text",
+          "name": "teaser-pretitle",
+          "label": "Pretitle"
+        },
+        {
           "component": "text",
           "name": "teaser-title",
-          "value": "",
           "label": "Title"
         },
         {
           "component": "richtext",
           "name": "teaser-description",
-          "value": "",
           "label": "Description"
         },
         {
           "component": "reference",
-          "name": "teaser-image",
-          "label": "Image",
-          "valueType": "string",
+          "name": "image",
+          "label": "Image Desktop",
           "multi": false
         },
         {
-          "name": "teaser-imageAlt",
           "component": "text",
-          "title": "Image Alt Text"
+          "name": "imageAlt",
+          "label": "Image Alt Text",
+          "description": "Alt text for the image"
         },
         {
-          "...": "../../models/partials/_button.json#/fields"
+          "component": "reference",
+          "name": "image-mobile",
+          "label": "Mobile Image",
+          "multi": false,
+          "description": "Mobile image will be displayed on smaller screens. If not set, the desktop image will be displayed."
+        },
+        {
+          "...": "../../models/partials/_button-title-target.json#/fields"
         }
       ]
     }

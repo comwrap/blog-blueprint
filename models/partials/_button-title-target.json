@@ -1,0 +1,26 @@
+{
+    "fields": [
+      {
+        "component": "aem-content",
+        "name": "link1",
+        "label": "Link"
+      },
+      {
+        "component": "text",
+        "name": "link1Text",
+        "label": "Text"
+      },
+      {
+        "component": "text",
+        "name": "link1Title",
+        "label": "Title"
+      },
+      {
+        "component": "select",
+        "name": "link1Target",
+        "label": "Link Target",
+        "options": [{ "...": "./_link-targets.json" }]
+      }
+    ]
+  }
+  

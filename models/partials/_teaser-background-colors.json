@@ -1,0 +1,6 @@
+[
+  { "name": "None", "value": "teaser-background-none" },
+  { "name": "Coral", "value": "teaser-background-coral" },
+  { "name": "Brown", "value": "teaser-background-brown" },
+  { "name": "Black", "value": "teaser-background-black" }
+]

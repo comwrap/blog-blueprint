@@ -1,0 +1,9 @@
+[
+  { "name": "0%", "value": "teaser-opacity-0" },
+  { "name": "10%", "value": "teaser-opacity-10" },
+  { "name": "20%", "value": "teaser-opacity-20" },
+  { "name": "35%", "value": "teaser-opacity-35" },
+  { "name": "55%", "value": "teaser-opacity-55" },
+  { "name": "70%", "value": "teaser-opacity-70" },
+  { "name": "100%", "value": "teaser-opacity-100" }
+]

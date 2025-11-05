@@ -33,6 +33,7 @@ export default function useBlockConfig(block, BLOCK_CONFIG, fieldExtractors = {}
         text: row.textContent?.trim() || '',
         node: row,
         picture: row.querySelector?.('picture') || null,
+        img: row.querySelector?.('img') || null,
       };
     } else {
       value = { text: '', node: null, picture: null };
