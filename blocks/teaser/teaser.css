@@ -1,144 +1,567 @@
+/* Base teaser wrapper */
 .teaser-wrapper {
   max-width: 1200px;
   margin: 0 auto;
   padding: var(--spacing-xl, 2rem) 0;
 }
 
-.teaser-block {
-  background: rgba(var(--background-color), 1);
-  border-radius: 1rem;
+/* Default teaser article styling */
+.teaser article {
+  position: relative;
+  border-radius: 1.25rem;
   overflow: hidden;
-  border: 1px solid rgba(var(--text-color), 0.08);
+  background: rgba(var(--background), 1);
   box-shadow: 
-    0 4px 20px rgb(0 0 0 / 6%),
-    0 1px 4px rgb(0 0 0 / 4%);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    0 4px 20px rgb(0 0 0 / 5%),
+    0 1px 4px rgb(0 0 0 / 3%);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.teaser-block:hover {
-  transform: translateY(-4px);
+.teaser article:hover {
+  transform: translateY(-6px);
   box-shadow: 
-    0 12px 32px rgb(0 0 0 / 12%),
-    0 2px 8px rgb(0 0 0 / 8%);
-  border-color: rgba(var(--text-color), 0.12);
+    0 20px 40px rgb(0 0 0 / 10%),
+    0 4px 12px rgb(0 0 0 / 6%);
 }
 
-.teaser-image {
+/* Image container - matches JS output */
+.teaser-image-container {
   width: 100%;
-  height: 280px;
   overflow: hidden;
-  background: rgba(var(--text-color), 0.04);
+  background: linear-gradient(135deg, rgba(var(--highlight), 0.05), rgba(var(--on-background), 0.03));
   position: relative;
 }
 
-.teaser-image img,
-.teaser-image picture {
+.teaser-image-container img,
+.teaser-image-container picture {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), filter 0.4s ease;
 }
 
-.teaser-image picture img {
+.teaser-image-container picture img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.teaser-block:hover .teaser-image img,
-.teaser-block:hover .teaser-image picture img {
-  transform: scale(1.05);
+.teaser article:hover .teaser-image-container img,
+.teaser article:hover .teaser-image-container picture img {
+  transform: scale(1.08) rotate(0.5deg);
+  filter: brightness(1.05);
 }
 
+/* Placeholder for when no image is shown */
+.teaser-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, 
+    rgba(var(--highlight), 0.1), 
+    rgba(var(--on-background), 0.05));
+  position: relative;
+}
+
+.teaser-placeholder::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 50%, 
+    rgba(var(--highlight), 0.15) 0%, 
+    transparent 70%);
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* Content area */
 .teaser-content {
-  padding: var(--spacing-l, 1.5rem);
+  padding: var(--spacing-xl, 2rem);
   background: transparent;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
+/* Pretitle styling */
+.teaser-pretitle {
+  font-size: var(--body-size-xs, 0.875rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(var(--highlight), 1);
+  margin: 0 0 var(--spacing-s, 0.5rem);
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+}
+
+.teaser-pretitle::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 40%;
+  height: 2px;
+  background: rgba(var(--highlight), 1);
+  transition: width 0.3s ease;
+}
+
+.teaser article:hover .teaser-pretitle::after {
+  width: 100%;
+}
+
+/* Title styling */
 .teaser-title {
+  margin: 0 0 var(--spacing-m, 1rem);
+}
+
+.teaser-title h2 {
   font-size: var(--heading-font-size-m, 1.75rem);
   font-weight: 700;
-  margin: 0 0 var(--spacing-m, 1rem);
-  color: rgba(var(--text-color), 1);
+  margin: 0;
+  color: rgba(var(--on-background), 1);
   line-height: 1.3;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
+  transition: color 0.3s ease;
 }
 
+.teaser article:hover .teaser-title h2 {
+  color: rgba(var(--highlight), 1);
+}
+
+/* Description styling */
 .teaser-description {
   font-size: var(--body-size-s, 1rem);
-  line-height: 1.6;
+  line-height: 1.7;
   margin: 0 0 var(--spacing-l, 1.5rem);
-  color: rgba(var(--text-color), 0.75);
+  color: rgba(var(--on-background), 0.75);
+  flex-grow: 1;
 }
 
-.teaser-button {
+.teaser-description p {
+  margin: 0 0 var(--spacing-s, 0.5rem);
+}
+
+/* Button container */
+.teaser-content .button-container {
+  margin-top: auto;
   display: flex;
   gap: var(--spacing-m, 1rem);
+  flex-wrap: wrap;
 }
 
-.teaser-button .button,
-.teaser-button .teaser-btn {
+.teaser-content .button,
+.teaser-content a.button {
   display: inline-flex;
   align-items: center;
-  padding: 0.625rem 1.5rem;
+  gap: var(--spacing-s, 0.5rem);
+  padding: 0.75rem 1.75rem;
   background: rgba(var(--button-primary), 1);
   color: rgba(var(--color-pure-white), 1);
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   text-decoration: none;
   font-weight: 600;
   font-size: var(--body-size-s, 1rem);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px rgba(var(--button-primary), 0.25);
+  box-shadow: 0 4px 12px rgba(var(--button-primary), 0.25);
   margin: 0;
+  position: relative;
+  overflow: hidden;
 }
 
-.teaser-button .button:hover,
-.teaser-button .button:focus,
-.teaser-button .teaser-btn:hover,
-.teaser-button .teaser-btn:focus {
+.teaser-content .button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.2), 
+    transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.teaser-content .button:hover::before {
+  opacity: 1;
+}
+
+.teaser-content .button:hover,
+.teaser-content .button:focus {
   background: rgba(var(--button-primary-hover), 1);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(var(--button-primary), 0.35);
+  box-shadow: 0 8px 20px rgba(var(--button-primary), 0.4);
   text-decoration: none;
   color: rgba(var(--color-pure-white), 1);
 }
 
-.teaser-button .button:active,
-.teaser-button .teaser-btn:active {
+.teaser-content .button:active {
   transform: translateY(0);
-  box-shadow: 0 1px 4px rgba(var(--button-primary), 0.25);
+  box-shadow: 0 2px 8px rgba(var(--button-primary), 0.25);
 }
 
-.teaser-button .button:focus-visible,
-.teaser-button .teaser-btn:focus-visible {
+.teaser-content .button:focus-visible {
   outline: 0.125rem solid rgba(var(--button-primary), 0.5);
   outline-offset: 0.25rem;
 }
 
-@media (width >= 768px) {
-  .teaser-block {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-  }
+/* Show arrow styling for buttons */
+.teaser-content .button-container.showarrow .button::after {
+  content: '→';
+  margin-left: var(--spacing-xs, 0.25rem);
+  transition: transform 0.3s ease;
+}
 
-  .teaser-image {
-    height: 100%;
-    min-height: 400px;
-  }
+.teaser-content .button-container.showarrow .button:hover::after {
+  transform: translateX(4px);
+}
+
+/* Primary button variant */
+.teaser-content .button.primary {
+  background: linear-gradient(135deg, 
+    rgba(var(--button-primary), 1), 
+    rgba(var(--button-primary-hover), 1));
+  box-shadow: 0 6px 16px rgba(var(--button-primary), 0.3);
+}
+
+.teaser-content .button.primary:hover {
+  box-shadow: 0 10px 24px rgba(var(--button-primary), 0.45);
+}
+
+/* ========================================
+   BACKGROUND COLOR VARIATIONS
+   ======================================== */
+
+/* Coral background */
+.teaser article.teaser-background-coral {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+}
+
+.teaser article.teaser-background-coral .teaser-content,
+.teaser article.teaser-background-coral .teaser-title h2,
+.teaser article.teaser-background-coral .teaser-description,
+.teaser article.teaser-background-coral .teaser-pretitle {
+  color: rgba(var(--color-pure-white), 1);
+}
+
+.teaser article.teaser-background-coral .teaser-pretitle::after {
+  background: rgba(var(--color-pure-white), 0.8);
+}
+
+.teaser article.teaser-background-coral:hover .teaser-title h2 {
+  color: rgba(var(--color-pure-white), 0.95);
+  text-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+}
+
+/* Brown background */
+.teaser article.teaser-background-brown {
+  background: linear-gradient(135deg, #8b6f47, #6f5639);
+}
+
+.teaser article.teaser-background-brown .teaser-content,
+.teaser article.teaser-background-brown .teaser-title h2,
+.teaser article.teaser-background-brown .teaser-description,
+.teaser article.teaser-background-brown .teaser-pretitle {
+  color: rgba(var(--color-pure-white), 1);
+}
+
+.teaser article.teaser-background-brown .teaser-pretitle::after {
+  background: rgba(var(--color-pure-white), 0.8);
+}
+
+.teaser article.teaser-background-brown:hover .teaser-title h2 {
+  color: rgba(var(--color-pure-white), 0.95);
+  text-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+}
+
+/* Black background */
+.teaser article.teaser-background-black {
+  background: linear-gradient(135deg, #1a1a1a, #000);
+}
+
+.teaser article.teaser-background-black .teaser-content,
+.teaser article.teaser-background-black .teaser-title h2,
+.teaser article.teaser-background-black .teaser-description,
+.teaser article.teaser-background-black .teaser-pretitle {
+  color: rgba(var(--color-pure-white), 1);
+}
+
+.teaser article.teaser-background-black .teaser-pretitle::after {
+  background: rgba(var(--color-pure-white), 0.8);
+}
+
+.teaser article.teaser-background-black:hover .teaser-title h2 {
+  color: rgba(var(--color-pure-white), 0.95);
+  text-shadow: 0 2px 8px rgb(255 255 255 / 15%);
+}
+
+/* None background (transparent) */
+.teaser article.teaser-background-none {
+  background: transparent;
+  box-shadow: none;
+}
+
+/* ========================================
+   OPACITY VARIATIONS
+   ======================================== */
+
+/* Opacity levels for content box overlay */
+.teaser article.teaser-opacity-0 .teaser-content {
+  background: rgba(var(--on-background), 0);
+}
+
+.teaser article.teaser-opacity-10 .teaser-content {
+  background: rgba(var(--on-background), 0.1);
+  backdrop-filter: blur(8px);
+}
+
+.teaser article.teaser-opacity-20 .teaser-content {
+  background: rgba(var(--on-background), 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.teaser article.teaser-opacity-35 .teaser-content {
+  background: rgba(var(--on-background), 0.35);
+  backdrop-filter: blur(12px);
+}
+
+.teaser article.teaser-opacity-55 .teaser-content {
+  background: rgba(var(--on-background), 0.55);
+  backdrop-filter: blur(14px);
+}
+
+.teaser article.teaser-opacity-70 .teaser-content {
+  background: rgba(var(--on-background), 0.7);
+  backdrop-filter: blur(16px);
+}
+
+.teaser article.teaser-opacity-100 .teaser-content {
+  background: rgba(var(--on-background), 1);
+}
+
+/* Adjust text color for higher opacity backgrounds */
+.teaser article.teaser-opacity-35 .teaser-content,
+.teaser article.teaser-opacity-55 .teaser-content,
+.teaser article.teaser-opacity-70 .teaser-content,
+.teaser article.teaser-opacity-100 .teaser-content {
+  color: rgba(var(--on-surface), 1);
+}
+
+.teaser article.teaser-opacity-35 .teaser-title h2,
+.teaser article.teaser-opacity-55 .teaser-title h2,
+.teaser article.teaser-opacity-70 .teaser-title h2,
+.teaser article.teaser-opacity-100 .teaser-title h2 {
+  color: rgba(var(--on-surface), 1);
+}
+
+.teaser article.teaser-opacity-35 .teaser-description,
+.teaser article.teaser-opacity-55 .teaser-description,
+.teaser article.teaser-opacity-70 .teaser-description,
+.teaser article.teaser-opacity-100 .teaser-description {
+  color: rgba(var(--on-surface), 0.85);
+}
+
+.teaser article.teaser-opacity-35 .teaser-pretitle,
+.teaser article.teaser-opacity-55 .teaser-pretitle,
+.teaser article.teaser-opacity-70 .teaser-pretitle,
+.teaser article.teaser-opacity-100 .teaser-pretitle {
+  color: rgba(var(--on-surface), 1);
+}
+
+/* ========================================
+   TEASER TYPE VARIATIONS
+   ======================================== */
+
+/* Content Box Teaser - content overlays image */
+.content-box-teaser .teaser article {
+  position: relative;
+}
+
+.content-box-teaser .teaser article .teaser-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  border-radius: 0 0 1.25rem 1.25rem;
+  margin: var(--spacing-l, 1.5rem);
+  border-radius: 1rem;
+}
+
+.content-box-teaser .teaser article .teaser-image-container {
+  height: 100%;
+  min-height: 500px;
+}
+
+/* Image Teaser - full background image with overlay */
+.image-teaser .teaser article {
+  position: relative;
+  min-height: 450px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.image-teaser .teaser article .teaser-image-container {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+}
+
+.image-teaser .teaser article .teaser-image-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, 
+    rgba(0, 0, 0, 0.7) 0%, 
+    rgba(0, 0, 0, 0.3) 50%, 
+    transparent 100%);
+  z-index: 1;
+}
+
+.image-teaser .teaser article .teaser-content {
+  position: relative;
+  z-index: 2;
+  color: rgba(var(--color-pure-white), 1);
+}
+
+.image-teaser .teaser article .teaser-title h2,
+.image-teaser .teaser article .teaser-description,
+.image-teaser .teaser article .teaser-pretitle {
+  color: rgba(var(--color-pure-white), 1);
+}
+
+.image-teaser .teaser article .teaser-pretitle::after {
+  background: rgba(var(--color-pure-white), 0.8);
+}
+
+/* Glass Effect Teaser - modern glassmorphism */
+.glass-effect-teaser .teaser article {
+  background: rgba(var(--background), 0.7);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(var(--on-background), 0.1);
+}
+
+.glass-effect-teaser .teaser article::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, 
+    rgba(var(--highlight), 0.5), 
+    rgba(var(--on-background), 0.1));
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glass-effect-teaser .teaser article:hover::before {
+  opacity: 1;
+}
+
+/* Regular Teaser - classic layout */
+.regular-teaser .teaser article {
+  border: 2px solid rgba(var(--on-background), 0.1);
+  transition: all 0.3s ease;
+}
+
+.regular-teaser .teaser article:hover {
+  border-color: rgba(var(--highlight), 0.5);
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+@media (width >= 768px) {
 
   .teaser-content {
     padding: var(--spacing-xxl, 2.5rem);
   }
+
+  .teaser-title h2 {
+    font-size: var(--heading-font-size-l, 2rem);
+  }
+
+  /* Content box adjustments for larger screens */
+  .content-box-teaser .teaser article .teaser-image-container {
+    min-height: 550px;
+  }
+
+  .image-teaser .teaser article {
+    min-height: 500px;
+  }
 }
 
 @media (width >= 1024px) {
-  .teaser-image {
-    min-height: 450px;
+  .teaser-title h2 {
+    font-size: var(--heading-font-size-xl, 2.25rem);
   }
 
-  .teaser-title {
-    font-size: var(--heading-font-size-l, 2rem);
+  .teaser-description {
+    font-size: var(--body-size-m, 1.125rem);
+  }
+
+  /* Content box adjustments for larger screens */
+  .content-box-teaser .teaser article .teaser-image-container {
+    min-height: 600px;
+  }
+
+  .image-teaser .teaser article {
+    min-height: 550px;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY & FOCUS STATES
+   ======================================== */
+
+.teaser article:focus-within {
+  outline: 3px solid rgba(var(--highlight), 0.5);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .teaser article,
+  .teaser-image-container img,
+  .teaser-image-container picture img,
+  .teaser-content .button,
+  .teaser-pretitle::after {
+    transition: none;
+    animation: none;
+  }
+
+  .teaser article:hover {
+    transform: none;
+  }
+
+  .teaser article:hover .teaser-image-container img,
+  .teaser article:hover .teaser-image-container picture img {
+    transform: none;
+  }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .teaser article {
+    box-shadow: 
+      0 4px 20px rgb(0 0 0 / 20%),
+      0 1px 4px rgb(0 0 0 / 15%);
+  }
+
+  .teaser article:hover {
+    box-shadow: 
+      0 20px 40px rgb(0 0 0 / 30%),
+      0 4px 12px rgb(0 0 0 / 20%);
   }
 } 
