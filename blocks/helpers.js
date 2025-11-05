@@ -573,3 +573,20 @@ export function mapPath(path) {
 
   return `${finalUrl.pathname}${finalUrl.search}${finalUrl.hash}`;
 }
+
+/**
+ * Fetches an SVG file and returns the text content.
+ * @param {string} url The URL of the SVG file
+ * @returns {Promise<string>} The SVG text content
+ */
+export async function fetchSVG(url) {
+  let svgText = '';
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Network response was not ok');
+    svgText = await response.text();
+  } catch (error) {
+    console.error('Error fetching SVG:', error);
+  }
+  return svgText;
+}

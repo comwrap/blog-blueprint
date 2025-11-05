@@ -1,7 +1,7 @@
 import { renderButton } from '../../components/button/button.js';
 
 export default function decorate(block) {
-  const [link, text, title, target, type, style] = block.children;
+  const [link, text, title, target, type, style, icon] = block.children;
 
   let linkButton = link?.querySelector('a');
   if (linkButton === null) {
@@ -15,6 +15,7 @@ export default function decorate(block) {
   const linkStyle = style?.textContent.trim();
   const linkText = text?.textContent.trim();
   const linkTitle = title?.textContent.trim();
+  const iconImage = icon?.querySelector('img');
 
   renderButton({
     linkButton,
@@ -23,6 +24,7 @@ export default function decorate(block) {
     linkTarget,
     linkType,
     linkStyle,
+    iconImage,
   });
 
   block.textContent = '';
