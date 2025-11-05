@@ -602,6 +602,21 @@
       },
       {
         "component": "select",
+        "name": "custombutton-link-target",
+        "label": "Link Target",
+        "options": [
+          {
+            "name": "Same Window",
+            "value": ""
+          },
+          {
+            "name": "New Tab",
+            "value": "_blank"
+          }
+        ]
+      },
+      {
+        "component": "select",
         "name": "custombutton-type",
         "label": "Button Type",
         "options": [
@@ -832,6 +847,21 @@
         "component": "text",
         "name": "custombutton-link-title",
         "label": "Title"
+      },
+      {
+        "component": "select",
+        "name": "custombutton-link-target",
+        "label": "Link Target",
+        "options": [
+          {
+            "name": "Same Window",
+            "value": ""
+          },
+          {
+            "name": "New Tab",
+            "value": "_blank"
+          }
+        ]
       },
       {
         "component": "select",
@@ -1129,6 +1159,21 @@
         "component": "text",
         "name": "custombutton-link-title",
         "label": "Title"
+      },
+      {
+        "component": "select",
+        "name": "custombutton-link-target",
+        "label": "Link Target",
+        "options": [
+          {
+            "name": "Same Window",
+            "value": ""
+          },
+          {
+            "name": "New Tab",
+            "value": "_blank"
+          }
+        ]
       },
       {
         "component": "select",
