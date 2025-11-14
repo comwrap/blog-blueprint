@@ -11,6 +11,7 @@
     "/content/blog-blueprint/api/dictionary.json"
   ],
   "includes": [
-    "/content/blog-blueprint/"
+    "/content/blog-blueprint/",
+    "/content/dam/"
   ]
 }
