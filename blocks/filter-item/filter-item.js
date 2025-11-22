@@ -102,8 +102,8 @@ export default async function decorate(block) {
     // For videos, set link to # to prevent navigation (modal will handle it)
     link = '#';
   } else {
-    // For non-video links, remove /content/qnx-xwalk prefix
-    link = FILTER_ITEM_LINK?.text.replace('/content/qnx-xwalk', '');
+    // For non-video links, remove /content/blog-blueprint prefix
+    link = FILTER_ITEM_LINK?.text.replace('/content/blog-blueprint', '');
     if (FILTER_ITEM_ASSET?.text.includes('.pdf')) {
       link = FILTER_ITEM_ASSET?.text;
     }

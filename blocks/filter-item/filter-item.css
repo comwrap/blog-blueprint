@@ -37,7 +37,7 @@
     padding: var(--space-xxs) var(--space-xs);
     font-size: var(--body-font-size-xxs);
     text-transform: uppercase;
-    outline: 1px solid var(--clr-qnx-coral);
+    outline: 1px solid var(--clr-coral);
     margin: 5px;
   }
 
@@ -46,7 +46,7 @@
   }
 
   .button:hover {
-    color: var(--clr-qnx-coral);
+    color: var(--clr-coral);
   }
 }
 

@@ -27,8 +27,8 @@
 }
 
 .filters .filters-filter .tag-dropdown.active .nice-select-element {
-  background-color: var(--clr-qnx-coral);
-  border-color: var(--clr-qnx-coral);
+  background-color: var(--clr-coral);
+  border-color: var(--clr-coral);
   color: var(--clr-white);
 }
 
