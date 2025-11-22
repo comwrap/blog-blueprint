@@ -1,2 +1,18 @@
 export function getCurrentCountryLanguage(): string[];
+export function useBlockConfig(block: HTMLElement, BLOCK_CONFIG: BlockConfig, fieldExtractors?: Record<string, (row: HTMLElement, index: number, rows: HTMLElement[]) => any>): Record<string, { text: string; node: HTMLElement | null; picture: HTMLPictureElement | null; img: HTMLImageElement | null }>;
+export function loadItemBlocks(block: HTMLElement, item: string): Promise<void>;
+export function isUE(): boolean;
+export function mapPath(path: string): string;
+export function loadBlock(block: HTMLElement): Promise<HTMLElement>;
 export async function getDictionary(): Promise<any> | null;
+export function getCurrentLanguage(): string;
+export function getTaxonomyMapById(language: string): Promise<Map<string, any>>;
+export function getTaxonomyMapByPath(language: string): Promise<Map<string, any>>;
+export function getTaxonomy(language: string): Promise<any[]>;
+export function getDictionaryColumn(column: string | null): Promise<any> | null;
+export function getDictionary(language: string | null): Promise<any> | null;
+export function createTag(tag: string, attributes: Record<string, string>): HTMLElement;
+export function fetchIndex(indexFile: string, pageSize: number): Promise<any[]>;
+export function queryEntireIndex(indexFile: string, pageSize: number): Promise<any[]>;
+export function getQueryIndex(): Promise<any[]>;
+export function addSearchParams(urlString: string, params: Record<string, string>, base: string): string;

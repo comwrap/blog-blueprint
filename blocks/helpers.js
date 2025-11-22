@@ -1,15 +1,45 @@
-import {
-  DEFAULT_LANGUAGE,
-  ROOT_PATH,
-  DEFAULT_LOCALE,
-} from '../scripts/global/constants.js';
+import { loadBlock } from '../scripts/aem.js';
+
+const TAGS_ROOT = '/content/cq:tags';
+const TAG_NAMESPACE = 'blog-blueprint';
+const ROOT_PATH = '/content/blog-blueprint';
+const DEFAULT_COUNTRY = 'us';
+const DEFAULT_LANGUAGE = 'en';
+const DEFAULT_LOCALE = `${DEFAULT_COUNTRY}-${DEFAULT_LANGUAGE}`;
+
+/**
+ * Checks whether the current page is opened in the Universal Editor Edit mode.
+ * @returns {boolean} True if the current document is opened in the Universal Editor Edit mode,
+ *                    false otherwise.
+ */
+export function isUEEdit() {
+  return document.documentElement.classList.contains('adobe-ue-edit');
+}
+
+/**
+ * Checks whether the current page is opened in the Universal Editor Preview mode.
+ * @returns {boolean} True if the current document is opened in the Universal Editor Preview mode,
+ *                    false otherwise.
+ */
+export function isUEPreview() {
+  return document.documentElement.classList.contains('adobe-ue-preview');
+}
+
+/**
+ * Checks whether the current page is opened in the Universal Editor (any mode).
+ * @returns {boolean} True if the current document is opened in the Universal Editor,
+ *                    false otherwise.
+ */
+export function isUE() {
+  return isUEEdit() || isUEPreview();
+}
+
 /**
  * Get the current country and language codes label by matching the current
  * location pathname to a regex.
  * @returns {string[]} The current country and language codes array on
  * success (e.g. ["us","en"]), array of two empty strings otherwise
  */
-
 export function getCurrentCountryLanguage() {
   const match = window.location.pathname.match(/(?:^|\/)([a-z]{2})-([a-z]{2})(?:\.html|\/|$)/i);
   return match ? match.slice(1, 3) : ['', ''];
@@ -586,7 +616,396 @@ export async function fetchSVG(url) {
     if (!response.ok) throw new Error('Network response was not ok');
     svgText = await response.text();
   } catch (error) {
-    console.error('Error fetching SVG:', error);
+    // Silently handle error and return empty string
   }
   return svgText;
+}
+
+/**
+ * Normalize a string for case-insensitive and trim matching
+ * @param {string} str - The string to normalize
+ * @returns {string} The normalized string
+ */
+export const normalizeForMatch = (str) => (str || '').trim().toLowerCase();
+
+/**
+ * Parse item tags and build a normalized map of categories to subcategories
+ * @param {string} tagsContent - Comma-separated tag string
+ * @param {object} options - Configuration options
+ * @param {function(string): string} options.normalizeFn
+ *   - Function to normalize strings for matching
+ * @param {function(string, string): string} options.getDisplayName
+ *   - Function to get display name from tag ID
+ * @returns {{
+ *   itemMap: Map<string, Set<string>>,
+ *   displayNames: Map<string, string>
+ * }} Object containing normalized map and display names
+ */
+export function parseItemTags(tagsContent, { normalizeFn, getDisplayName }) {
+  const itemMap = new Map();
+  const displayNames = new Map();
+  if (!tagsContent) return { itemMap, displayNames };
+
+  tagsContent
+    .split(',')
+    .map((t) => t.trim())
+    .filter(Boolean)
+    .forEach((tag) => {
+      const m = tag.match(/^([^:]+):([^/]+)\/(.+)$/);
+      if (!m) return;
+      const [, namespace, category, subcategory] = m;
+
+      // Build tag IDs for taxonomy lookup
+      const categoryTagId = `${namespace}:${category}`;
+      const subcategoryTagId = `${namespace}:${category}/${subcategory}`;
+
+      // Derive fallback names and get display names from taxonomy
+      const categoryFallback = category.replace(/--/g, ' & ').replace(/-/g, ' ');
+      const subcategoryFallback = subcategory.replace(/-/g, ' ');
+      const categoryDisplayName = getDisplayName(categoryTagId, categoryFallback);
+      const subcategoryDisplayName = getDisplayName(
+        subcategoryTagId,
+        subcategoryFallback,
+      );
+
+      const normalizedCat = normalizeFn(categoryDisplayName);
+      const normalizedSub = normalizeFn(subcategoryDisplayName);
+
+      // Store display names
+      displayNames.set(normalizedCat, categoryDisplayName.trim());
+      displayNames.set(normalizedSub, subcategoryDisplayName.trim());
+
+      if (!itemMap.has(normalizedCat)) itemMap.set(normalizedCat, new Set());
+      itemMap.get(normalizedCat).add(normalizedSub);
+    });
+
+  return { itemMap, displayNames };
+}
+
+/**
+ * Checks if an item matches the selected tag filters
+ * @param {Map<string, Set<string>>} selectedFilters - Map of selected categories to subcategories
+ * @param {Map<string, Set<string>>} itemTagMap - Map of item's categories to subcategories
+ * @returns {boolean} True if item matches all selected filters (OR within category, AND between)
+ */
+const matchesTagFilters = (selectedFilters, itemTagMap) => {
+  if (selectedFilters.size === 0) return true;
+
+  // For each category with selections, check if item matches ANY of
+  // the selected subcategories (OR within category)
+  // Between categories, ALL must match (AND between categories)
+  return Array.from(selectedFilters.entries()).every(
+    ([cat, selectedSubSet]) => {
+      const normalizedCat = normalizeForMatch(cat);
+      const itemSubSet = itemTagMap.get(normalizedCat);
+      if (!itemSubSet) return false;
+
+      // Check if item has ANY of the selected subcategories
+      return Array.from(selectedSubSet).some((selectedSub) => {
+        const normalizedSub = normalizeForMatch(selectedSub);
+        return itemSubSet.has(normalizedSub);
+      });
+    },
+  );
+};
+
+/**
+ * Creates a function to check if an item matches all current filters (tags, type, search)
+ * @param {object} options - Configuration options
+ * @param {function(string, string): string} options.getDisplayName
+ *   - Function to get display name from tag ID
+ * @param {HTMLElement} options.block - The block element
+ * @returns {function} Function that checks if an item matches all filters
+ */
+export function createItemMatcher({ getDisplayName, block }) {
+  return (filterItemEl, selectedFilters, searchQuery) => {
+    const itemTags = filterItemEl?.dataset.tags?.trim() || '';
+    const { itemMap } = parseItemTags(itemTags, {
+      normalizeFn: normalizeForMatch,
+      getDisplayName,
+    });
+    const tagMatches = matchesTagFilters(selectedFilters, itemMap);
+
+    const itemType = normalizeForMatch(filterItemEl?.dataset.type || '');
+    const activeFilter = normalizeForMatch(block.dataset.activeFilter || '');
+    const typeMatches = !activeFilter || itemType === activeFilter;
+
+    const titleText = filterItemEl
+      ?.querySelector('.filter-item-title')
+      ?.textContent?.trim()
+      .toLowerCase() || '';
+    const searchMatches = !searchQuery || titleText.includes(searchQuery);
+
+    return tagMatches && typeMatches && searchMatches;
+  };
+}
+
+/**
+ * Ensures a container element exists, creating it if necessary
+ * @param {HTMLElement} parent - Parent element
+ * @param {string} selector - CSS class selector (without dot)
+ * @param {Function} appendFn - Optional function to determine where to append
+ *   (default: appendChild)
+ * @returns {HTMLElement} The container element
+ */
+export function ensureContainer(parent, selector, appendFn = null) {
+  let container = parent.querySelector(`.${selector}`);
+  if (!container) {
+    container = document.createElement('div');
+    container.className = selector;
+    if (appendFn) {
+      appendFn(container);
+    } else {
+      parent.appendChild(container);
+    }
+  }
+  return container;
+}
+
+/**
+ * Maps a Tag ID to its content path.
+ *
+ * Example: `qnx:region/emea` ⇒ `/content/cq:tags/qnx/region/emea`
+ *
+ * NOTE: Does not check for mapped path existence.
+ * @param {import('./types').Tag['id']} id The Tag ID
+ * @returns {?import('./types').Tag['path']} The Tag path on success, null otherwise
+ */
+export function mapTagIdToPath(id) {
+  if (!id) return null;
+  return `${TAGS_ROOT}/${TAG_NAMESPACE}/${id.replace(`${TAG_NAMESPACE}:`, '')}`;
+}
+
+/**
+ * Maps the taxonomy spreadsheet entries to {@link TagSpreadsheetEntry}.
+ * @param {import('./types').TagSpreadsheetEntry[]} data The taxonomy spreadsheet entries
+ * @returns {import('./types').Tag[]} The mapped tags
+ */
+function mapTaxonomy(data) {
+  if (!Array.isArray(data)) return [];
+  return data.map((entry) => /** @type {import('./types').Tag} */({
+    id: entry.tag,
+    path: mapTagIdToPath(entry.tag),
+    name: entry.tag.lastIndexOf('/') === -1 ? '' : entry.tag.slice(entry.tag.lastIndexOf('/') + 1),
+    title: entry.title,
+    description: entry['jcr:description'],
+  }));
+}
+
+/**
+ * Fetches the taxonomy (AEM Tags) configured for the current site.
+ *
+ * IMPORTANT: Assumes there is a `/content/site/taxonomy` page configured with exposed AEM Tags.
+ * @param {string} [language] The language code for Tag title translation
+ * @returns {Promise<import("./types").Tag[]>} The array of AEM Tags exposed by the taxonomy page
+ */
+async function fetchTaxonomy(language) {
+  try {
+    const url = new URL(`${window.location.origin}${window.hlx.codeBasePath}/taxonomy.json`);
+    if (language) url.searchParams.append('sheet', language);
+    const resp = await fetch(url);
+    const data = await resp.json();
+    return {
+      promise: null,
+      data: mapTaxonomy(data?.data),
+    };
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.warn(`Could not fetch taxonomy for language ${language} due to:`, error);
+    return {
+      promise: null,
+      data: [],
+    };
+  }
+}
+
+/**
+ * Gets the taxonomy (AEM Tags) configured for the current site as an array of {@link Tag}.
+ *
+ * IMPORTANT: Assumes there is a `/content/site/taxonomy` page configured with exposed AEM Tags.
+ * @param {string} [language] The language code for Tag title translation.
+ * @returns {Promise<import("./types").Tag[]>} The array of AEM Tags exposed by the taxonomy page.
+ */
+export async function getTaxonomy(language) {
+  const lang = language || DEFAULT_LANGUAGE;
+  // Initialize window
+  window.taxonomy = window.taxonomy || {};
+  window.taxonomy[lang] = window.taxonomy[lang] || {
+    data: null,
+    promise: null,
+  };
+
+  // IMPORTANT: never replace this entry but only mutate its fields to avoid a race condition!
+  const stableCacheEntry = window.taxonomy[lang];
+
+  // Return taxonomy if already loaded
+  if (stableCacheEntry.data) {
+    return stableCacheEntry.data;
+  }
+
+  // Return promise if taxonomy are currently loading
+  if (stableCacheEntry.promise) {
+    return stableCacheEntry.promise;
+  }
+
+  // Fetch taxonomy and store the promise
+  stableCacheEntry.promise = fetchTaxonomy(lang).then((res) => {
+    stableCacheEntry.data = res.data;
+    // Clear promise once resolved
+    stableCacheEntry.promise = null;
+    return stableCacheEntry.data;
+  });
+
+  return stableCacheEntry.promise;
+}
+
+/**
+ * Gets the taxonomy (AEM Tags) configured for the current site as a path lookup Map.
+ *
+ * IMPORTANT: Assumes there is a `/content/site/taxonomy` page configured with exposed AEM Tags.
+ * @param {string} [language] The language code for Tag title translation.
+ * @returns {Promise<Map<Tag['path'], Tag>>} The path lookup Map of AEM Tags exposed by the taxonomy
+ *                                           page.
+ */
+export async function getTaxonomyMapByPath(language) {
+  const taxonomy = await getTaxonomy(language);
+  return new Map(taxonomy.map((t) => ([t.path, t])));
+}
+
+/**
+ * Asset Selector (EDS / AEM) inserts links using the "play" endpoint by default:
+ *   https://<delivery-host>/adobe/assets/<URN>/play?assetname=<file>
+ *
+ * That URL is meant for Adobe's embedded player (iframe/HLS) and will be blocked
+ * if used directly as <video src=""> (Chrome ORB rejects it).
+ *
+ * This helper rewrites the "play" URL into a Delivery API URL for the original rendition:
+ *   https://<delivery-host>/adobe/assets/<URN>/original/as/<file>
+ *
+ * The /original/as/ endpoint returns the raw binary with proper video/mp4 headers,
+ * safe to embed directly in <video> or to pass into Plyr.
+ */
+export function videoToOriginalRendition(url) {
+  try {
+    const u = new URL(url);
+    if (/\/original\/as\//.test(u.pathname) || /\/dynamicmedia\/deliver\//.test(u.pathname)) {
+      return url; // already good
+    }
+
+    // Handle /play/as/filename.mp4 format (convert to /original/as/filename.mp4)
+    const playAsMatch = u.pathname.match(/^(\/adobe\/assets\/[^/]+)\/play\/as\/(.+)$/);
+    if (playAsMatch) {
+      const idPath = playAsMatch[1];
+      const filename = playAsMatch[2];
+      return `${u.origin}${idPath}/original/as/${encodeURIComponent(filename)}`;
+    }
+
+    // Handle /play?assetname=filename.mp4 format
+    const playMatch = u.pathname.match(/^(\/adobe\/assets\/[^/]+)\/play$/);
+    if (!playMatch) return url;
+    const idPath = playMatch[1];
+    const file = u.searchParams.get('assetname') || '';
+    return file ? `${u.origin}${idPath}/original/as/${encodeURIComponent(file)}` : url;
+  } catch {
+    return url;
+  }
+}
+
+/**
+ * Gets the taxonomy (AEM Tags) configured for the current site as an ID lookup Map.
+ *
+ * IMPORTANT: Assumes there is a `/content/site/taxonomy` page configured with exposed AEM Tags.
+ * @param {string} [language] The language code for Tag title translation.
+ * @returns {Promise<Map<Tag['id'], Tag>>} The ID lookup Map of AEM Tags exposed by the taxonomy
+ *                                         page.
+ */
+export async function getTaxonomyMapById(language) {
+  const lang = language === 'zh' ? 'zh-cn' : language;
+  const taxonomy = await getTaxonomy(lang);
+  return new Map(taxonomy.map((t) => ([t.id, t])));
+}
+
+/**
+ * Loads child blocks
+ * @param {Element} parentBlock The block element
+ */
+export function loadItemBlocks(parentBlock, blockClassName) {
+  const children = [...parentBlock.children];
+  const markerTextStartsWith = 'inner-block';
+
+  const innerBlockPromises = [];
+
+  children.forEach((block) => {
+    let markerText = false;
+    // change it to check if the block has the class "inner-block"
+    if (block.classList.contains(markerTextStartsWith)) {
+      markerText = true;
+    }
+
+    if (markerText) {
+      block.classList.add(markerTextStartsWith);
+      innerBlockPromises.push(loadBlock(block));
+      parentBlock.classList.add(`has-child-block-${blockClassName}`);
+    }
+  });
+
+  return Promise.all(innerBlockPromises); // wait for all to load
+}
+
+/**
+ * Extracts fields from block rows and removes rows as per config,
+ * allowing custom extraction logic per field.
+ *
+ * @param {Element} block The block element
+ * @param {import("./types").BlockConfig} BLOCK_CONFIG The block config object
+ * @param {{
+*   [k: string]: import("./types").FieldExtractor,
+* }} [fieldExtractors] Field extractors: `{ FIELD_NAME: (row, index, rows) => { ... } }`
+* @returns {{
+*   [k: keyof BlockConfig['FIELDS']]: {
+*     text: string,
+*     node: Element | null,
+*     picture: HTMLPictureElement | null,
+*     [j: string]: any,
+*   }
+* }} The structured fields
+*/
+export function useBlockConfig(block, BLOCK_CONFIG, fieldExtractors = {}) {
+  const rows = Array.from(block.children);
+
+  const fields = {};
+  Object.entries(BLOCK_CONFIG.FIELDS).forEach(([key, { index }]) => {
+    const row = rows[index];
+    let value;
+
+    // If a custom extractor is provided, use it
+    if (typeof fieldExtractors[key] === 'function') {
+      value = fieldExtractors[key](row, index, rows);
+    } else if (row) {
+      // Default extraction: text, node, picture
+      value = {
+        text: row.textContent?.trim() || '',
+        node: row,
+        picture: row.querySelector?.('picture') || null,
+        img: row.querySelector?.('img') || null,
+      };
+    } else {
+      value = { text: '', node: null, picture: null };
+    }
+
+    fields[key] = value;
+  });
+
+  // Decorate block
+  if (fields.BLOCK_ID) block.id = fields.BLOCK_ID.text;
+  if (fields.BLOCK_LABEL) block.setAttribute('data-block-label', fields.BLOCK_LABEL.text);
+
+  // Remove configured rows
+  Object.values(BLOCK_CONFIG.FIELDS)
+    .filter(({ removeRow }) => removeRow)
+    .forEach(({ index }) => rows[index]?.remove());
+
+  if (BLOCK_CONFIG.empty) block.textContent = '';
+
+  return fields;
 }

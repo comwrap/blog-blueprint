@@ -768,6 +768,104 @@
     ]
   },
   {
+    "id": "filters",
+    "fields": [
+      {
+        "component": "select",
+        "name": "classes_filters-style",
+        "label": "Style",
+        "options": [
+          {
+            "name": "Tiles",
+            "value": "filters-tiles"
+          },
+          {
+            "name": "List",
+            "value": "filters-list"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "filters-total-items-label",
+        "label": "Total Items Label",
+        "description": "The label shown for the total items."
+      },
+      {
+        "component": "text",
+        "name": "filters-first-label",
+        "label": "First Filter Tag (Type) Label",
+        "description": "The label shown for the first filter."
+      },
+      {
+        "component": "number",
+        "name": "filters-items",
+        "min": 0,
+        "label": "Number of items before Load More button. If set to 0, the Load More button will not be shown."
+      },
+      {
+        "component": "text",
+        "name": "filters-load-more-label",
+        "label": "Label for button to load more items"
+      },
+      {
+        "component": "text",
+        "name": "filters-item-link-label",
+        "label": "Label of the link for the filter items"
+      },
+      {
+        "component": "boolean",
+        "name": "classes_filters-show-tags",
+        "label": "Show tags",
+        "description": "Check this to show the tags in the filter items."
+      }
+    ]
+  },
+  {
+    "id": "filter-item",
+    "fields": [
+      {
+        "component": "text",
+        "name": "name",
+        "label": "Name",
+        "description": "Internal label used only in the Content Tree. Not shown on the page."
+      },
+      {
+        "component": "text",
+        "name": "filter-item-type",
+        "label": "Filter Item Type",
+        "description": "The type of filter item, used for filtering."
+      },
+      {
+        "component": "text",
+        "name": "filter-item-title",
+        "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "name": "filter-item-description",
+        "label": "Description"
+      },
+      {
+        "component": "aem-content",
+        "name": "filter-item-link",
+        "label": "Reference Link"
+      },
+      {
+        "component": "reference",
+        "name": "filter-item-asset",
+        "label": "Asset",
+        "multi": false
+      },
+      {
+        "component": "aem-tag",
+        "name": "filter-item-tags",
+        "label": "Tags",
+        "rootPath": "/content/cq:tags/qnx"
+      }
+    ]
+  },
+  {
     "id": "fragment",
     "fields": [
       {

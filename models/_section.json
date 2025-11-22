@@ -69,7 +69,8 @@
         "gallery",
         "event-teaser",
         "framed-grid",
-        "teaser-list"
+        "teaser-list",
+        "filters"
       ]
     }
   ]

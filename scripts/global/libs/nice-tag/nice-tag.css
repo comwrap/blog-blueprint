@@ -1,0 +1,105 @@
+.nice-tag {
+  /* CSS variables API to style NiceTag globally (override values where needed) */
+
+  /* Root element */
+  --nice-tag-display: inline-block;
+  --nice-tag-font-size: var(--body-font-size-s);
+  --nice-tag-line-height: 18px;
+  --nice-tag-font-weight: var(--font-weight-semibold);
+  --nice-tag-text-transform: uppercase;
+
+  /* Label element */
+  --nice-tag-button-padding: 10px var(--space-m);
+  --nice-tag-button-border: 1px solid var(--clr-b-dark);
+  --nice-tag-button-border-radius: 0;
+  --nice-tag-button-background-color: var(--clr-b-light);
+  --nice-tag-button-color: var(--clr-b-text);
+  --nice-tag-button-cursor: pointer;
+
+  /* Hover state */
+  --nice-tag-button-hover-background-color: var(--nice-tag-button-background-color);
+  --nice-tag-button-hover-color: var(--clr-primary);
+  --nice-tag-button-hover-border-color: var(--clr-primary);
+
+  /* Selected state */
+  --nice-tag-button-selected-background-color: var(--clr-primary);
+  --nice-tag-button-selected-color: var(--clr-b-overall-light);
+  --nice-tag-button-selected-border-color: var(--clr-primary);
+
+  /* Selected/Hover state */
+  --nice-tag-button-selected-hover-background-color: var(--clr-burnt-umber);
+
+  /* Disabled state */
+  --nice-tag-button-disabled-background-color: var(--clr-n-gray-1);
+  --nice-tag-button-disabled-color: var(--clr-b-text);
+  --nice-tag-button-disabled-border-color: var(--clr-n-gray-1);
+  --nice-tag-button-disabled-opacity: 60%;
+  --nice-tag-button-disabled-cursor: not-allowed;
+
+  display: var(--nice-tag-display);
+  font-size: var(--nice-tag-font-size);
+  line-height: var(--nice-tag-line-height);
+  font-weight: var(--nice-tag-font-weight);
+  text-transform: var(--nice-tag-text-transform);
+}
+
+/* Hide the native checkbox but keep it accessible */
+.nice-tag-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* The visible button */
+.nice-tag-button {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--nice-tag-button-padding);
+  border: var(--nice-tag-button-border);
+  border-radius: var(--nice-tag-button-border-radius);
+  background-color: var(--nice-tag-button-background-color);
+  color: var(--nice-tag-button-color);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Label text */
+.nice-tag-label {
+  white-space: nowrap;
+}
+
+/* Hover/focus states */
+.nice-tag-button:hover,
+.nice-tag:focus-visible .nice-tag-button {
+  border-color: var(--nice-tag-button-hover-border-color);
+  background-color: var(--nice-tag-button-hover-background-color);
+  color: var(--nice-tag-button-hover-color);
+}
+
+/* Selected state */
+.nice-tag--selected .nice-tag-button {
+  border-color: var(--nice-tag-button-selected-border-color);
+  background-color: var(--nice-tag-button-selected-background-color);
+  color: var(--nice-tag-button-selected-color);
+}
+
+/* Selected/Hover state */
+.nice-tag--selected .nice-tag-button:hover,
+.nice-tag--selected:focus-visible .nice-tag-button {
+  border-color: var(--nice-tag-button-selected-hover-background-color);
+  background-color: var(--nice-tag-button-selected-hover-background-color);
+}
+
+/* Disabled state */
+.nice-tag--disabled .nice-tag-button {
+  border-color: var(--nice-tag-button-disabled-border-color);
+  background-color: var(--nice-tag-button-disabled-background-color);
+  color: var(--nice-tag-button-disabled-color);
+  cursor: var(--nice-tag-button-disabled-cursor);
+  opacity: var(--nice-tag-button-disabled-opacity);
+}

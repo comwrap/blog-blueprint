@@ -1,0 +1,138 @@
+.nice-text {
+  /* Colors */
+  --nice-text-color: var(--clr-b-text);
+  --nice-text-hover-color: var(--clr-primary);
+
+  /* Label */
+  --nice-text-label-font-size: var(--body-font-size-s);
+  --nice-text-label-line-height: 21px;
+  --nice-text-label-font-weight: var(--font-weight-semibold);
+
+  /* Input */
+  --nice-text-input-height: 48px;
+  --nice-text-input-font-size: var(--body-font-size-s);
+  --nice-text-input-line-height: 36px;
+  --nice-text-input-padding-inline: var(--space-xss);
+  --nice-text-input-padding-block: 0;
+  --nice-text-input-color: var(--nice-text-color);
+  --nice-text-input-background-color: var(--clr-b-light);
+  --nice-text-input-border-color: var(--nice-text-input-background-color);
+  --nice-text-input-border-block-end-color: var(--nice-text-color);
+
+  /* Icon */
+  --nice-text-icon-size: var(--space-m);
+  --nice-text-icon-inset: auto auto var(--space-xss) var(--nice-text-input-padding-inline);
+
+  /* Cancel button */
+  --nice-text-cancel-button-size: var(--space-s);
+  --nice-text-cancel-button-font-size: var(--body-font-size-m);
+  --nice-text-cancel-button-inset: auto var(--nice-text-input-padding-inline) 15px auto;
+
+  /* Disabled state */
+  --nice-text-input-disabled-background-color: color-mix(in srgb, var(--clr-n-gray-1) 50%, transparent);
+  --nice-text-input-disabled-border-color: var(--nice-text-input-disabled-background-color);
+  --nice-text-input-disabled-color: var(--clr-n-gray-1);
+  --nice-text-input-disabled-cursor: not-allowed;
+
+  position: relative;
+
+  label {
+    display: block;
+    font-size: var(--nice-text-label-font-size);
+    line-height: var(--nice-text-label-line-height);
+    font-weight: var(--nice-text-label-font-weight);
+  }
+
+  span.icon {
+    --icon-size: var(--nice-text-icon-size);
+
+    position: absolute;
+    inset: var(--nice-text-icon-inset);
+    display: block;
+    width: var(--icon-size);
+    height: var(--icon-size);
+    pointer-events: none;
+
+    svg {
+      display: inherit;
+      width: inherit;
+      height: inherit;
+    }
+  }
+
+  input {
+    display: block;
+    width: 100%;
+    height: var(--nice-text-input-height);
+    font-size: var(--nice-text-input-font-size);
+    line-height: var(--nice-text-input-line-height);
+    padding-inline: var(--nice-text-input-padding-inline);
+    padding-block: var(--nice-text-input-padding-block);
+    color: var(--nice-text-input-color);
+    background-color: var(--nice-text-input-background-color);
+    border: 1px solid var(--nice-text-input-border-color);
+    border-block-end-color: var(--nice-text-input-border-block-end-color);
+
+    /* Type "search" */
+    &[type='search'] {
+      /* Add extra padding-inline-start on search input to account for the icon */
+      padding-inline-start: calc(
+        var(--nice-text-input-padding-inline)
+        + var(--nice-text-icon-size)
+        + 4px
+      );
+
+      /* Hide default "Cancel" button of search input */
+
+      /* Chrome, Edge, Safari */
+      &::-webkit-search-cancel-button {
+        -webkit-appearance: none;
+        appearance: none;
+        display: none;
+      }
+
+      /* Firefox */
+      &::-moz-search-clear {
+        display: none;
+      }
+    }
+  }
+
+  button.cancel {
+    display: none;
+    padding: unset;
+    margin: unset;
+    border: unset;
+    background-color: unset;
+    font-size: var(--nice-text-cancel-button-font-size);
+    font-weight: 500;
+    line-height: var(--nice-text-cancel-button-size);
+    cursor: pointer;
+    position: absolute;
+    inset: var(--nice-text-cancel-button-inset);
+  }
+
+  /* Show "Cancel" button when input is not empty */
+  input:not(:placeholder-shown) ~ button.cancel {
+    display: block;
+  }
+
+  /* Hover state */
+  &:hover {
+    border-block-end-color: var(--nice-text-hover-color);
+  }
+
+  /* Focus state */
+  input:focus {
+    outline: none;
+    border-block-end-color: var(--nice-text-hover-color);
+  }
+
+  /* Disabled state */
+  input:disabled {
+    color: var(--nice-text-input-disabled-color);
+    background-color: var(--nice-text-input-disabled-background-color);
+    border-color: var(--nice-text-input-disabled-border-color);
+    cursor: var(--nice-text-input-disabled-cursor);
+  }
+}

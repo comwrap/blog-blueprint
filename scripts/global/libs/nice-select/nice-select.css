@@ -1,0 +1,322 @@
+/* Nice Select styles */
+.nice-select {
+  /* Element */
+  --nice-select-font-size: var(--body-font-size-s);
+  --nice-select-line-height: 36px;
+  --nice-select-padding-inline-end: 30px;
+  --nice-select-arrow-size: 9.72px;
+
+  /* Dropdown */
+  --nice-select-dropdown-background-color: var(--clr-nb-glass-2);
+  --nice-select-dropdown-backdrop-filter: blur(var(--background-blur-m));
+  --nice-select-dropdown-box-shadow: 10px 10px 45px 25px #0C3A500D;
+  --nice-select-dropdown-padding: var(--space-xss);
+  --nice-select-dropdown-max-height: 288px;
+  --nice-select-dropdown-zindex: 2;
+
+  /* Option */
+  --nice-select-option-font-size: var(--body-font-size-s);
+  --nice-select-option-line-height: 22px;
+  --nice-select-option-padding-block: var(--space-xss);
+  --nice-select-option-padding-inline-end: 29px;
+  --nice-select-option-focus-color: var(--clr-b-overall-light);
+  --nice-select-option-focus-background-color: var(--clr-primary);
+
+  /* Label */
+  --nice-select-label-font-size: var(--body-font-size-s);
+  --nice-select-label-line-height: 21px;
+  --nice-select-label-font-weight: var(--font-weight-semibold);
+
+  /* Input */
+  --nice-select-input-height: 48px;
+  --nice-select-input-height-small: 36px;
+  --nice-select-input-font-size: var(--body-font-size-s);
+  --nice-select-search-input-padding-inline: 5px;
+
+  /* Arrow */
+  --nice-select-arrow-right: 18.11px;
+
+  /* Cancel button */
+  --nice-select-cancel-button-size: var(--space-s);
+  --nice-select-cancel-button-font-size: var(--body-font-size-m);
+  --nice-select-cancel-button-right: calc(var(--nice-select-padding-inline-end) + var(--space-xxs));
+
+  /* Colors */
+  --nice-select-background-color: var(--clr-b-light);
+  --nice-select-border-color: var(--clr-b-light);
+  --nice-select-border-block-end-color: var(--clr-b-text);
+  --nice-select-hover-color: var(--clr-primary);
+  --nice-select-arrow-color: var(--clr-b-text);
+
+  > label {
+    display: block;
+    font-size: var(--nice-select-label-font-size);
+    line-height: var(--nice-select-label-line-height);
+    font-weight: var(--nice-select-label-font-weight);
+  }
+
+  > select {
+    display: block;
+    font-size: 0;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    padding: 0;
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  > .nice-select-element {
+    box-sizing: border-box;
+    clear: both;
+    display: block;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: var(--nice-select-font-size);
+    font-weight: normal;
+    line-height: var(--nice-select-line-height);
+    background-color: var(--nice-select-background-color);
+    border: 1px solid var(--nice-select-border-color);
+    border-block-end-color: var(--nice-select-border-block-end-color);
+    outline: none;
+    height: var(--nice-select-input-height);
+    padding-inline-start: var(--nice-select-dropdown-padding);
+    padding-inline-end: var(--nice-select-padding-inline-end);
+    text-align: start;
+    user-select: none;
+    white-space: nowrap;
+    width: auto;
+    position: relative;
+
+    &:hover {
+      --nice-select-arrow-color: var(--nice-select-hover-color);
+
+      border-block-end-color: var(--nice-select-hover-color);
+
+      input:not(.nice-select-search) {
+        color: var(--nice-select-hover-color);
+      }
+    }
+
+    &:focus-visible {
+      border-color: var(--nice-select-border-block-end-color);
+    }
+
+    /* Arrow */
+    &::after {
+      border-block-end: 2px solid var(--nice-select-arrow-color);
+      border-inline-end: 2px solid var(--nice-select-arrow-color);
+      content: '';
+      display: block;
+      width: var(--nice-select-arrow-size);
+      height: var(--nice-select-arrow-size);
+      margin-block-start: -2px;
+      pointer-events: none;
+      position: absolute;
+      right: var(--nice-select-arrow-right);
+      top: calc(50% - var(--nice-select-arrow-size) / 2);
+      transform-origin: 66% 66%;
+      transform: rotate(45deg);
+      transition: transform 150ms ease-in-out;
+    }
+
+    /* Current input */
+    input.current[type='text'],
+    input.multiple-options[type='text'] {
+      appearance: none;
+      user-select: none;
+      border: none;
+      outline: none;
+      padding: unset;
+      padding-block: unset;
+      padding-inline: unset;
+      margin: unset;
+      background-color: unset;
+      display: inline-block;
+      width: inherit;
+      height: var(--nice-select-input-height);
+      font-size: var(--nice-select-input-font-size);
+      line-height: var(--nice-select-input-height);
+      cursor: pointer;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    &:has(.option.selected) {
+      /* Current input with selected option */
+      input.current[type='text'],
+      input.multiple-options[type='text'] {
+        width: calc(100% - var(--nice-select-cancel-button-size));
+        font-weight: bold;
+      }
+    }
+
+    /* Cancel button */
+    button.cancel {
+      display: none;
+      padding: unset;
+      margin: unset;
+      border: unset;
+      background-color: unset;
+      font-size: var(--nice-select-cancel-button-font-size);
+      font-weight: 500;
+      line-height: var(--nice-select-cancel-button-size);
+      cursor: pointer;
+      position: absolute;
+      top: calc(50% - var(--nice-select-cancel-button-size) / 2);
+      right: var(--nice-select-cancel-button-right);
+    }
+    &:has(.option.selected) {
+      /* Cancel button with selected option */
+      button.cancel {
+        display: block;
+
+        &:focus-visible {
+          color: var(--nice-select-hover-color);
+        }
+      }
+    }
+
+    /* Options list wrapper */
+    .nice-select-dropdown {
+      position: absolute;
+      width: 100%;
+      margin-block-start: 1px;
+      pointer-events: none;
+      top: 100%;
+      left: 0;
+      transform-origin: 50% 0;
+      transition: opacity .1s ease-out;
+      opacity: 0;
+      z-index: var(--nice-select-dropdown-zindex);
+      background-color: var(--nice-select-dropdown-background-color);
+      backdrop-filter: var(--nice-select-dropdown-backdrop-filter);
+      box-shadow: var(--nice-select-dropdown-box-shadow);
+
+      /* Search box */
+      .nice-select-search-box {
+        box-sizing: border-box;
+        pointer-events: none;
+        width: 100%;
+        padding-block: var(--nice-select-option-padding-block);
+        padding-inline: var(--nice-select-dropdown-padding);
+
+        /* Search input */
+        input.nice-select-search {
+          box-sizing: border-box;
+          pointer-events: none;
+          display: inline-block;
+          vertical-align: middle;
+          outline: none;
+          width: 100%;
+          height: var(--nice-select-input-height-small);
+          font-size: var(--nice-select-font-size);
+          line-height: var(--nice-select-input-height-small);
+          padding-inline: var(--nice-select-search-input-padding-inline);
+        }
+      }
+
+      /* Options list */
+      .list {
+        box-sizing: border-box;
+        pointer-events: none;
+        overflow: hidden;
+        overflow-y: auto;
+        max-height: var(--nice-select-dropdown-max-height);
+        margin-block: 0;
+        padding: 0;
+
+        /* Options group */
+        .optgroup {
+          font-weight: bold;
+        }
+
+        /* Options */
+        .option {
+          list-style: none;
+          outline: none;
+          pointer-events: none;
+          white-space: initial;
+          transition: unset;
+          cursor: pointer;
+          text-align: start;
+          font-size: var(--nice-select-option-font-size);
+          line-height: var(--nice-select-option-line-height);
+          padding-block: var(--nice-select-option-padding-block);
+          padding-inline-start: var(--nice-select-dropdown-padding);
+          padding-inline-end: var(--nice-select-option-padding-inline-end);
+
+          &:hover,
+          &.focus,
+          &.selected.focus {
+            color: var(--nice-select-option-focus-color);
+            background-color: var(--nice-select-option-focus-background-color);
+          }
+
+          &[aria-hidden='true'] {
+            display: none;
+          }
+
+          &.selected {
+            font-weight: bold;
+          }
+
+          &.disabled {
+            color: initial;
+            background-color: transparent;
+            cursor: default;
+            opacity: 40%;
+          }
+
+          /* Extra display inside option */
+          .extra {
+            float: right;
+          }
+        }
+      }
+    }
+
+    /* Open state */
+    &.open {
+      /* Arrow */
+      &::after {
+        transform: rotate(-135deg);
+      }
+
+      /* Cancel button */
+      button.cancel {
+        pointer-events: all;
+      }
+
+      /* Options list wrapper */
+      .nice-select-dropdown {
+        opacity: 1;
+        pointer-events: auto;
+        transform: scale(1) translateY(0);
+
+        /* Search box */
+        .nice-select-search-box {
+          pointer-events: auto;
+
+          /* Search input */
+          input.nice-select-search {
+            pointer-events: auto;
+          }
+        }
+
+        /* Options list */
+        .list {
+          pointer-events: auto;
+
+          .option {
+            pointer-events: auto;
+          }
+        }
+      }
+    }
+
+    /* Disabled state */
+    &.disabled {
+      pointer-events: none;
+    }
+  }
+}
