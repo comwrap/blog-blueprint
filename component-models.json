@@ -861,7 +861,7 @@
         "component": "aem-tag",
         "name": "filter-item-tags",
         "label": "Tags",
-        "rootPath": "/content/cq:tags/qnx"
+        "rootPath": "/content/cq:tags/blog-blueprint"
       }
     ]
   },
