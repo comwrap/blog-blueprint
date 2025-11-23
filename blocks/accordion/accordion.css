@@ -1,4 +1,25 @@
+/* Accordion Component - Using CSS Variables */
+
 .accordion {
+  /* Accordion-specific variables */
+  --accordion-title-font-size: var(--heading-font-size-s);
+  --accordion-title-line-height: 1.75rem;
+  --accordion-title-font-weight: 500;
+  --accordion-title-margin-right: var(--spacing-xl);
+  --accordion-icon-size: 24px;
+  --accordion-icon-thickness: 3px;
+  --accordion-icon-position-right: var(--spacing-m);
+  --accordion-border-width: 1px;
+  --accordion-panel-padding: 0 var(--spacing-m);
+  --accordion-content-padding-bottom: var(--spacing-m);
+  --accordion-content-image-margin: var(--spacing-m);
+  --accordion-panel-max-height: 1000px;
+  --accordion-transition-duration: 0.3s;
+  --accordion-transition-easing: ease;
+  --accordion-panel-transition-duration: 0.5s;
+  --accordion-panel-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Component styles */
   list-style: none;
   padding: 0;
   margin: 0;
@@ -6,7 +27,7 @@
 
 .accordion > li {
   cursor: pointer;
-  border-bottom: 1px solid rgb(var(--color-pure-black));
+  border-bottom: var(--accordion-border-width) solid var(--text-color);
 }
 
 .accordion li:last-child {
@@ -24,47 +45,48 @@
   flex-flow: row nowrap;
   gap: 0;
   position: relative;
-  color: var(--color-pure-black);
+  color: var(--text-color);
 }
 
 .accordion-trigger:hover {
   background: transparent;
-  color: rgb(var(--link-hover-color));
+  color: var(--link-hover-color);
 }
 
 .accordion-title {
-  font-size: 1.25rem;
-  font-weight: 500;
-  line-height: 1.75rem;
-  margin-right: 2rem;
+  font-size: var(--accordion-title-font-size);
+  font-weight: var(--accordion-title-font-weight);
+  line-height: var(--accordion-title-line-height);
+  margin-right: var(--accordion-title-margin-right);
 }
 
 .accordion-icon {
   position: absolute;
-  right: 1rem;
-  width: 1.5rem;
-  height: 1.5rem;
-  transition: transform 0.3s ease;
+  right: var(--accordion-icon-position-right);
+  width: var(--accordion-icon-size);
+  height: var(--accordion-icon-size);
+  transition: transform var(--accordion-transition-duration) var(--accordion-transition-easing);
 }
 
-.accordion-icon::before, .accordion-icon::after {
+.accordion-icon::before,
+.accordion-icon::after {
   content: "";
   position: absolute;
   background-color: currentcolor;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  transition: transform 0.3s ease;
+  transition: transform var(--accordion-transition-duration) var(--accordion-transition-easing);
 }
 
 .accordion-icon::before {
-  width: 1.5rem;
-  height: 0.2rem;
+  width: var(--accordion-icon-size);
+  height: var(--accordion-icon-thickness);
 }
 
 .accordion-icon::after {
-  width: 0.2rem;
-  height: 1.5rem;
+  width: var(--accordion-icon-thickness);
+  height: var(--accordion-icon-size);
 }
 
 .accordion-trigger[aria-expanded="true"] .accordion-icon::after {
@@ -74,14 +96,14 @@
 
 .accordion-panel {
   overflow: hidden;
-  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: max-height var(--accordion-panel-transition-duration) var(--accordion-panel-transition-easing);
   max-height: 0;
-  padding: 0 1rem;
+  padding: var(--accordion-panel-padding);
   will-change: max-height;
 }
 
 .accordion-panel:not([hidden]) {
-  max-height: 62.5rem;
+  max-height: var(--accordion-panel-max-height);
 }
 
 .accordion-panel[hidden] {
@@ -89,11 +111,11 @@
 }
 
 .accordion-content {
-  padding: 0 0 1rem;
+  padding: 0 0 var(--accordion-content-padding-bottom);
 }
 
 .accordion-content picture {
-  margin-bottom: 1rem;
+  margin-bottom: var(--accordion-content-image-margin);
   display: block;
 }
 
@@ -102,9 +124,13 @@
   height: auto;
 }
 
-.accordion button:hover, 
+.accordion button:hover,
 .accordion button:focus {
   background: unset;
   border-radius: 0;
   border: unset;
+}
+
+.section.fragment-container .accordion-trigger {
+  display: inline-block;
 }
