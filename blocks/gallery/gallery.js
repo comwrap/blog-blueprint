@@ -283,9 +283,10 @@ async function createGalleryCarousel(container, items) {
   // Initialize Swiper
   const swiper = new Swiper(swiperContainer, {
     slidesPerView: 1,
-    spaceBetween: 30,
+    spaceBetween: 10,
     speed: 300,
     loop: false,
+    centeredSlides: false,
     keyboard: {
       enabled: true,
       onlyInViewport: true,
