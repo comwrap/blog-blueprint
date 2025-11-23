@@ -440,10 +440,6 @@
   .gallery-grid.gallery-cols-4 {
     grid-template-columns: repeat(4, 1fr);
   }
-/* 
-  .gallery-carousel {
-    padding: 0 100px;
-  } */
 
   .gallery-thumbnail {
     width: var(--gallery-thumbnail-size-desktop);
